@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Goldvale
 
-## Getting Started
+> A calm daily companion + home-rehab tracker for senior and chronically-ill pets.
 
-First, run the development server:
+Goldvale turns the scattered day-to-day observations of caring for an aging or chronically-ill dog or cat into a longitudinal **mobility-and-wellbeing story**. It weaves in home **physiotherapy** — trending a validated mobility score and logging the vet-prescribed rehab plan — uses **vector search** to surface "this flare resembles 5 weeks ago" pattern memory, and packages everything into a cited, **vet-ready brief**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+It is explicitly **non-clinical**: it remembers, spots patterns, and prepares you — while your vet diagnoses, prescribes, and decides.
+
+Built for the **H0 hackathon** ("Hack the Zero Stack with Vercel v0 + AWS Databases"), **Monetizable B2C** track.
+
+## Stack
+
+| Layer | Tech |
+| --- | --- |
+| Frontend | Next.js 16 + TypeScript + Tailwind on **Vercel** (screens designed in claude.ai/design) |
+| Database | **AWS Aurora PostgreSQL + pgvector** — relational + time-series + vector + analytics in one engine |
+| ORM | Drizzle |
+| AI | Vercel AI SDK + **Amazon Bedrock (Claude)**; Titan/Cohere embeddings |
+
+## The non-clinical line (the cardinal rule)
+
+Clinical scores are computed by **deterministic code** (`lib/domain`), never the LLM. The model only narrates trends and poses "questions for your vet"; every model output passes a non-clinical guardrail (`assertNonClinical`); red flags route to "contact your vet now."
+
+## Structure
+
+```
+app/          # Next.js routes + API
+components/    # wired UI (grafted from claude.ai/design — see HANDOFF.md)
+lib/
+  domain/     # pure, tested: scoring, guardrails, progression
+  db/         # Drizzle schema + Aurora client
+  ai/         # Bedrock adapters
+db/schema.sql # canonical Aurora DDL (the 4-layer data model)
+scripts/      # migrate + seed
+docs/         # BUILD_PLAN.md, brief
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Status
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🚧 Active development. See `docs/BUILD_PLAN.md` for the plan + 28-day iterations, and `HANDOFF.md` for the frontend workflow.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT — see [LICENSE](LICENSE).
