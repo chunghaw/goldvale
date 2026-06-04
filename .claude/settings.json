@@ -1,0 +1,21 @@
+{
+  "$comment": "Shared project settings (committed). Allowlist lets Goldvale sub-agents run the routine dev loop (npm/npx, tsc, vitest, drizzle, local git, Postgres MCP, Playwright) without prompting. Outward-facing actions (git push, deploys) stay gated.",
+  "permissions": {
+    "allow": [
+      "PowerShell(npm *)", "PowerShell(npx *)", "PowerShell(node *)",
+      "PowerShell(Set-Location *)",
+      "PowerShell(git status *)", "PowerShell(git diff *)", "PowerShell(git add *)",
+      "PowerShell(git commit *)", "PowerShell(git log *)", "PowerShell(git branch *)",
+      "PowerShell(git switch *)", "PowerShell(git checkout *)", "PowerShell(git restore *)",
+      "PowerShell(scripts/codex-review.ps1 *)",
+      "Bash(npm *)", "Bash(npx *)", "Bash(node *)",
+      "Bash(git status *)", "Bash(git diff *)", "Bash(git add *)", "Bash(git commit *)",
+      "Bash(git log *)", "Bash(git branch *)", "Bash(git switch *)", "Bash(git checkout *)",
+      "Read(//c/Users/EdmundTan/projects/goldvale/**)",
+      "Write(//c/Users/EdmundTan/projects/goldvale/**)",
+      "Edit(//c/Users/EdmundTan/projects/goldvale/**)",
+      "WebFetch", "WebSearch",
+      "mcp__Postgres__*", "mcp__playwright__*"
+    ]
+  }
+}

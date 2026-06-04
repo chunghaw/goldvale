@@ -1,0 +1,9 @@
+{
+  "$comment": "Postgres MCP activates once DATABASE_URL is set — lets the agent inspect/query Aurora during dev. Playwright (registered at user scope) is used for UI iteration.",
+  "mcpServers": {
+    "Postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
+    }
+  }
+}
