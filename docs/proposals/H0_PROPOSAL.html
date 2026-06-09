@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>H0 Hackathon — Product Proposal &amp; Comparison</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1020; --surface:#121933; --surface2:#1a2342; --line:#283357;
+    --text:#eaf0ff; --muted:#9fb0d8; --faint:#6b7aa8;
+    --paw:#14b8a6; --rhyme:#6366f1; --echo:#a855f7; --adopt:#f59e0b;
+    --good:#22c55e; --mid:#eab308; --bad:#ef4444;
+    --radius:16px; --shadow:0 10px 30px rgba(0,0,0,.35);
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#1b2750 0,transparent 60%),var(--bg);
+    color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  a{color:#8fb4ff;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--faint);font-weight:700}
+  h1{font-size:clamp(30px,5vw,52px);line-height:1.05;margin:.2em 0 .3em;font-weight:800;letter-spacing:-.02em}
+  h2{font-size:clamp(22px,3vw,32px);margin:0 0 .2em;font-weight:800;letter-spacing:-.01em}
+  h3{font-size:19px;margin:0 0 .35em;font-weight:700}
+  p{color:var(--muted);margin:.5em 0}
+  .lead{font-size:19px;color:#c8d4f5;max-width:80ch}
+  /* hero */
+  header.hero{padding:64px 0 30px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(99,102,241,.10),transparent)}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 4px}
+  .badge{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;color:var(--muted)}
+  .badge b{color:var(--text)}
+  /* layout */
+  section{padding:48px 0;border-bottom:1px solid var(--line)}
+  .grid{display:grid;gap:20px}
+  .cols-2{grid-template-columns:1fr 1fr}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:900px){.cols-2,.cols-4{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .card.accent{border-top:4px solid var(--line)}
+  /* recommendation banner */
+  .rec{display:flex;gap:20px;align-items:flex-start;background:linear-gradient(120deg,rgba(20,184,166,.14),rgba(99,102,241,.10));
+    border:1px solid #2c6a63;border-radius:var(--radius);padding:24px}
+  .rec .pill{background:var(--paw);color:#04211d;font-weight:800;border-radius:10px;padding:6px 12px;font-size:13px;white-space:nowrap}
+  /* meters */
+  .meter{height:9px;border-radius:99px;background:#0e1730;overflow:hidden;border:1px solid var(--line)}
+  .meter > i{display:block;height:100%;border-radius:99px}
+  .mrow{display:grid;grid-template-columns:130px 1fr 34px;gap:10px;align-items:center;margin:7px 0;font-size:13px;color:var(--muted)}
+  .mrow b{color:var(--text);text-align:right;font-variant-numeric:tabular-nums}
+  /* score pills */
+  .s{display:inline-flex;min-width:26px;justify-content:center;border-radius:7px;padding:2px 6px;font-weight:800;font-size:13px;color:#06210c}
+  .s5{background:#22c55e}.s4{background:#86d36b;color:#0a2410}.s3{background:#eab308;color:#241c02}.s2{background:#f59e0b;color:#241402}.s1{background:#ef4444;color:#2a0606}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px;overflow:hidden;border-radius:12px}
+  th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--surface2);color:var(--text);font-size:12.5px;letter-spacing:.03em;text-transform:uppercase;position:sticky;top:0}
+  tbody tr:hover{background:#16203f}
+  td.dim{color:var(--faint)}
+  .scroll{overflow:auto;border:1px solid var(--line);border-radius:12px}
+  /* concept cards */
+  .concept{position:relative;overflow:hidden}
+  .concept .tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+  .concept h3 .rank{font-size:13px;color:var(--faint);font-weight:600;margin-left:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+  .chip{font-size:12px;background:#0f1830;border:1px solid var(--line);border-radius:8px;padding:4px 9px;color:var(--muted)}
+  .kv{margin:12px 0}
+  .kv .k{font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:10px}
+  .risk{background:#2a1622;border:1px solid #5b2440;border-radius:10px;padding:10px 12px;font-size:13.5px;color:#ffc9da;margin-top:12px}
+  .moat{background:#0e2030;border:1px solid #1f4a5e;border-radius:10px;padding:10px 12px;font-size:13.5px;color:#bfe9ff;margin-top:10px}
+  .accent-paw{border-top-color:var(--paw)} .accent-rhyme{border-top-color:var(--rhyme)}
+  .accent-echo{border-top-color:var(--echo)} .accent-adopt{border-top-color:var(--adopt)}
+  .tag-paw{background:rgba(20,184,166,.16);color:#5fe6d3} .tag-rhyme{background:rgba(99,102,241,.18);color:#aab2ff}
+  .tag-echo{background:rgba(168,85,247,.16);color:#d8b3ff} .tag-adopt{background:rgba(245,158,11,.16);color:#ffd591}
+  .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .chart-box{position:relative;height:360px}
+  .note{font-size:13px;color:var(--faint)}
+  .arch{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;white-space:pre;color:#bcd0ff;background:#0c142b;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto}
+  .pick{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .pick .dot{width:12px;height:12px;border-radius:50%;margin-top:7px;flex:0 0 auto}
+  footer{padding:40px 0 70px;color:var(--faint);font-size:13px}
+  .tl{display:grid;grid-template-columns:90px 1fr;gap:0 16px}
+  .tl .wk{font-weight:800;color:var(--text);padding:10px 0;border-top:1px solid var(--line)}
+  .tl .ds{padding:10px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Product Proposal &middot; Decision Brief</div>
+    <h1>Four ways to win <span style="color:#8fb4ff">H0</span>.</h1>
+    <p class="lead">A side-by-side comparison of the four strongest concepts for <b>“H0: Hack the Zero Stack with Vercel v0 + AWS Databases.”</b> Every option runs on the same locked stack and uses <b>verified, free public data</b>. Pick the one you’ll most enjoy shipping — the recommendation balances the four judging criteria against build risk, data licensing, and monetization.</p>
+    <div class="badges">
+      <span class="badge">Track: <b>Monetizable B2C</b></span>
+      <span class="badge">DB: <b>Aurora PostgreSQL + pgvector</b></span>
+      <span class="badge">AI: <b>Vercel AI SDK + Bedrock Claude</b></span>
+      <span class="badge">Frontend: <b>Next.js on Vercel / v0</b></span>
+      <span class="badge">Deadline: <b>Jun 29, 2026 · 5pm PDT</b> (~28 days)</span>
+      <span class="badge">Prize/track: <b>$10k + $10k AWS credits</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- RECOMMENDATION -->
+<section>
+  <div class="wrap">
+    <div class="rec">
+      <div class="pill">RECOMMENDED</div>
+      <div>
+        <h2 style="margin-bottom:6px">🛡️ PawShield — pet product &amp; medication safety radar</h2>
+        <p style="color:#d7e6ff;margin-top:4px">The best simultaneous fit for what these AWS-database judges actually score. The data model <i>is</i> the product: the <b>1.28M-report federal animal adverse-event corpus</b> (essentially untouched by consumer apps) + FDA recalls, modeled as a <b>per-cohort statistical-lift</b> view joined to <b>pgvector ingredient-linkage</b>. Clean US-public-domain data (unencumbered monetization), the lowest-risk 28-day build, and a visceral &lt;3-min demo. <b>Pick Rhyme instead</b> if markets excite you more — higher “wow,” but you must nail transcript-caching on day one.</p>
+        <div class="chips" style="margin-top:12px">
+          <span class="chip">Tech/DB <span class="s s5">5</span></span>
+          <span class="chip">Design <span class="s s4">4</span></span>
+          <span class="chip">Impact <span class="s s4">4</span></span>
+          <span class="chip">Originality <span class="s s5">5</span></span>
+          <span class="chip">Data licensing: <b style="color:#5fe6d3">public domain</b></span>
+          <span class="chip">Build risk: <b style="color:#86d36b">low</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARTS -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The numbers</div>
+    <h2>How they score</h2>
+    <p>Left: the four <b>equally-weighted judging criteria</b> (1–5). Right: <b>judging average vs practical readiness</b> (data licensing + build-ease + monetization + low-liability). PawShield leads on the combined view; Rhyme edges the pure judging score.</p>
+    <div class="grid cols-2" style="margin-top:18px">
+      <div class="chart-card"><div class="chart-box"><canvas id="radar"></canvas></div></div>
+      <div class="chart-card"><div class="chart-box"><canvas id="bars"></canvas></div></div>
+    </div>
+    <div class="legend">
+      <span><i style="background:#14b8a6"></i>PawShield</span>
+      <span><i style="background:#6366f1"></i>Rhyme</span>
+      <span><i style="background:#a855f7"></i>Echo</span>
+      <span><i style="background:#f59e0b"></i>Adopt-Fit</span>
+    </div>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">At a glance</div>
+    <h2>Decision matrix</h2>
+    <p>Scores are 1–5 (higher is better, including “Build ease” and “Low saturation”). Color: <span class="s s5">5</span> <span class="s s4">4</span> <span class="s s3">3</span> <span class="s s2">2</span>.</p>
+    <div class="scroll" style="margin-top:14px">
+      <table>
+        <thead><tr>
+          <th>Dimension</th><th>🛡️ PawShield</th><th>📊 Rhyme</th><th>🧠 Echo</th><th>🐾 Adopt-Fit</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="dim">Domain</td><td>Pets</td><td>US stocks</td><td>Mental health</td><td>Pets</td></tr>
+          <tr><td class="dim">Overall rank</td><td><b>#1</b></td><td>#2</td><td>#3</td><td>#4</td></tr>
+          <tr><td class="dim">Technical / DB modeling</td><td><span class="s s5">5</span></td><td><span class="s s5">5</span></td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td></tr>
+          <tr><td class="dim">Design potential</td><td><span class="s s4">4</span></td><td><span class="s s5">5</span></td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td></tr>
+          <tr><td class="dim">Impact / real-world</td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td><td><span class="s s5">5</span></td><td><span class="s s5">5</span></td></tr>
+          <tr><td class="dim">Originality</td><td><span class="s s5">5</span></td><td><span class="s s5">5</span></td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td></tr>
+          <tr><td class="dim">Data licensing (commercial-clean)</td><td><span class="s s5">5</span></td><td><span class="s s3">3</span></td><td><span class="s s4">4</span></td><td><span class="s s5">5</span></td></tr>
+          <tr><td class="dim">Build ease (low 28-day risk)</td><td><span class="s s4">4</span></td><td><span class="s s3">3</span></td><td><span class="s s4">4</span></td><td><span class="s s3">3</span></td></tr>
+          <tr><td class="dim">Monetization clarity (B2C)</td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td><td><span class="s s4">4</span></td><td><span class="s s2">2</span></td></tr>
+          <tr><td class="dim">Low market saturation</td><td><span class="s s4">4</span></td><td><span class="s s3">3</span></td><td><span class="s s3">3</span></td><td><span class="s s3">3</span></td></tr>
+          <tr><td class="dim">Demo “wow”</td><td><span class="s s4">4</span></td><td><span class="s s5">5</span></td><td><span class="s s3">3</span></td><td><span class="s s4">4</span></td></tr>
+          <tr><td class="dim">Liability exposure</td><td>Medium</td><td>Medium</td><td><b style="color:#ffb3c8">High</b></td><td style="color:#86d36b">Low</td></tr>
+          <tr><td class="dim">Monetization model</td><td>$6/mo freemium</td><td>$15–19/mo</td><td>$8/mo</td><td>low sub + B2B2C</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT CARDS -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Deep dives</div>
+    <h2>The four concepts</h2>
+    <div class="grid cols-2" style="margin-top:18px">
+
+      <!-- PAWSHIELD -->
+      <div class="card concept accent accent-paw">
+        <span class="tag tag-paw">PETS · safety</span>
+        <h3>🛡️ PawShield <span class="rank">#1 overall</span></h3>
+        <p>Log your pet’s foods, treats &amp; meds. PawShield watches <b>FDA recalls + the federal animal adverse-event corpus</b> and tells you, with citations, which of <i>your</i> products carry elevated risk for a pet like yours.</p>
+        <div class="moat"><b>Data-model centerpiece:</b> a per-cohort <b>statistical-lift</b> materialized view (this ingredient’s serious-reaction rate for <i>your</i> species/breed/age vs baseline) <b>joined to pgvector</b> ingredient-linkage that matches messy product strings (“chicken jerky treats” ≈ a recalled SKU).</div>
+        <div class="kv">
+          <div class="k">Target audience</div>
+          <div>Owners of senior pets, chronic-meds pets, and anxious “researcher” owners. US pet industry ≈ $150B/yr; ≈ 90M pet-owning households.</div>
+          <div class="k">Verified free data</div>
+          <div class="chips">
+            <span class="chip">openFDA Animal Adverse-Event</span><span class="chip">openFDA Food Recall</span><span class="chip">TheDogAPI / API-Ninjas</span>
+          </div>
+          <div class="k">Demo</div>
+          <div>“312 adverse-event reports match a pet like yours — and here’s your kibble’s recall history.”</div>
+        </div>
+        <div class="mrow"><span>Build ease</span><div class="meter"><i style="width:80%;background:var(--paw)"></i></div><b>Low</b></div>
+        <div class="mrow"><span>Data licensing</span><div class="meter"><i style="width:100%;background:var(--paw)"></i></div><b>5</b></div>
+        <div class="mrow"><span>Monetization</span><div class="meter"><i style="width:80%;background:var(--paw)"></i></div><b>4</b></div>
+        <div class="risk"><b>Key risk:</b> adverse-event reports are voluntary, unverified &amp; lag 3–6 mo — show counts + lift, never imply causation; openFDA forbids implying endorsement (“based on FDA-published reports”).</div>
+      </div>
+
+      <!-- RHYME -->
+      <div class="card concept accent accent-rhyme">
+        <span class="tag tag-rhyme">STOCKS · research</span>
+        <h3>📊 Rhyme <span class="rank">#2 · highest “wow”</span></h3>
+        <p>Pick a ticker’s latest earnings call → Rhyme finds the most <b>semantically similar past calls market-wide</b>, then shows what the stock, insiders &amp; shorts did in the next 90 days. “History rhymes.”</p>
+        <div class="moat"><b>Data-model centerpiece:</b> one query traverses a <b>vector ANN over transcript segments → partitioned time-series forward-returns → insider events</b>. Plus an <b>“evasiveness” score = cosine distance between each analyst question and management’s answer</b> (2026 research; no retail product ships it).</div>
+        <div class="kv">
+          <div class="k">Target audience</div>
+          <div>Self-directed retail investors who already read transcripts. ≈ 60%+ of US adults own stock; tens of millions are self-directed.</div>
+          <div class="k">Verified free data</div>
+          <div class="chips">
+            <span class="chip">Alpha Vantage transcripts*</span><span class="chip">SEC EDGAR (Form 4)</span><span class="chip">Tiingo prices</span><span class="chip">FINRA short volume</span>
+          </div>
+          <div class="k">Demo</div>
+          <div>“This call rhymes with NVDA FY19 — management dodged margin questions; the stock fell a median 11% over 60 days.”</div>
+        </div>
+        <div class="mrow"><span>Build ease</span><div class="meter"><i style="width:60%;background:var(--rhyme)"></i></div><b>Med</b></div>
+        <div class="mrow"><span>Data licensing</span><div class="meter"><i style="width:60%;background:var(--rhyme)"></i></div><b>3</b></div>
+        <div class="mrow"><span>Demo wow</span><div class="meter"><i style="width:100%;background:var(--rhyme)"></i></div><b>5</b></div>
+        <div class="risk"><b>Key risk:</b> *Alpha Vantage free tier is 25 req/day &amp; shrinking — <b>batch-cache all transcripts in Aurora at ingest</b>, never per-user (SEC 8-K Exhibit-99 as fallback). Compute analogue outcomes point-in-time; frame as research, not advice.</div>
+      </div>
+
+      <!-- ECHO -->
+      <div class="card concept accent accent-echo">
+        <span class="tag tag-echo">MENTAL HEALTH · journaling</span>
+        <h3>🧠 Echo <span class="rank">#3</span></h3>
+        <p>A reflective journal whose superpower is <b>memory</b>: today’s entry surfaces the 3–5 emotionally-most-similar moments from your <i>own</i> past and what helped — plus a personal “what actually lifts <i>my</i> next-day mood” analytics layer.</p>
+        <div class="moat"><b>Data-model centerpiece:</b> per-user <b>HNSW recall over your own history</b> + a continuous <b>mood time-series</b> + a materialized “what works for me” view. Value compounds with your data — uncloneable by a GPT-wrapper.</div>
+        <div class="kv">
+          <div class="k">Target audience</div>
+          <div>Self-improvement adults 25–45 who already journal and want depth, not streaks. Mental-wellness apps are a multi-billion-$ market.</div>
+          <div class="k">Verified free data</div>
+          <div class="chips"><span class="chip">GoEmotions (Apache-2.0)</span><span class="chip">OpenAlex (CC0)</span><span class="chip">VAD via Claude at ingest</span></div>
+          <div class="k">Demo</div>
+          <div>“You’ve felt this work-dread 6 times; the 2 times you walked + named the distortion, your next-day mood rose most.”</div>
+        </div>
+        <div class="mrow"><span>Build ease</span><div class="meter"><i style="width:70%;background:var(--echo)"></i></div><b>Med</b></div>
+        <div class="mrow"><span>Impact</span><div class="meter"><i style="width:100%;background:var(--echo)"></i></div><b>5</b></div>
+        <div class="mrow"><span>Retention moat</span><div class="meter"><i style="width:90%;background:var(--echo)"></i></div><b>High</b></div>
+        <div class="risk"><b>Key risk (highest liability):</b> stay strictly non-clinical — hard-block diagnosis, deterministic 988 crisis interstitial on risk-language, encrypt journals, per-user isolation, no training on user data (state it as a selling point).</div>
+      </div>
+
+      <!-- ADOPT-FIT -->
+      <div class="card concept accent accent-adopt">
+        <span class="tag tag-adopt">PETS · adoption</span>
+        <h3>🐾 Adopt-Fit <span class="rank">#4</span></h3>
+        <p>Describe your life in your own words → Adopt-Fit ranks breeds <b>and real shelter animals</b> by genuine fit, overlaying <b>empirical length-of-stay / outcome data</b> to steer you toward overlooked-but-suitable animals.</p>
+        <div class="moat"><b>Data-model centerpiece:</b> shelter <b>intake→outcome lifecycle</b> (date-diff + window functions) → an <code>adoptability_index</code>, joined to <b>hybrid pgvector + structured</b> matching. Public-domain data, low liability.</div>
+        <div class="kv">
+          <div class="k">Target audience</div>
+          <div>Prospective adopters &amp; rescues. Strong feel-good impact (helps hard-to-place animals).</div>
+          <div class="k">Verified free data</div>
+          <div class="chips"><span class="chip">Austin Animal Center (Socrata)</span><span class="chip">NYC Dog Licensing</span><span class="chip">TheDogAPI / API-Ninjas</span><span class="chip">Stanford Dogs (opt)</span></div>
+          <div class="k">Demo</div>
+          <div>“Great fit — but black senior pit-mixes wait 4× longer; here are 3 overlooked animals you’d love.”</div>
+        </div>
+        <div class="mrow"><span>Build ease</span><div class="meter"><i style="width:70%;background:var(--adopt)"></i></div><b>Med</b></div>
+        <div class="mrow"><span>Liability</span><div class="meter"><i style="width:90%;background:var(--adopt)"></i></div><b>Low</b></div>
+        <div class="mrow"><span>B2C monetization</span><div class="meter"><i style="width:50%;background:var(--adopt)"></i></div><b>2.5</b></div>
+        <div class="risk"><b>Key risk:</b> breed-trait generalizations are stereotypes (esp. pit-mix LOS) — frame as tendencies / “these animals need you.” Real revenue is B2B2C shelter placement → weakest pure-B2C story of the four.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MARKET & GAP -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Market &amp; competition</div>
+    <h2>Where the open lane is</h2>
+    <div class="grid cols-2" style="margin-top:16px">
+      <div class="card"><h3>📊 Stocks — crowded, except one lane</h3>
+        <p>13F/insider/Congress trackers are <b>saturated</b> (WhaleWisdom, Fintel, Quiver, Capitol Trades, and 2026’s “Meridian” already selling “signal convergence”). AI trade-journaling/coaching is <b>table stakes</b> (TradeZella, TraderSync). <b>The open lane:</b> earnings-call <i>semantics</i> + historical analogues — today only in enterprise tools (AlphaSense, Hebbia, Serafis) &amp; academia. <b>Rhyme</b> owns the retail version. <span class="note">(This is why your earlier “Prism” divergence idea ranked last — it’s the crowded lane.)</span></p>
+      </div>
+      <div class="card"><h3>🐾 Pets — chatbots everywhere, data ignored</h3>
+        <p>Saturated around <b>AI-vet-triage chat</b> (Voyage AI Vet, PetWellness AI) and <b>health-record vaults</b> (PetDesk, VitusVet) — thin LLM wrappers over a notes table, high liability. <b>Untouched:</b> openFDA’s 1.28M adverse-event corpus, weekly recall feed, and municipal shelter lifecycle data. <b>PawShield &amp; Adopt-Fit</b> own the “public-data-graph” lane and sidestep clinical-advice liability.</p>
+      </div>
+      <div class="card"><h3>🧠 Mental health — single-modality middle</h3>
+        <p>Mood loggers (Daylio, How We Feel), AI journals (Reflectly, Stoic, Rosebud), content libraries (Calm, Headspace). They reframe the <i>present</i> entry; almost none treat your history as a <b>queryable, embedded corpus</b>. <b>Echo</b> owns “retrieval-over-your-own-life.”</p>
+      </div>
+      <div class="card"><h3>🎯 What these judges reward</h3>
+        <p>The panel is <b>AWS database specialists</b>. Across every domain, the winning move is the same: make the <b>JOIN between text-embeddings and structured signals</b> the product — relational + time-series + pgvector + analytics in one Aurora instance — not a chatbot. All four concepts are built to do exactly that.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Shared architecture</div>
+    <h2>One stack, any concept</h2>
+    <div class="grid cols-2" style="margin-top:16px">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr><td class="dim">Frontend</td><td>Next.js (App Router) + TypeScript + Tailwind / shadcn — scaffolded in <b>v0.app</b>, deployed on <b>Vercel</b></td></tr>
+            <tr><td class="dim">Primary DB</td><td><b>Aurora PostgreSQL Serverless v2 + pgvector</b> (HNSW). Relational + time-series + vector + analytics in one engine</td></tr>
+            <tr><td class="dim">DB access</td><td>RDS Data API (serverless-friendly, no pooling) or Drizzle ORM; SQL migrations</td></tr>
+            <tr><td class="dim">AI</td><td><b>Vercel AI SDK + Amazon Bedrock (Claude)</b> for the agent; Bedrock Titan / Cohere for embeddings</td></tr>
+            <tr><td class="dim">Ingestion</td><td>Python batch jobs (reuse our parser patterns) → Aurora, via GitHub Actions cron / Lambda. <b>Cache once, never per-user</b></td></tr>
+            <tr><td class="dim">Auth / pay</td><td>Auth.js + Stripe (test mode) freemium → the “monetizable” story</td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:12px">Hits all three sponsors: Vercel (frontend + AI SDK) · AWS (Aurora + Bedrock) · clean B2C monetization.</p>
+      </div>
+      <div class="card">
+<div class="arch">  User ─▶ Next.js on Vercel (v0 UI)
+            │
+            ▼
+   Vercel AI SDK  ◀── tool calls ──┐
+            │                      │
+            ▼                      │
+   Amazon Bedrock (Claude)        │
+            │  embeddings         │
+            ▼                      │
+  ┌───────────────────────────────┴──┐
+  │   Aurora PostgreSQL + pgvector    │
+  │  relational · time-series ·       │
+  │  vector(HNSW) · mat/views         │
+  └───────────────▲───────────────────┘
+                  │ nightly batch
+        Python ingestion (free public APIs)</div>
+        <p class="note" style="margin-top:12px">Submission needs: published Vercel link, Vercel Team ID, architecture diagram, screenshots proving Aurora storage, &lt;3-min video. Bonus +0.6 for #H0Hackathon build-log posts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Plan</div>
+    <h2>28-day shape (any concept)</h2>
+    <div class="tl" style="margin-top:14px">
+      <div class="wk">Week 1</div><div class="ds">Stand up Aurora + Vercel + Bedrock access. <b>Ingest the free data into Aurora</b> (the heavy ETL) + build the relational + time-series schema. Land real rows.</div>
+      <div class="wk">Week 2</div><div class="ds">Embeddings → pgvector + HNSW indexes; the <b>materialized analytics view</b> that is the data-model centerpiece. Validate the core query end-to-end.</div>
+      <div class="wk">Week 3</div><div class="ds">Bedrock Claude agent (tool-calling over the DB) + the v0/Next.js UI + auth + Stripe test. First full demo loop.</div>
+      <div class="wk">Week 4</div><div class="ds">Polish design, architecture diagram, screenshots, <b>&lt;3-min video</b>, build-log posts (#H0Hackathon bonus), Devpost submit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DECISION HELPER -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">How to choose</div>
+    <h2>Pick…</h2>
+    <div style="margin-top:8px">
+      <div class="pick"><span class="dot" style="background:var(--paw)"></span><div><b>PawShield</b> — if you want the safest high-ceiling outcome: cleanest data licensing, lowest build risk, an untouched dataset, and a demo that lands instantly. <i>The recommendation.</i></div></div>
+      <div class="pick"><span class="dot" style="background:var(--rhyme)"></span><div><b>Rhyme</b> — if markets are your passion and you want the most impressive data-model demo, and you’ll commit to disciplined transcript-caching on day one.</div></div>
+      <div class="pick"><span class="dot" style="background:var(--echo)"></span><div><b>Echo</b> — if you care about mental health and a product whose value compounds with the user; accept the higher non-clinical-framing/privacy bar.</div></div>
+      <div class="pick"><span class="dot" style="background:var(--adopt)"></span><div><b>Adopt-Fit</b> — if you want the most feel-good, lowest-liability build and the prettiest match-report UI, and you’re OK with a softer pure-B2C monetization story.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>Sources:</b> H0 Devpost (rules &amp; resources), SEC EDGAR / openFDA / FINRA / FRED / Alpha Vantage / Tiingo, OpenAlex, GoEmotions, IPIP, SAMHSA, Austin Animal Center &amp; NYC Open Data, TheDogAPI / API-Ninjas — all verified free during research. Scores are this analysis’s judgment against the four equally-weighted H0 criteria plus practical build factors. Market figures are rough industry estimates, not precise claims.</p>
+    <p>Prepared as a decision brief. Reply with your pick and I’ll generate the full build plan (CLAUDE.md, SQL schema, architecture diagram, day-by-day timeline) and start standing up the stack.</p>
+  </div>
+</footer>
+
+<script>
+const C={paw:'#14b8a6',rhyme:'#6366f1',echo:'#a855f7',adopt:'#f59e0b'};
+const grid='#283357', tick='#9fb0d8';
+function alpha(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
+new Chart(document.getElementById('radar'),{
+  type:'radar',
+  data:{labels:['Technical / DB','Design','Impact','Originality'],
+    datasets:[
+      {label:'PawShield',data:[5,4,4,5],borderColor:C.paw,backgroundColor:alpha(C.paw,.18),borderWidth:2,pointBackgroundColor:C.paw},
+      {label:'Rhyme',data:[5,5,4,5],borderColor:C.rhyme,backgroundColor:alpha(C.rhyme,.15),borderWidth:2,pointBackgroundColor:C.rhyme},
+      {label:'Echo',data:[4,4,5,4],borderColor:C.echo,backgroundColor:alpha(C.echo,.13),borderWidth:2,pointBackgroundColor:C.echo},
+      {label:'Adopt-Fit',data:[4,4,5,4],borderColor:C.adopt,backgroundColor:alpha(C.adopt,.10),borderWidth:2,pointBackgroundColor:C.adopt}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tick}},title:{display:true,text:'Judging criteria (1–5)',color:'#eaf0ff',font:{size:14}}},
+    scales:{r:{min:0,max:5,ticks:{stepSize:1,color:tick,backdropColor:'transparent'},grid:{color:grid},angleLines:{color:grid},pointLabels:{color:'#c8d4f5',font:{size:12}}}}}
+});
+new Chart(document.getElementById('bars'),{
+  type:'bar',
+  data:{labels:['PawShield','Rhyme','Echo','Adopt-Fit'],
+    datasets:[
+      {label:'Judging average',data:[4.5,4.75,4.25,4.25],backgroundColor:alpha('#6366f1',.85)},
+      {label:'Practical readiness',data:[4.0,3.25,3.5,3.75],backgroundColor:alpha('#14b8a6',.85)}
+    ]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tick}},title:{display:true,text:'Judging avg vs practical readiness',color:'#eaf0ff',font:{size:14}}},
+    scales:{x:{min:0,max:5,ticks:{color:tick},grid:{color:grid}},y:{ticks:{color:'#eaf0ff'},grid:{color:'transparent'}}}}
+});
+</script>
+</body>
+</html>
