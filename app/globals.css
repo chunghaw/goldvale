@@ -1,15 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  /* Goldvale brand — warm, calm, low-anxiety. See HANDOFF.md. */
-  --background: #fbf7ef;   /* warm cream */
-  --foreground: #2a2622;   /* warm charcoal */
-  --gold: #e0a526;         /* primary — key actions / highlights (use sparingly) */
-  --sage: #5b8c82;         /* positive / steady trends */
+  /* Goldvale brand — warm, calm, low-anxiety. See HANDOFF.md.
+     We ship the COOLED, higher-contrast reading of this system the screens were
+     designed against (handoff/README.md): same hues, cooler/stronger contrast. */
+  --background: #eef1ef;   /* cooled cream — base paper */
+  --foreground: #20262a;   /* cool charcoal — stronger contrast */
+  --gold: #d6981e;         /* highlight only, used sparingly */
+  --sage: #4f8a7d;         /* primary calm — actions + positive states */
   --danger: #c0492b;       /* ONLY the bounded "contact your vet now" element */
-  --muted: #8a8175;        /* warm gray secondary text */
+  --muted: #687069;        /* readable secondary text */
+  --muted-soft: #8a938e;   /* faint captions */
   --card: #ffffff;
   --radius: 18px;
+
+  /* hairlines / fields (cool) */
+  --hairline: #dde3df;
+  --hairline-soft: #e8ece9;
+  --field: #f2f5f3;
+
+  /* positive / action tints */
+  --sage-soft: rgba(79, 138, 125, 0.13);
+  --sage-ink: #3a6b60;
+  --gold-soft: rgba(214, 152, 30, 0.15);
+  --gold-ink: #8a6410;
+
+  /* muted per-section accent family — colour + structure without brightness */
+  --slate: #5b7a99;  --slate-soft: rgba(91, 122, 153, 0.12);
+  --teal:  #3f8f86;  --teal-soft:  rgba(63, 143, 134, 0.12);
+  --plum:  #7d6b96;  --plum-soft:  rgba(125, 107, 150, 0.12);
+  --clay:  #b3654a;  --clay-soft:  rgba(179, 101, 74, 0.12);  --clay-ink: #97492f;
+  --neutral-soft: rgba(104, 112, 105, 0.12);
+
+  --gv-ease: cubic-bezier(.2, .7, .3, 1);
 }
 
 @theme inline {
@@ -25,10 +48,42 @@
   --radius-card: var(--radius);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
+}
+
+:root {
+  /* editorial serif for titles + key figures (loaded via next/font in layout) */
+  --serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Goldvale interaction primitives (ported from the design host) ───────────── */
+.gv-scroll::-webkit-scrollbar { width: 0; height: 0; }
+.gv-scroll { scrollbar-width: none; }
+
+.gv-press { transition: transform .12s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease; }
+.gv-press:active { transform: scale(0.985); }
+.gv-press:disabled { cursor: not-allowed; }
+
+textarea.gv-note { font-family: inherit; transition: border-color .15s ease, background .15s ease; }
+textarea.gv-note::placeholder { color: var(--muted); opacity: .8; }
+textarea.gv-note:focus { outline: none; border-color: var(--sage) !important; background: #fff !important; }
+
+@keyframes gv-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes gv-pop {
+  0%   { opacity: 0; transform: scale(.82); }
+  70%  { transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.gv-rise { animation: gv-rise .42s var(--gv-ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  .gv-rise { animation: none; }
 }

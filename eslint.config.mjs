@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design handoff mocks (browser-global React + CDN bezel) — specs, not product code.
+    "handoff/**",
+    "design/**",
   ]),
 ]);
 

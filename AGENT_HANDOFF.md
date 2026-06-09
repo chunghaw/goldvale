@@ -58,7 +58,7 @@ Six features (full detail in `docs/proposals/H0_GOLDVALE_BRIEF.html`): ① mobil
 
 ## 6. Current build state (✅ done + tested)
 
-Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldvale`, branch `main`. `tsc --noEmit` clean, **13 vitest tests pass**.
+Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldvale`, branch `main`. `tsc --noEmit` clean, **25 vitest tests pass**, `npm run lint` + `next build` green (all 3 routes compile). `handoff/` + `design/` are eslint-ignored (raw design mocks).
 
 | Area | Files |
 | --- | --- |
@@ -68,16 +68,19 @@ Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldv
 | AI | `lib/ai/bedrock.ts` (chat + embeddings; `narrateSafe` enforces the guardrail) |
 | Seed + scripts | `lib/db/seed-data.ts`, `scripts/migrate.ts` (applies schema.sql), `scripts/seed.ts` |
 | Agentic factory | `.claude/agents/{builder,reviewer-codex,db-specialist}.md`, `.claude/workflows/feature-loop.js`, `scripts/codex-review.ps1`, `.claude/settings.json`, `.mcp.json` (Postgres MCP) |
-| Brand | `app/globals.css` — tokens: `bg-cream` #fbf7ef, `text-charcoal` #2a2622, `gold` #e0a526, `sage` #5b8c82, danger red, `rounded-card` 18px |
+| Brand | `app/globals.css` — shipped the **cooled** token variant the mocks were tuned for (bg #eef1ef, charcoal #20262a, sage #4f8a7d, gold #d6981e) + section-accent family + Newsreader serif + `gv-*` interaction classes |
+| **UI — 3 demo screens wired** | `components/ui/*` (Card, SectionHead, Face, Hero, VetLine, icons, tokens) + `components/{checkin,dashboard,vet-brief}/*Screen.tsx`. Routes: `/pets/[id]` (dashboard), `/pets/[id]/checkin`, `/pets/[id]/brief`; `/` redirects to the demo pet. Ported from `handoff/` exports, typed from DB/domain shapes, guardrail-enforced. |
+| **Data seam — LIVE on Aurora** | `getPetView(id)` (`lib/data/pets.ts`) reads **live from Aurora** when `DATABASE_URL` is set (`lib/data/queries.ts`), else the domain-computed demo fallback (`demo.ts`). Same `PetView` shape (`view.ts`) either way. `queries.ts` exercises all 4 layers per read (relational pet/plan/protocol · time-series check-ins/scores/partitioned sessions/meds · the 2 materialized views · pgvector-ready). Every clinical figure from `lib/domain`; every narrative passes `assertNonClinical`. |
+| **AWS go-live (done)** | Aurora PG 17.7 Serverless v2 (us-east-1, public, password auth) live. **Bedrock live**: Titan embeddings (1024-dim) + **Claude `us.anthropic.claude-sonnet-4-6`** (all Anthropic models need a `us.`/`global.` inference-profile id — bare id = "on-demand not supported"). `.env` has working `DATABASE_URL` + AWS keys. `scripts/`: `migrate` · `seed` · **`seed-demo-pet`** (Oscar's 34-day history) · **`backfill-embeddings`** (Titan → pgvector) · `smoke` (4-layer) · `bedrock-models` (list invokable ids) · `bedrock-smoke` · `check-view` · `check-recall`. Demo pet = **Oscar** (`OSCAR_PET_ID`, `lib/data/ids.ts`). |
+| **pgvector recall proven** | `recallSimilarJournal()` in `lib/data/queries.ts` — embeds a query, kNN over `journal_entries` (HNSW cosine). Verified: "stiff/slow getting up" ranks the 3 flare days 62/58/43% and the good day last at 9%. **Exported + verified at the data layer; not yet wired to a UI surface** (the "see how those days went" deep-link is next). |
 | Docs | `CLAUDE.md`, `docs/BUILD_PLAN.md`, `HANDOFF.md` (frontend), `docs/proposals/*.html` |
-| **No UI yet** | `components/` is empty; `app/page.tsx` is the default starter |
 
 ---
 
 ## 7. What's pending / blocked
 
-1. **AWS go-live (blocks Iteration 0/1).** Need from the user: `DATABASE_URL` (Aurora PostgreSQL 16, Serverless v2, pgvector, publicly reachable), `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, the enabled `BEDROCK_CHAT_MODEL` id, and Bedrock model access enabled (Claude + Titan). Then: create `.env` (gitignored) → `npx tsx scripts/migrate.ts` → `npx tsx scripts/seed.ts` → smoke-test a real query + a live Bedrock call.
-2. **Frontend screens** — designed in claude.ai/design (mobile, hi-fi, **Goldvale tokens — not** the "Unstructured AI Studio Design System"). User drops exports in `design/incoming/<screen>/`; you refactor into typed `components/` and wire to the backend. See `HANDOFF.md` for the screen→route→data map. Priority: **daily-checkin → dashboard → vet-brief**, then onboarding + exercise-track.
+1. **Bedrock (the AI rails) — the only remaining go-live blocker.** Aurora is fully live (see §6); the DB rails are done. Still need from the user: `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (IAM key with `AmazonBedrockFullAccess`), and possibly the Anthropic first-use form (the Model-access console page is **retired** — serverless models auto-enable on first invoke). Once keys land: query Bedrock to set exact `BEDROCK_CHAT_MODEL`/`BEDROCK_EMBED_MODEL` ids (watch for the `us.` inference-profile prefix), live-invoke smoke test, then backfill `journal_entries`/`mobility_score_events` embeddings → wire **pgvector kNN recall** (the "see how those days went" deep-link) and the **check-in save** server action (currently a `TODO(aws-go-live)` local transition).
+2. **Frontend screens** — the 3 demo-critical screens (daily-checkin, dashboard, vet-brief) from `handoff/` are **ported + wired** (see §6). They render on **demo data computed through `lib/domain`** because the live DB calls in `getPetView` are still stubbed. **Still pending:** the save action on the check-in is a local transition (`TODO(aws-go-live)` — wire to a server action inserting `daily_checkins` + child events once Aurora is up); next screens to design = onboarding + exercise-track. The cooled vs warm token choice was made (cooled).
 3. **Iterations 1–5** — see `docs/BUILD_PLAN.md`. It.1 (the wedge) is the first real end-to-end loop (Bramble demo).
 
 ---
@@ -100,8 +103,8 @@ Pragmatic data engineer (SQL / dbt / Microsoft Fabric / ACHA migration). Values:
 
 ## 10. Immediate next action
 
-Whichever the user provides first:
-- **AWS values →** create `.env`, migrate + seed, smoke-test both rails, then start **Iteration 1** (daily check-in route + mobility wedge + pgvector recall, all guardrailed).
-- **A design screen in `design/incoming/` →** wire it into `components/` + a route, typed from the real DB shapes.
+The 3 demo screens are built and showable on demo data. The critical-path move now is **make them real** — which needs AWS:
+- **AWS values →** create `.env`, `npx tsx scripts/migrate.ts` + `scripts/seed.ts`, then replace the `getPetView` body in `lib/data/pets.ts` with real Aurora queries (relational pet/plan + time-series check-ins/scores + pgvector recall + the adherence/baseline MVs) — the `PetView` shape and every component stay unchanged. Then wire the check-in **save** server action and the pgvector pattern-memory recall (live Bedrock embeddings via `narrateSafe`).
+- **More design screens (onboarding, exercise-track) →** same pattern: presentational component in `components/` + typed view-model in `lib/data` + a route.
 
 Design and AWS proceed in parallel.
