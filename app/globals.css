@@ -88,3 +88,29 @@ textarea.gv-note:focus { outline: none; border-color: var(--sage) !important; ba
 @media (prefers-reduced-motion: reduce) {
   .gv-rise { animation: none; }
 }
+
+/* ── Device presentation ─────────────────────────────────────────────────────
+   Mobile-first: phones get the bare full-bleed app. On wider screens (laptops),
+   the same app is centered inside a phone frame on a soft ambient backdrop, so a
+   judge opening the link on a desktop sees a deliberate mobile app, not a column. */
+@media (min-width: 600px) {
+  .gv-stage {
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px 16px 44px;
+    background: radial-gradient(1100px 720px at 50% -12%, #f3f6f4 0%, #e7ece9 52%, #dfe5e1 100%);
+    background-attachment: fixed;
+  }
+  .gv-device {
+    width: 412px;
+    flex: 0 0 auto;
+    background: var(--background);
+    border: 9px solid #14171a;
+    border-radius: 46px;
+    box-shadow: 0 30px 70px rgba(20, 30, 28, 0.28), 0 6px 18px rgba(20, 30, 28, 0.16);
+    overflow: hidden;
+    min-height: calc(100dvh - 74px);
+  }
+}
