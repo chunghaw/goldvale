@@ -303,6 +303,7 @@ function VetBriefCard({ header, briefCount, href }: { header: PetHeader; briefCo
 
 export function DashboardScreen({ header, view }: { header: PetHeader; view: DashboardView }) {
   const briefHref = `/pets/${header.id}/brief`;
+  const recallHref = `/pets/${header.id}/recall`;
   return (
     <main className="gv-scroll" style={{ width: "100%", maxWidth: 440, margin: "0 auto", padding: "24px 16px 32px" }}>
       <Hero
@@ -324,7 +325,7 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
         <MobilityChart trend={view.mobility} bandLabel={bandLabel(view.mobility.band)} />
         <QolWeekCard qol={view.qol} />
         {view.progression.fires && <ProgressionCard nudge={view.progression} briefHref={briefHref} />}
-        <PatternCard pattern={view.pattern} href={briefHref} />
+        <PatternCard pattern={view.pattern} href={recallHref} />
         <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} />
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />
         <VetLine />

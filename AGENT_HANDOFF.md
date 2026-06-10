@@ -79,9 +79,11 @@ Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldv
 
 ## 7. What's pending / blocked
 
-1. **Bedrock (the AI rails) — the only remaining go-live blocker.** Aurora is fully live (see §6); the DB rails are done. Still need from the user: `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (IAM key with `AmazonBedrockFullAccess`), and possibly the Anthropic first-use form (the Model-access console page is **retired** — serverless models auto-enable on first invoke). Once keys land: query Bedrock to set exact `BEDROCK_CHAT_MODEL`/`BEDROCK_EMBED_MODEL` ids (watch for the `us.` inference-profile prefix), live-invoke smoke test, then backfill `journal_entries`/`mobility_score_events` embeddings → wire **pgvector kNN recall** (the "see how those days went" deep-link) and the **check-in save** server action (currently a `TODO(aws-go-live)` local transition).
-2. **Frontend screens** — the 3 demo-critical screens (daily-checkin, dashboard, vet-brief) from `handoff/` are **ported + wired** (see §6). They render on **demo data computed through `lib/domain`** because the live DB calls in `getPetView` are still stubbed. **Still pending:** the save action on the check-in is a local transition (`TODO(aws-go-live)` — wire to a server action inserting `daily_checkins` + child events once Aurora is up); next screens to design = onboarding + exercise-track. The cooled vs warm token choice was made (cooled).
-3. **Iterations 1–5** — see `docs/BUILD_PLAN.md`. It.1 (the wedge) is the first real end-to-end loop (Bramble demo).
+**Go-live is DONE — Aurora + Bedrock + both AI features are live and verified.** No remaining infra blockers. The full vertical slice works on real data: the 3 screens read live, the check-in **writes** live, and pgvector recall is exposed in the UI.
+
+1. **Check-in save — DONE.** `lib/data/checkin-write.ts` (`persistCheckin`, pure/testable) + `lib/actions/checkin.ts` (`"use server"` wrapper, revalidates `/pets/[id]`). CheckinScreen calls it; inserts `daily_checkins` + partitioned `exercise_session_events` + `medication_events` + `journal_entries` (note embedded via Titan). Verified live by `scripts/check-save.ts` (round-trips +1 each table, then cleans up).
+2. **Recall UI — DONE.** `/pets/[id]/recall` (`app/pets/[id]/recall/page.tsx` + `components/recall/RecallScreen.tsx`) runs live `recallSimilarJournal` and ranks the owner's own journal days by meaning; deep-linked from the dashboard PatternCard + the check-in confirmation. Degrades gracefully if Bedrock/DB is unreachable.
+3. **Next up (no blockers):** deploy to Vercel (wire the `.env` vars as Vercel env), then onboarding + exercise-track screens, and Iterations 2–5 (`docs/BUILD_PLAN.md`). Token choice = cooled (made).
 
 ---
 
@@ -96,6 +98,8 @@ Pragmatic data engineer (SQL / dbt / Microsoft Fabric / ACHA migration). Values:
 - **`goldvale` is the canonical project.** The sibling `C:\Users\EdmundTan\projects\prism` is the old/dead repo (different GitHub remote) — disposable; its useful HTMLs were copied into `docs/proposals/`. Don't merge them (two separate `.git`s). Open VS Code on the **goldvale** folder for future sessions.
 - **Windows + PowerShell.** The terminal tool is PowerShell (a `Bash` tool may or may not be present in a given session — don't rely on it). `git push` prints stderr that PowerShell renders as a red "error" — it usually **succeeded** (look for the `<sha>..<sha> main -> main` line).
 - **Git auth** is cached (Git Credential Manager) for `chunghaw` — pushes are seamless.
+- **Aurora SG / IP whitelist gotcha.** Aurora is public but its security group (`goldvale-db-sg`, `sg-04ed2dff46b24c2c3`) only allows whitelisted IPs on 5432. **When the dev machine's public IP changes, connections hang with `ETIMEDOUT`.** Fix: get the current IP (`(Invoke-RestMethod https://api.ipify.org?format=json).ip`), add an inbound rule **PostgreSQL/TCP/5432/`<ip>`/32** to that SG (EC2 → Security Groups; use the exact IP, NOT the console's "My IP"). Probe with `Test-NetConnection <writer-endpoint> -Port 5432` (`TcpTestSucceeded`). If even the right IP fails, the local network may block outbound 5432 → use a different network or `0.0.0.0/0` temporarily.
+- **Bedrock model ids need an inference profile.** Bare `anthropic.*` ids return "on-demand not supported"; use the `us.`/`global.` prefix (current: `us.anthropic.claude-sonnet-4-6`). `scripts/bedrock-models.ts` lists what's invokable.
 - **Secrets** live only in `.env` (gitignored via `.env*` + `!.env.example`). Never commit keys.
 - **Custom `.claude/agents` register on a fresh session**, not mid-session — a mid-session workflow must use the default agent with roles inlined.
 

@@ -11,6 +11,7 @@
  * daily_checkins + child events when Aurora is live.
  */
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Face } from "@/components/ui/Face";
@@ -18,6 +19,8 @@ import { VetLine } from "@/components/ui/VetLine";
 import { Hero } from "@/components/ui/Hero";
 import { Ico } from "@/components/ui/icons";
 import { A, C } from "@/components/ui/tokens";
+import { saveCheckin } from "@/lib/actions/checkin";
+import type { Tolerance } from "@/lib/domain/progression";
 import type { CheckinConfig, PatternMemory, PetHeader } from "@/lib/data/view";
 
 const ACC = { day: A.sage, move: A.slate, rehab: A.teal, meds: A.plum, note: A.clay };
@@ -494,6 +497,29 @@ function Confirmation({
           ))}
         </div>
 
+        <Link
+          href={`/pets/${header.id}/recall`}
+          className="gv-press"
+          style={{
+            width: "100%",
+            marginTop: 14,
+            padding: "12px",
+            borderRadius: 13,
+            cursor: "pointer",
+            border: `1px solid ${C.sage}`,
+            background: "var(--sage-soft)",
+            color: "var(--sage-ink)",
+            fontSize: 14,
+            fontWeight: 650,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+            textDecoration: "none",
+          }}
+        >
+          See how those days went {Ico.chevR({ s: 16, c: "var(--sage-ink)" })}
+        </Link>
         <div style={{ fontSize: 11.5, color: C.muted, marginTop: 11, textAlign: "center", lineHeight: 1.45 }}>
           {insight.vetFraming}
         </div>
@@ -533,6 +559,8 @@ export function CheckinScreen({ header, config }: { header: PetHeader; config: C
   );
   const [note, setNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const ready = qol !== null;
 
@@ -546,10 +574,27 @@ export function CheckinScreen({ header, config }: { header: PetHeader; config: C
     return done / 5;
   }, [qol, mob, ex, meds, note, config.mobilityItems.length, config.exercises]);
 
-  function handleSave() {
-    if (!ready) return;
-    // TODO(aws-go-live): server action inserting daily_checkins + child events.
-    setSubmitted(true);
+  async function handleSave() {
+    if (qol === null || saving) return;
+    setSaving(true);
+    setError(null);
+    try {
+      await saveCheckin({
+        petId: header.id,
+        qol,
+        mobilityItems: mob,
+        exercises: config.exercises
+          .filter((e) => ex[e.id]?.done)
+          .map((e) => ({ exerciseId: e.id, tolerance: (ex[e.id].tol ?? "handled") as Tolerance })),
+        meds: config.meds.map((m) => ({ medName: m.name, given: Boolean(meds[m.id]) })),
+        note,
+      });
+      setSubmitted(true);
+    } catch {
+      setError("Couldn't save your check-in — please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -602,25 +647,28 @@ export function CheckinScreen({ header, config }: { header: PetHeader; config: C
             <button
               className="gv-press"
               onClick={handleSave}
-              disabled={!ready}
+              disabled={!ready || saving}
               style={{
                 marginTop: 2,
                 width: "100%",
                 padding: "15px",
                 borderRadius: 15,
                 border: "none",
-                cursor: ready ? "pointer" : "not-allowed",
+                cursor: ready && !saving ? "pointer" : "not-allowed",
                 background: ready ? "linear-gradient(180deg, #59978a, #437a6d)" : "#dbe3df",
                 color: ready ? "#ffffff" : "#9aa49e",
                 fontSize: 16,
                 fontWeight: 700,
                 letterSpacing: -0.2,
                 boxShadow: ready ? "0 6px 16px rgba(63,123,109,0.30)" : "none",
-                opacity: ready ? 1 : 0.9,
+                opacity: ready ? (saving ? 0.85 : 1) : 0.9,
               }}
             >
-              {ready ? "Save today’s check-in" : "Tap a face to start"}
+              {saving ? "Saving…" : ready ? "Save today’s check-in" : "Tap a face to start"}
             </button>
+            {error && (
+              <div style={{ fontSize: 12.5, color: C.danger, textAlign: "center", fontWeight: 600 }}>{error}</div>
+            )}
             <VetLine paddingTop={4} />
             <div style={{ height: 6 }} />
           </div>
