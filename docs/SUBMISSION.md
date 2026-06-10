@@ -28,13 +28,19 @@ SDK, all hosted on **Vercel** (Next.js 16).
 
 ## Screenshots (live, on real Aurora + Bedrock)
 
-| Daily check-in | Dashboard | Vet brief | Pattern-memory recall |
-| --- | --- | --- | --- |
-| ![checkin](screenshots/checkin.png) | ![dashboard](screenshots/dashboard.png) | ![brief](screenshots/brief.png) | ![recall](screenshots/recall.png) |
+| Daily check-in | Dashboard | Vet brief |
+| --- | --- | --- |
+| ![checkin](screenshots/checkin.png) | ![dashboard](screenshots/dashboard.png) | ![brief](screenshots/brief.png) |
+
+| Pattern-memory recall | Exercise track |
+| --- | --- |
+| ![recall](screenshots/recall.png) | ![exercises](screenshots/exercises.png) |
 
 The **recall** screen is the pgvector payoff: it embeds the surfaced pattern with Titan
 and kNN-ranks Oscar's own journal days by meaning — Jun 4 (66%), May 30 (55%),
-May 22 (41%), and the "good day" correctly last at 5%.
+May 22 (41%), and the "good day" correctly last at 5%. The **exercise track** is
+vet-plan-gated: it logs adherence and surfaces the FITT progression nudge only when
+`lib/domain` says it's earned — always a question, never an auto-advance.
 
 ## Submission checklist
 - [x] Published Vercel project link
