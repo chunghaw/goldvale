@@ -28,13 +28,13 @@ SDK, all hosted on **Vercel** (Next.js 16).
 
 ## Screenshots (live, on real Aurora + Bedrock)
 
-| Daily check-in | Dashboard | Vet brief |
+| Onboarding | Daily check-in | Dashboard |
 | --- | --- | --- |
-| ![checkin](screenshots/checkin.png) | ![dashboard](screenshots/dashboard.png) | ![brief](screenshots/brief.png) |
+| ![onboarding](screenshots/onboarding.png) | ![checkin](screenshots/checkin.png) | ![dashboard](screenshots/dashboard.png) |
 
-| Pattern-memory recall | Exercise track |
-| --- | --- |
-| ![recall](screenshots/recall.png) | ![exercises](screenshots/exercises.png) |
+| Vet brief | Pattern-memory recall | Exercise track |
+| --- | --- | --- |
+| ![brief](screenshots/brief.png) | ![recall](screenshots/recall.png) | ![exercises](screenshots/exercises.png) |
 
 The **recall** screen is the pgvector payoff: it embeds the surfaced pattern with Titan
 and kNN-ranks Oscar's own journal days by meaning — Jun 4 (66%), May 30 (55%),
