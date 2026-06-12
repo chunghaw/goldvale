@@ -10,6 +10,8 @@ handoff/
   daily-checkin/   → /pets/[id]/checkin
   dashboard/       → /pets/[id]
   exercise-track/  → /pets/[id]/exercises
+  companion/       → /pets/[id]/companion   (AI chat — companion + scribe + vet-prep)
+  media/           → /pets/[id]/media       (capture sheet + visual-recall timeline)
   vet-brief/       → /pets/[id]/brief
 ```
 
