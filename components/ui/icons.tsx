@@ -187,4 +187,32 @@ export const Ico = {
         <path d="M8 14v.5M16 14v.5M11.25 16.25h1.5L12 17l-.75-.75Z" />
       </>
     )),
+  send: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.9, (
+      <>
+        <path d="M22 2 11 13" />
+        <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
+      </>
+    )),
+  close: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 2, <path d="M18 6 6 18M6 6l12 12" />),
+  phone: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.8, (
+      <path d="M13.83 19.05a16 16 0 0 1-8.88-8.88c-.4-.92-.18-2 .54-2.7l1.3-1.32a1.6 1.6 0 0 1 2.54.3l1 1.66a1.6 1.6 0 0 1-.2 1.95l-.66.74a12 12 0 0 0 4.34 4.34l.74-.66a1.6 1.6 0 0 1 1.95-.2l1.66 1a1.6 1.6 0 0 1 .3 2.54l-1.31 1.3c-.71.72-1.79.94-2.7.54Z" />
+    )),
+  video: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.6, (
+      <>
+        <path d="m16 10 4.5-2.5v9L16 14" />
+        <rect x="2" y="6" width="14" height="12" rx="2" />
+      </>
+    )),
+  library: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.6, (
+      <>
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="9" cy="9" r="2" />
+        <path d="m21 15-3.6-3.6a2 2 0 0 0-2.8 0L6 20" />
+      </>
+    )),
 } satisfies Record<string, Icon>;

@@ -255,6 +255,45 @@ CREATE TABLE literature_chunks (
 );
 CREATE INDEX ON literature_chunks USING hnsw (embedding vector_cosine_ops);
 
+-- ╔═════════════════════════ COMPANION CHAT + MEDIA ═══════════════════════════╗
+-- multimodal AI companion (non-clinical scribe) + media library (photos/videos).
+CREATE TYPE chat_role  AS ENUM ('owner','assistant');
+CREATE TYPE media_kind AS ENUM ('photo','video');
+
+CREATE TABLE chat_threads (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pet_id uuid NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX ON chat_threads (pet_id);
+
+CREATE TABLE chat_messages (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  thread_id uuid NOT NULL REFERENCES chat_threads(id) ON DELETE CASCADE,
+  role chat_role NOT NULL,
+  text text,
+  cards jsonb,                 -- agent tool outputs the client renders as rich cards
+  media jsonb,                 -- attached media refs for owner messages
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX ON chat_messages (thread_id, created_at);
+
+-- photos/videos: relational record + pgvector visual recall ("similar days")
+CREATE TABLE media_assets (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pet_id uuid NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  kind media_kind NOT NULL,
+  url text NOT NULL,                                  -- S3 object url/key
+  caption text,
+  duration_sec int,
+  journal_entry_id uuid REFERENCES journal_entries(id) ON DELETE SET NULL,
+  mention_at_vet boolean NOT NULL DEFAULT false,
+  embedding vector(1024),                            -- Titan multimodal (image+text)
+  recorded_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX ON media_assets (pet_id, recorded_at DESC);
+CREATE INDEX ON media_assets USING hnsw (embedding vector_cosine_ops);
+
 -- ╔═════════════════════════ ANALYTICS (materialized views) ═══════════════════╗
 -- per-pet rolling baseline of each mobility scale + MCID-crossing flag
 CREATE MATERIALIZED VIEW rolling_baseline_mv AS

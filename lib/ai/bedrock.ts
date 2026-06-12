@@ -17,7 +17,7 @@ function provider() {
   });
 }
 
-function chatModel() {
+export function chatModel() {
   const id = process.env.BEDROCK_CHAT_MODEL;
   if (!id) throw new Error("BEDROCK_CHAT_MODEL not set");
   return provider()(id);

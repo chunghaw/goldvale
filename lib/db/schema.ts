@@ -209,3 +209,40 @@ export const literatureChunks = pgTable("literature_chunks", {
   chunk: text("chunk").notNull(),
   embedding: vector("embedding", { dimensions: EMBED_DIM }),
 });
+
+// ── companion chat (the multimodal agent; non-clinical scribe) ──────────────────
+export const chatRoleEnum = pgEnum("chat_role", ["owner", "assistant"]);
+
+export const chatThreads = pgTable("chat_threads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  petId: uuid("pet_id").notNull().references(() => pets.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [index("chat_threads_pet_idx").on(t.petId)]);
+
+export const chatMessages = pgTable("chat_messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  threadId: uuid("thread_id").notNull().references(() => chatThreads.id, { onDelete: "cascade" }),
+  role: chatRoleEnum("role").notNull(),
+  text: text("text"),
+  /** rich-card payloads (agent tool outputs) the client renders inside the bubble */
+  cards: jsonb("cards"),
+  /** attached media refs for owner messages */
+  media: jsonb("media"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [index("chat_messages_thread_idx").on(t.threadId, t.createdAt)]);
+
+// ── media library (photos/videos) — relational + pgvector visual recall ─────────
+export const mediaKindEnum = pgEnum("media_kind", ["photo", "video"]);
+
+export const mediaAssets = pgTable("media_assets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  petId: uuid("pet_id").notNull().references(() => pets.id, { onDelete: "cascade" }),
+  kind: mediaKindEnum("kind").notNull(),
+  url: text("url").notNull(),
+  caption: text("caption"),
+  durationSec: integer("duration_sec"),
+  journalEntryId: uuid("journal_entry_id").references(() => journalEntries.id, { onDelete: "set null" }),
+  mentionAtVet: boolean("mention_at_vet").notNull().default(false),
+  embedding: vector("embedding", { dimensions: EMBED_DIM }),
+  recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [index("media_pet_idx").on(t.petId, t.recordedAt)]);

@@ -84,6 +84,10 @@ textarea.gv-note:focus { outline: none; border-color: var(--sage) !important; ba
   70%  { transform: scale(1.04); }
   100% { opacity: 1; transform: scale(1); }
 }
+@keyframes gv-dot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30%           { opacity: 1;   transform: translateY(-3px); }
+}
 .gv-rise { animation: gv-rise .42s var(--gv-ease) both; }
 @media (prefers-reduced-motion: reduce) {
   .gv-rise { animation: none; }

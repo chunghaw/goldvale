@@ -278,6 +278,31 @@ function RecoveryCard({ phases, protocolLabel, exercisesHref }: { phases: Recove
   );
 }
 
+function CompanionCard({ name, href }: { name: string; href: string }) {
+  return (
+    <Link
+      href={href}
+      className="gv-press"
+      style={{
+        width: "100%", textAlign: "left", cursor: "pointer",
+        background: "linear-gradient(135deg, #4f8a7d, #50708a)", border: "none",
+        borderRadius: "var(--radius)", padding: 16, color: "#fff",
+        boxShadow: "0 10px 24px rgba(63,123,109,0.26)",
+        display: "flex", alignItems: "center", gap: 13, textDecoration: "none",
+      }}
+    >
+      <div style={{ width: 40, height: 40, borderRadius: 12, flexShrink: 0, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {Ico.sparkles({ s: 20, c: "#fff" })}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500 }}>Talk to Goldvale</div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", marginTop: 1 }}>Chat, log a note, ask what {name} did last week</div>
+      </div>
+      {Ico.chevR({ s: 18, c: "#fff" })}
+    </Link>
+  );
+}
+
 function VetBriefCard({ header, briefCount, href }: { header: PetHeader; briefCount: number; href: string }) {
   return (
     <Link
@@ -348,6 +373,7 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
         <MobilityChart trend={view.mobility} bandLabel={bandLabel(view.mobility.band)} />
         <QolWeekCard qol={view.qol} />
         {view.progression.fires && <ProgressionCard nudge={view.progression} briefHref={briefHref} />}
+        <CompanionCard name={header.name} href={`/pets/${header.id}/companion`} />
         <PatternCard pattern={view.pattern} href={recallHref} />
         <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />
