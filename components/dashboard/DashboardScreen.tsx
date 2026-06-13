@@ -373,7 +373,27 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
         <MobilityChart trend={view.mobility} bandLabel={bandLabel(view.mobility.band)} />
         <QolWeekCard qol={view.qol} />
         {view.progression.fires && <ProgressionCard nudge={view.progression} briefHref={briefHref} />}
-        <CompanionCard name={header.name} href={`/pets/${header.id}/companion`} />
+        <div style={{ display: "flex", gap: 14 }}>
+          <CompanionCard name={header.name} href={`/pets/${header.id}/companion`} />
+          <Link
+            href={`/pets/${header.id}/media`}
+            className="gv-press"
+            style={{
+              flexShrink: 0, width: 132, cursor: "pointer", textDecoration: "none",
+              background: "#fff", border: `1px solid ${C.hair}`, borderRadius: "var(--radius)",
+              padding: 16, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 10,
+              boxShadow: "0 1px 2px rgba(32,38,42,0.04), 0 10px 26px rgba(32,38,42,0.05)",
+            }}
+          >
+            <div style={{ width: 38, height: 38, borderRadius: 11, background: A.clay.soft, color: A.clay.c, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {Ico.library({ s: 19, c: A.clay.c })}
+            </div>
+            <div>
+              <div style={{ fontFamily: "var(--serif)", fontSize: 15.5, fontWeight: 500, color: C.charcoal }}>Photos &amp; clips</div>
+              <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>+ similar days</div>
+            </div>
+          </Link>
+        </div>
         <PatternCard pattern={view.pattern} href={recallHref} />
         <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />

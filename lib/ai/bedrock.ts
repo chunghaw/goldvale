@@ -6,6 +6,7 @@
  * before it can reach a user.
  */
 import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
+import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
 import { generateText, embed, embedMany } from "ai";
 import { assertNonClinical } from "@/lib/domain/guardrails";
 
@@ -55,4 +56,34 @@ export async function embedText(value: string): Promise<number[]> {
 export async function embedTexts(values: string[]): Promise<number[][]> {
   const { embeddings } = await embedMany({ model: embeddingModel(), values });
   return embeddings;
+}
+
+// ── Titan multimodal image embeddings (for pgvector "similar days" visual recall) ─
+let _runtime: BedrockRuntimeClient | null = null;
+function runtime(): BedrockRuntimeClient {
+  if (_runtime) return _runtime;
+  _runtime = new BedrockRuntimeClient({
+    region: process.env.AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
+  });
+  return _runtime;
+}
+
+/** Embed an image (base64, no data: prefix) into the shared 1024-dim space; optional
+ *  caption sharpens the vector. Used to find the owner's own visually-similar media. */
+export async function embedImage(base64Image: string, caption?: string): Promise<number[]> {
+  const modelId = process.env.BEDROCK_IMAGE_EMBED_MODEL ?? "amazon.titan-embed-image-v1";
+  const body = JSON.stringify({
+    inputImage: base64Image,
+    ...(caption ? { inputText: caption } : {}),
+    embeddingConfig: { outputEmbeddingLength: 1024 },
+  });
+  const res = await runtime().send(new InvokeModelCommand({
+    modelId, contentType: "application/json", accept: "application/json", body,
+  }));
+  const json = JSON.parse(new TextDecoder().decode(res.body)) as { embedding: number[] };
+  return json.embedding;
 }

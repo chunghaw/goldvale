@@ -215,4 +215,24 @@ export const Ico = {
         <path d="m21 15-3.6-3.6a2 2 0 0 0-2.8 0L6 20" />
       </>
     )),
+  play: (p = {}) => (
+    <svg width={p.s ?? 16} height={p.s ?? 16} viewBox="0 0 24 24" fill={p.c ?? "currentColor"} aria-hidden>
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  ),
+  layers: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.7, (
+      <>
+        <path d="m12 2 9 5-9 5-9-5 9-5Z" />
+        <path d="m3 12 9 5 9-5" />
+        <path d="m3 17 9 5 9-5" />
+      </>
+    )),
+  flag: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.7, (
+      <>
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z" />
+        <path d="M4 22v-7" />
+      </>
+    )),
 } satisfies Record<string, Icon>;
