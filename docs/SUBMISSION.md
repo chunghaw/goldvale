@@ -36,6 +36,15 @@ SDK, all hosted on **Vercel** (Next.js 16).
 | --- | --- | --- |
 | ![brief](screenshots/brief.png) | ![recall](screenshots/recall.png) | ![exercises](screenshots/exercises.png) |
 
+| AI companion (chat agent) | | |
+| --- | --- | --- |
+| ![companion](screenshots/companion.png) | | |
+
+The **companion** is a non-clinical chat **agent**: Bedrock Claude (Sonnet 4.6) with
+tool-use over Aurora — it logs the owner's notes, recalls their own history (pgvector),
+narrates the mobility trend, flags items for the vet, and escalates red flags — with the
+guardrail on every reply. The rich cards in the thread are real tool outputs.
+
 The **recall** screen is the pgvector payoff: it embeds the surfaced pattern with Titan
 and kNN-ranks Oscar's own journal days by meaning — Jun 4 (66%), May 30 (55%),
 May 22 (41%), and the "good day" correctly last at 5%. The **exercise track** is
