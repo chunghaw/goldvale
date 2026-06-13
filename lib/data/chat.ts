@@ -6,8 +6,17 @@
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { chatThreads, chatMessages } from "@/lib/db/schema";
+import { presignGet } from "@/lib/storage/s3";
 import type { CompanionCard } from "@/lib/ai/companion";
 
+/** Stored in chat_messages.media (jsonb) — the S3 key, presigned on read. */
+export interface StoredMediaRef {
+  key: string;
+  kind: "photo" | "video";
+  caption?: string;
+}
+
+/** What the UI receives — a presigned url. */
 export interface MediaRef {
   url: string;
   kind: "photo" | "video";
@@ -35,16 +44,18 @@ export async function loadMessages(threadId: string): Promise<ChatMessageView[]>
   const db = getDb();
   const rows = await db.select().from(chatMessages)
     .where(eq(chatMessages.threadId, threadId)).orderBy(asc(chatMessages.createdAt));
-  return rows.map((r) => ({
+  return Promise.all(rows.map(async (r) => ({
     id: r.id,
     role: r.role,
     text: r.text,
     cards: (r.cards as CompanionCard[] | null) ?? [],
-    media: (r.media as MediaRef[] | null) ?? [],
-  }));
+    media: await Promise.all(((r.media as StoredMediaRef[] | null) ?? []).map(async (m) => ({
+      url: await presignGet(m.key), kind: m.kind, caption: m.caption,
+    }))),
+  })));
 }
 
-export async function appendOwner(threadId: string, text: string, media: MediaRef[] = []): Promise<string> {
+export async function appendOwner(threadId: string, text: string, media: StoredMediaRef[] = []): Promise<string> {
   const db = getDb();
   const [m] = await db.insert(chatMessages).values({
     threadId, role: "owner", text: text || null, media: media.length ? media : null,

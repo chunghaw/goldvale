@@ -7,7 +7,7 @@
  * reply. Every reply is guardrail-checked server-side. (Photo/video attach lands in
  * the media update; the button is parked until then.)
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import Image from "next/image";
 import { Ico } from "@/components/ui/icons";
 import { C } from "@/components/ui/tokens";
@@ -176,23 +176,39 @@ export function CompanionScreen({
 }) {
   const [messages, setMessages] = useState<ChatMessageView[]>(initialMessages);
   const [text, setText] = useState("");
+  const [attached, setAttached] = useState<string | null>(null); // local data URL preview
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, sending]);
 
+  function onPickFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setAttached(typeof reader.result === "string" ? reader.result : null);
+    reader.readAsDataURL(file);
+  }
+
   async function handleSend() {
     const t = text.trim();
-    if (!t || sending) return;
+    const img = attached;
+    if ((!t && !img) || sending) return;
     setText("");
+    setAttached(null);
     setSending(true);
-    const optimistic: ChatMessageView = { id: `tmp-${messages.length}`, role: "owner", text: t, cards: [], media: [] };
+    const optimistic: ChatMessageView = {
+      id: `tmp-${messages.length}`, role: "owner", text: t, cards: [],
+      media: img ? [{ url: img, kind: "photo" }] : [],
+    };
     setMessages((m) => [...m, optimistic]);
     try {
-      const { assistant } = await sendCompanionMessage({ petId, text: t });
+      const { assistant } = await sendCompanionMessage({ petId, text: t, imageDataUrl: img ?? undefined });
       setMessages((m) => [...m, assistant]);
     } catch {
       setMessages((m) => [...m, { id: `err-${m.length}`, role: "assistant", text: "Sorry — I couldn't reach my notes just now. Please try again.", cards: [], media: [] }]);
@@ -200,6 +216,8 @@ export function CompanionScreen({
       setSending(false);
     }
   }
+
+  const canSend = (text.trim().length > 0 || attached !== null) && !sending;
 
   const empty = messages.length === 0;
 
@@ -247,15 +265,26 @@ export function CompanionScreen({
 
       {/* input */}
       <div style={{ flexShrink: 0, position: "relative", background: "rgba(238,241,239,0.92)", backdropFilter: "blur(8px)", borderTop: `1px solid ${C.hairSoft}`, padding: "10px 12px 12px" }}>
+        <input ref={fileRef} type="file" accept="image/*" onChange={onPickFile} style={{ display: "none" }} />
+
+        {attached && (
+          <div className="gv-rise" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 13, padding: 6, marginBottom: 9, boxShadow: "0 2px 8px rgba(32,38,42,0.06)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- local data-URL preview */}
+            <img src={attached} alt="attached" style={{ width: 40, height: 40, borderRadius: 9, objectFit: "cover", display: "block" }} />
+            <span style={{ fontSize: 12.5, fontWeight: 600, color: C.charcoal, paddingRight: 2 }}>Photo ready</span>
+            <button className="gv-press" onClick={() => setAttached(null)} aria-label="Remove" style={{ width: 24, height: 24, borderRadius: 999, border: "none", background: C.field, color: C.muted, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{Ico.close({ s: 13, c: C.muted })}</button>
+          </div>
+        )}
+
         <div style={{ display: "flex", alignItems: "flex-end", gap: 9 }}>
-          <button className="gv-press" disabled aria-label="Attach (coming soon)" title="Photos & video — coming in the camera update" style={{ width: 42, height: 42, borderRadius: 999, flexShrink: 0, cursor: "not-allowed", border: `1px solid ${C.hair}`, background: "#fff", color: C.mutedSoft, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.6 }}>{Ico.plus({ s: 20, c: C.mutedSoft })}</button>
+          <button className="gv-press" onClick={() => fileRef.current?.click()} disabled={sending} aria-label="Attach a photo" style={{ width: 42, height: 42, borderRadius: 999, flexShrink: 0, cursor: sending ? "not-allowed" : "pointer", border: `1px solid ${C.hair}`, background: "#fff", color: C.sage, display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.plus({ s: 20, c: C.sage })}</button>
           <div style={{ flex: 1, display: "flex", alignItems: "center", background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 22, padding: "4px 6px 4px 15px", minHeight: 42 }}>
             <input
               value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
               placeholder={`Tell Goldvale about ${petName}…`}
               style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: 14.5, fontFamily: "inherit", color: C.charcoal, padding: "7px 0" }}
             />
-            <button className="gv-press" onClick={handleSend} disabled={!text.trim() || sending} aria-label="Send" style={{ width: 34, height: 34, borderRadius: 999, flexShrink: 0, cursor: text.trim() && !sending ? "pointer" : "not-allowed", border: "none", background: text.trim() && !sending ? "linear-gradient(165deg, #54948a, #437a6d)" : "#dbe3df", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: text.trim() && !sending ? "0 3px 9px rgba(63,123,109,0.3)" : "none" }}>{Ico.send({ s: 16, c: text.trim() && !sending ? "#fff" : "#9aa49e" })}</button>
+            <button className="gv-press" onClick={handleSend} disabled={!canSend} aria-label="Send" style={{ width: 34, height: 34, borderRadius: 999, flexShrink: 0, cursor: canSend ? "pointer" : "not-allowed", border: "none", background: canSend ? "linear-gradient(165deg, #54948a, #437a6d)" : "#dbe3df", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: canSend ? "0 3px 9px rgba(63,123,109,0.3)" : "none" }}>{Ico.send({ s: 16, c: canSend ? "#fff" : "#9aa49e" })}</button>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 9 }}>

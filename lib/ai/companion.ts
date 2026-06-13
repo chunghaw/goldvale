@@ -7,7 +7,7 @@
  * diagnoses — the final reply is run through the non-clinical guardrail before it
  * leaves this module, and each tool call surfaces a "rich card" for the UI.
  */
-import { generateText, tool, stepCountIs } from "ai";
+import { generateText, tool, stepCountIs, type ModelMessage } from "ai";
 import { z } from "zod";
 import { asc, eq } from "drizzle-orm";
 import { chatModel, embedText } from "@/lib/ai/bedrock";
@@ -47,8 +47,14 @@ How to help:
 
 Keep replies short, warm, and plain. Always route real concern back to the vet.`;
 
-export async function runCompanion(opts: { petId: string; petName: string; history: ChatTurn[] }): Promise<CompanionReply> {
-  const { petId, petName, history } = opts;
+export async function runCompanion(opts: {
+  petId: string;
+  petName: string;
+  history: ChatTurn[];
+  /** an image attached to the latest owner message, for the agent to see (non-clinically) */
+  image?: { base64: string; mediaType: string };
+}): Promise<CompanionReply> {
+  const { petId, petName, history, image } = opts;
   const db = getDb();
   const cards: CompanionCard[] = [];
 
@@ -113,10 +119,18 @@ export async function runCompanion(opts: { petId: string; petName: string; histo
     }),
   };
 
-  const messages = history.map((h) => ({
-    role: (h.role === "owner" ? "user" : "assistant") as "user" | "assistant",
+  const messages: ModelMessage[] = history.map((h) => ({
+    role: h.role === "owner" ? "user" : "assistant",
     content: h.text,
   }));
+  // attach the image to the latest owner message so Claude can see it
+  const last = messages[messages.length - 1];
+  if (image && last && last.role === "user") {
+    last.content = [
+      { type: "text", text: typeof last.content === "string" ? last.content : "" },
+      { type: "image", image: image.base64, mediaType: image.mediaType },
+    ];
+  }
 
   const res = await generateText({
     model: chatModel(),
