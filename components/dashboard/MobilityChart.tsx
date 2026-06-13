@@ -6,7 +6,7 @@
  * stroke on mount (honours prefers-reduced-motion). Every figure is precomputed
  * by lib/domain upstream; this component only draws.
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Ico } from "@/components/ui/icons";
@@ -35,6 +35,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
   const baseY = y(baseline);
 
   const lineRef = useRef<SVGPathElement>(null);
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
   useEffect(() => {
     const el = lineRef.current;
     if (!el) return;
@@ -51,7 +52,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
 
   return (
     <Card>
-      <SectionHead icon={Ico.trend({ s: 18, c: ACCENT.c })} accent={ACCENT} title="Mobility trend" hint="GenPup-M · 24 items" />
+      <SectionHead icon={Ico.trendUp({ s: 18, c: ACCENT.c })} accent={ACCENT} title="Mobility trend" hint="GenPup-M · 24 items" />
 
       <div style={{ display: "flex", alignItems: "flex-end", gap: 12, marginBottom: 4 }}>
         <div>
@@ -75,7 +76,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
               borderRadius: 999,
             }}
           >
-            {Ico.trend({ s: 13, c: "var(--sage-ink)" })} {improvement} better than baseline
+            {Ico.trendUp({ s: 13, c: "var(--sage-ink)" })} {improvement} better than baseline
           </div>
         </div>
         <div style={{ flex: 1 }} />
@@ -85,7 +86,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
         </div>
       </div>
 
-      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: "block", marginTop: 8, overflow: "visible" }}>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: "block", marginTop: 8, overflow: "visible" }} onClick={() => setActiveIdx(null)}>
         <defs>
           <linearGradient id="mobFill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={ACCENT.c} stopOpacity="0.18" />
@@ -99,22 +100,36 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
         </text>
         <path d={area} fill="url(#mobFill)" />
         <path ref={lineRef} d={line} fill="none" stroke={ACCENT.c} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        {pts.map((p, i) => (
-          <circle
-            key={i}
-            cx={p[0]}
-            cy={p[1]}
-            r={i === pts.length - 1 ? 4.5 : 2.6}
-            fill={i === pts.length - 1 ? ACCENT.c : "#fff"}
-            stroke={ACCENT.c}
-            strokeWidth="1.8"
-          />
-        ))}
+        {pts.map((p, i) => {
+          const isActive = activeIdx === i;
+          const isLast = i === pts.length - 1;
+          return (
+            <g key={i}>
+              <circle cx={p[0]} cy={p[1]} r={isActive ? 5.5 : isLast ? 4.5 : 2.6} fill={isActive || isLast ? ACCENT.c : "#fff"} stroke={ACCENT.c} strokeWidth="1.8" />
+              <circle cx={p[0]} cy={p[1]} r={13} fill="transparent" style={{ cursor: "pointer" }} onClick={(e) => { e.stopPropagation(); setActiveIdx(isActive ? null : i); }} />
+            </g>
+          );
+        })}
         {series.map((d, i) => (
-          <text key={i} x={x(i)} y={H - 6} textAnchor="middle" fontSize="9.5" fill={C.mutedSoft} fontWeight="600">
+          <text key={i} x={x(i)} y={H - 6} textAnchor="middle" fontSize="9.5" fill={activeIdx === i ? ACCENT.c : C.mutedSoft} fontWeight={activeIdx === i ? 700 : 600}>
             {d.label}
           </text>
         ))}
+        {activeIdx !== null && (() => {
+          const p = pts[activeIdx];
+          const d = series[activeIdx];
+          const tw = 50, th = 28;
+          const tx = Math.min(Math.max(p[0] - tw / 2, padX), W - padX - tw);
+          const above = p[1] - th - 9 >= padTop;
+          const ty = above ? p[1] - th - 9 : p[1] + 9;
+          return (
+            <g pointerEvents="none">
+              <rect x={tx} y={ty} width={tw} height={th} rx={7} fill={C.charcoal} />
+              <text x={tx + tw / 2} y={ty + 13} textAnchor="middle" fontSize="11.5" fontWeight="700" fill="#fff">{d.value}<tspan fontSize="8" fillOpacity="0.65"> /108</tspan></text>
+              <text x={tx + tw / 2} y={ty + 22} textAnchor="middle" fontSize="8" fill="#fff" fillOpacity="0.7">{d.label}</text>
+            </g>
+          );
+        })()}
       </svg>
 
       <div
@@ -129,7 +144,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
       >
         <span style={{ color: ACCENT.c, flexShrink: 0, marginTop: 1 }}>{Ico.sparkles({ s: 14, c: ACCENT.c })}</span>
         <div style={{ fontSize: 12.5, color: "#4a544f", lineHeight: 1.45 }}>
-          An <strong style={{ color: C.charcoal, fontWeight: 700 }}>{improvement}-point</strong> improvement vs the pet&rsquo;s own
+          An <strong style={{ color: C.charcoal, fontWeight: 700 }}>{improvement}-point</strong>{" "}improvement vs the pet&rsquo;s own
           baseline — past the {mcid}-point mark Goldvale treats as meaningful. Worth mentioning at your next visit, not a diagnosis.
         </div>
       </div>

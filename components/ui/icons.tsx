@@ -45,6 +45,13 @@ export const Ico = {
         <path d="M16 17h6v-6" />
       </>
     )),
+  trendUp: (p = {}) =>
+    svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.8, (
+      <>
+        <path d="m22 7-8.5 8.5-5-5L2 17" />
+        <path d="M16 7h6v6" />
+      </>
+    )),
   activity: (p = {}) =>
     svg(p.s ?? 16, p.c ?? "currentColor", p.w ?? 1.7, <path d="M22 12h-4l-3 9L9 3l-3 9H2" />),
   sparkles: (p = {}) =>

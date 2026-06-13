@@ -16,7 +16,7 @@ import { A, C, type Accent } from "@/components/ui/tokens";
 import type { BriefMention, BriefView, PetHeader, SnapshotStat, MedAdherence } from "@/lib/data/view";
 
 const ICONS: Record<BriefMention["iconKey"], (p?: IconProps) => React.JSX.Element> = {
-  trend: Ico.trend,
+  trend: Ico.trendUp,
   repeat: Ico.repeat,
   activity: Ico.activity,
 };
@@ -111,7 +111,7 @@ function MentionRow({ m, on, onToggle }: { m: BriefMention; on: boolean; onToggl
 function Snapshot({ stats }: { stats: SnapshotStat[] }) {
   return (
     <Card>
-      <SectionHead icon={Ico.trend({ s: 18, c: A.sage.c })} accent={A.sage} title="28-day snapshot" />
+      <SectionHead icon={Ico.trendUp({ s: 18, c: A.sage.c })} accent={A.sage} title="28-day snapshot" />
       <div style={{ display: "flex", gap: 9 }}>
         {stats.map((s) => (
           <div

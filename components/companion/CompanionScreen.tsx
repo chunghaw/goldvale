@@ -80,7 +80,7 @@ function MobilityMiniCard({ series, improvement }: { series: number[]; improveme
     <div style={{ marginTop: 11, background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: 13 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          {Ico.trend({ s: 13, c: C.sage })}
+          {Ico.trendUp({ s: 13, c: C.sage })}
           <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: C.sage }}>Mobility · your trend</span>
         </div>
         {improvement > 0 && <span style={{ fontSize: 11, fontWeight: 700, color: "var(--sage-ink)", background: "var(--sage-soft)", padding: "2px 8px", borderRadius: 999 }}>{improvement} better</span>}

@@ -230,7 +230,7 @@ function ActiveView({ header, view, ex, setEx, onLog, saving }: {
       </Card>
 
       <Card>
-        <SectionHead icon={Ico.trend({ s: 18, c: ACC.prog.c })} accent={ACC.prog} title="Progress" hint="this week" />
+        <SectionHead icon={Ico.trendUp({ s: 18, c: ACC.prog.c })} accent={ACC.prog} title="Progress" hint="this week" />
         <div style={{ display: "flex", alignItems: "flex-end", gap: 14, marginBottom: 14 }}>
           <div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
