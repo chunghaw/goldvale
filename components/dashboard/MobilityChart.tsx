@@ -26,7 +26,9 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
   const lo = Math.min(...vals) - 4,
     hi = Math.max(...vals) + 4;
   const x = (i: number) => padX + (i * (W - padX * 2)) / (series.length - 1);
-  const y = (v: number) => padTop + ((hi - v) / (hi - lo)) * (H - padTop - padBot);
+  // y is INVERTED vs the raw score: GenPup-M is higher = worse, so we plot a lower
+  // (better) score HIGHER on the chart — improvement rises, worsening falls.
+  const y = (v: number) => padTop + ((v - lo) / (hi - lo)) * (H - padTop - padBot);
   const pts = series.map((d, i) => [x(i), y(d.value)] as const);
   const line = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(" ");
   const area = `${line} L${x(series.length - 1).toFixed(1)} ${H - padBot} L${padX} ${H - padBot} Z`;
@@ -90,6 +92,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
             <stop offset="100%" stopColor={ACCENT.c} stopOpacity="0" />
           </linearGradient>
         </defs>
+        <text x={padX} y={padTop + 1} fontSize="9" fill={ACCENT.c} fontWeight="700">↑ better</text>
         <line x1={padX} y1={baseY} x2={W - padX} y2={baseY} stroke={C.muted} strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
         <text x={W - padX} y={baseY - 5} textAnchor="end" fontSize="9.5" fill={C.muted} fontWeight="600">
           baseline {baseline}

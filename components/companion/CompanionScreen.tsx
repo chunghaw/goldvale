@@ -73,7 +73,8 @@ function MobilityMiniCard({ series, improvement }: { series: number[]; improveme
   const W = 232, H = 50;
   const lo = Math.min(...series) - 2, hi = Math.max(...series) + 2;
   const x = (i: number) => 4 + (i * (W - 8)) / (series.length - 1);
-  const y = (v: number) => 6 + ((hi - v) / (hi - lo)) * (H - 12);
+  // inverted: GenPup-M lower = better, so a lower score plots higher (improvement rises)
+  const y = (v: number) => 6 + ((v - lo) / (hi - lo)) * (H - 12);
   const line = series.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
   return (
     <div style={{ marginTop: 11, background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: 13 }}>
