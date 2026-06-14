@@ -18,6 +18,7 @@ import { bandFor, changeDirection, crossedMcid, GENPUP_M } from "@/lib/domain/mo
 import { DEFAULT_PROGRESSION, isCleanSession, shouldNudgeProgression, type Session, type Tolerance } from "@/lib/domain/progression";
 import { assertNonClinical } from "@/lib/domain/guardrails";
 import { embedText } from "@/lib/ai/bedrock";
+import { OSCAR_PET_ID } from "./ids";
 import type { PetView, PatternMemory, ProgressionNudge, RecoveryPhase, ExerciseTrackView } from "./view";
 
 /** A past journal day surfaced by pgvector kNN (cosine) — semantic, not keyword. */
@@ -134,7 +135,8 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
   const signalment = [pet.name, ageYears ? `${ageYears} yr` : null, pet.breed].filter(Boolean).join(" · ");
   const weekPostOp = protocol ? Math.floor(daysBetween(NOW, new Date(protocol.onsetDate)) / 7) : null;
   const phaseLabel = weekPostOp != null ? `Week ${weekPostOp} · post-op` : "";
-  const nextVisit = fmtShort.format(new Date(NOW.getTime() + 9 * DAY));
+  // a "next visit" only makes sense once there's a protocol/condition being followed
+  const nextVisit = protocol ? fmtShort.format(new Date(NOW.getTime() + 9 * DAY)) : null;
   const streakDays = consecutiveStreak(checkins.map((c) => c.recordedAt));
 
   // ── derive: mobility trend (domain-computed) ────────────────────────────────
@@ -191,8 +193,10 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
   // ── derive: pattern memory (time-series recall over mobility_items) ─────────
   const pattern = patternFromCheckins(checkins);
 
-  // ── derive: recovery timeline (DB phases + curated copy) ─────────────────────
-  const recovery = await buildRecovery(db, protocol?.templateId ?? "tplo_post_op", weekPostOp ?? 0);
+  // ── derive: recovery timeline (only if the pet actually has a protocol) ──────
+  const PROTOCOL_LABELS: Record<string, string> = { tplo_post_op: "TPLO post-op", ivdd_conservative: "IVDD recovery" };
+  const recovery = protocol ? await buildRecovery(db, protocol.templateId, weekPostOp ?? 0) : [];
+  const protocolLabel = protocol ? PROTOCOL_LABELS[protocol.templateId] ?? "Recovery plan" : "";
 
   // ── derive: meds adherence (28-day window) ──────────────────────────────────
   const medAgg = aggregateMeds(medRows);
@@ -203,14 +207,17 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
   const avgQol = recentQol.length ? recentQol.reduce((a, b) => a + b, 0) / recentQol.length : 0;
 
   const improvement = baseline - current;
-  const mentions = buildMentions({ current, baseline, improvement, band, pattern, cleanSessions, spanDays });
+  const mentions = buildMentions({
+    current, baseline, improvement, band, pattern, cleanSessions, spanDays,
+    hasMobility: series.length > 0, fires: progressionNudge.fires,
+  });
 
   return {
     header: {
       id: pet.id,
       name: pet.name,
       signalment,
-      photoUrl: "/demo/oscar.jpg",
+      photoUrl: pet.id === OSCAR_PET_ID ? "/demo/oscar.jpg" : null,
       phaseLabel,
       vetName: plan?.prescriberName ?? "your vet",
       nextVisit,
@@ -230,12 +237,12 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
       qol: {
         values: qolValues,
         dow: qolDow,
-        note: safe("A gentle week overall, holding steady. Worth keeping an eye on the lower days."),
+        note: qolValues.length ? safe("A gentle week overall, holding steady. Worth keeping an eye on the lower days.") : "",
       },
       progression: progressionNudge,
       pattern,
       recovery,
-      protocolLabel: "TPLO post-op",
+      protocolLabel,
       briefCount: mentions.length,
     },
     checkin: {
@@ -271,9 +278,9 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
     brief: {
       mentions,
       snapshot: [
-        { value: String(current), unit: "/108", label: `Mobility · ${band}` },
-        { value: avgQol.toFixed(1), unit: "/4", label: "Avg day" },
-        { value: String(medAdherencePct), unit: "%", label: "Med adherence" },
+        { value: series.length ? String(current) : "—", unit: series.length ? "/108" : "", label: series.length ? `Mobility · ${band}` : "Mobility" },
+        { value: recentQol.length ? avgQol.toFixed(1) : "—", unit: recentQol.length ? "/4" : "", label: "Avg day" },
+        { value: medAgg.total >= 4 ? String(medAdherencePct) : "—", unit: medAgg.total >= 4 ? "%" : "", label: "Med adherence" },
       ],
       meds: medAgg.names.map((name) => ({
         name,
@@ -438,9 +445,13 @@ function buildMentions(d: {
   pattern: PatternMemory;
   cleanSessions: number;
   spanDays: number;
+  hasMobility: boolean;
+  fires: boolean;
 }): PetView["brief"]["mentions"] {
-  return [
-    {
+  const out: PetView["brief"]["mentions"] = [];
+  // only surface a mention when there's actually something to mention
+  if (d.hasMobility && d.improvement > 0) {
+    out.push({
       id: "mobility",
       iconKey: "trend",
       accentKey: "snap",
@@ -449,8 +460,10 @@ function buildMentions(d: {
         `GenPup-M is ${d.current} now vs ${d.baseline} four weeks ago — past the point Goldvale flags as meaningful. Still in the "${d.band}" band.`,
       ),
       tag: "Trend",
-    },
-    {
+    });
+  }
+  if (d.pattern.occurrences.length > 0) {
+    out.push({
       id: "rising",
       iconKey: "repeat",
       accentKey: "mention",
@@ -459,8 +472,10 @@ function buildMentions(d: {
         `Harder getting up from lying down on ${d.pattern.occurrences.map((o) => o.date).join(", ")} — clustered in the mornings.`,
       ),
       tag: "Pattern",
-    },
-    {
+    });
+  }
+  if (d.fires) {
+    out.push({
       id: "progress",
       iconKey: "activity",
       accentKey: "teal",
@@ -469,6 +484,7 @@ function buildMentions(d: {
         `${d.cleanSessions} clean rehab sessions over ${d.spanDays} days. A question for you — is it time for a little more?`,
       ),
       tag: "Question",
-    },
-  ];
+    });
+  }
+  return out;
 }

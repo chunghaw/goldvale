@@ -12,12 +12,13 @@ export interface PetHeader {
   name: string;
   /** e.g. "Oscar · 12 yr · Toy poodle" */
   signalment: string;
-  photoUrl: string;
+  /** the pet's photo, or null → the UI shows a monogram */
+  photoUrl: string | null;
   /** e.g. "Week 5 · post-op" */
   phaseLabel: string;
   vetName: string;
-  /** display date, e.g. "Jun 18" */
-  nextVisit: string;
+  /** display date, e.g. "Jun 18"; null when nothing is scheduled */
+  nextVisit: string | null;
   streakDays: number;
 }
 

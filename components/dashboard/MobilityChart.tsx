@@ -50,6 +50,21 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
     });
   }, []);
 
+  if (series.length < 2) {
+    return (
+      <Card>
+        <SectionHead icon={Ico.trendUp({ s: 18, c: ACCENT.c })} accent={ACCENT} title="Mobility trend" hint="GenPup-M" />
+        <div style={{ padding: "18px 6px 8px", textAlign: "center" }}>
+          <div style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.5, maxWidth: 264, margin: "0 auto" }}>
+            {series.length === 1
+              ? `First GenPup-M score logged: ${current}/108. The trend appears once there's a second to compare.`
+              : "Your mobility trend will appear here — Goldvale charts each GenPup-M check-in against the pet's own baseline."}
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <SectionHead icon={Ico.trendUp({ s: 18, c: ACCENT.c })} accent={ACCENT} title="Mobility trend" hint="GenPup-M · 24 items" />

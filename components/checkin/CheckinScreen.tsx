@@ -445,7 +445,7 @@ function Confirmation({
           Another gentle day on the record. That&rsquo;s how the bigger picture comes together.
         </div>
         <div style={{ fontSize: 12, color: C.muted, marginTop: 9, fontVariantNumeric: "tabular-nums" }}>
-          Check-in #{checkinNumber} logged · {header.streakDays}-day streak
+          Check-in #{checkinNumber + 1} logged · {header.streakDays + 1}-day streak
         </div>
       </div>
 

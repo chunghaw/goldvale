@@ -263,11 +263,11 @@ export function VetBriefScreen({ header, brief }: { header: PetHeader; brief: Br
         avatarAlt={header.name}
         eyebrow={`Brief for ${header.vetName}`}
         title={`${header.name}’s vet brief`}
-        badge={
+        badge={header.nextVisit ? (
           <>
             {Ico.cal({ s: 12, c: "#fff" })} {header.nextVisit}
           </>
-        }
+        ) : undefined}
       >
         <HeroStats
           stats={[
@@ -287,13 +287,17 @@ export function VetBriefScreen({ header, brief }: { header: PetHeader; brief: Br
             hint={`${includedCount} of ${brief.mentions.length}`}
           />
           <div style={{ fontSize: 12.5, color: C.muted, marginTop: -4, marginBottom: 13, lineHeight: 1.45 }}>
-            Goldvale surfaced these from your check-ins. Tap to choose what goes in the brief.
+            {brief.mentions.length > 0
+              ? "Goldvale surfaced these from your check-ins. Tap to choose what goes in the brief."
+              : `Nothing to flag yet. As you log check-ins, photos, and rehab, the things worth mentioning to ${header.name}’s vet will gather here.`}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-            {brief.mentions.map((m) => (
-              <MentionRow key={m.id} m={m} on={inc[m.id]} onToggle={() => setInc((s) => ({ ...s, [m.id]: !s[m.id] }))} />
-            ))}
-          </div>
+          {brief.mentions.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+              {brief.mentions.map((m) => (
+                <MentionRow key={m.id} m={m} on={inc[m.id]} onToggle={() => setInc((s) => ({ ...s, [m.id]: !s[m.id] }))} />
+              ))}
+            </div>
+          )}
         </Card>
 
         <Snapshot stats={brief.snapshot} />

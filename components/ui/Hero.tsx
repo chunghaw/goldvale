@@ -3,8 +3,8 @@
  * serif title, a top-right badge, and a slot for the bottom row (stat tiles on the
  * dashboard/brief, a consolation banner on the check-in).
  */
-import Image from "next/image";
 import type { ReactNode } from "react";
+import { Avatar } from "./Avatar";
 
 export function Hero({
   avatarSrc,
@@ -14,7 +14,7 @@ export function Hero({
   badge,
   children,
 }: {
-  avatarSrc: string;
+  avatarSrc: string | null;
   avatarAlt: string;
   eyebrow: string;
   title: ReactNode;
@@ -65,13 +65,7 @@ export function Hero({
             boxShadow: "0 4px 12px rgba(0,0,0,0.14)",
           }}
         >
-          <Image
-            src={avatarSrc}
-            alt={avatarAlt}
-            width={52}
-            height={52}
-            style={{ width: 52, height: 52, borderRadius: 999, objectFit: "cover", display: "block" }}
-          />
+          <Avatar src={avatarSrc} name={avatarAlt} size={52} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.78)", fontWeight: 600, letterSpacing: 0.3 }}>

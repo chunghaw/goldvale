@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db/client";
 import { pets } from "@/lib/db/schema";
 import { MediaTimelineScreen } from "@/components/media/MediaTimelineScreen";
 import { getMediaTimeline } from "@/lib/data/media";
+import { OSCAR_PET_ID } from "@/lib/data/ids";
 
 export const dynamic = "force-dynamic";
 
@@ -14,5 +15,6 @@ export default async function MediaPage({ params }: { params: Promise<{ id: stri
   if (!pet) notFound();
 
   const view = await getMediaTimeline(id);
-  return <MediaTimelineScreen petId={id} petName={pet.name} petPhoto="/demo/oscar.jpg" view={view} />;
+  const petPhoto = id === OSCAR_PET_ID ? "/demo/oscar.jpg" : null;
+  return <MediaTimelineScreen petId={id} petName={pet.name} petPhoto={petPhoto} view={view} />;
 }

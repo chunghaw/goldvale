@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db/client";
 import { pets } from "@/lib/db/schema";
 import { CompanionScreen } from "@/components/companion/CompanionScreen";
 import { getOrCreateThread, loadMessages } from "@/lib/data/chat";
+import { OSCAR_PET_ID } from "@/lib/data/ids";
 
 export const dynamic = "force-dynamic";
 
@@ -16,5 +17,6 @@ export default async function CompanionPage({ params }: { params: Promise<{ id: 
   const threadId = await getOrCreateThread(id);
   const messages = await loadMessages(threadId);
 
-  return <CompanionScreen petId={id} petName={pet.name} petPhoto="/demo/oscar.jpg" initialMessages={messages} />;
+  const petPhoto = id === OSCAR_PET_ID ? "/demo/oscar.jpg" : null;
+  return <CompanionScreen petId={id} petName={pet.name} petPhoto={petPhoto} initialMessages={messages} />;
 }

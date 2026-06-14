@@ -21,6 +21,11 @@ function QolWeekCard({ qol }: { qol: QolWeek }) {
   return (
     <Card>
       <SectionHead icon={Ico.heart({ s: 18, c: A.slate.c })} accent={A.slate} title="The week in mood" hint="last 7 days" />
+      {qol.values.length === 0 ? (
+        <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.5, padding: "4px 2px 2px" }}>
+          No check-ins yet this week — your first one starts the picture.
+        </div>
+      ) : (
       <div style={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
         {qol.values.map((lv, i) => {
           const today = i === qol.values.length - 1;
@@ -47,7 +52,8 @@ function QolWeekCard({ qol }: { qol: QolWeek }) {
           );
         })}
       </div>
-      <div style={{ fontSize: 12, color: C.muted, marginTop: 13, lineHeight: 1.45 }}>{qol.note}</div>
+      )}
+      {qol.note && <div style={{ fontSize: 12, color: C.muted, marginTop: 13, lineHeight: 1.45 }}>{qol.note}</div>}
     </Card>
   );
 }
@@ -341,7 +347,8 @@ function VetBriefCard({ header, briefCount, href }: { header: PetHeader; briefCo
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500 }}>Prepare a vet brief</div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", marginTop: 1 }}>
-          For {header.name}&rsquo;s visit on {header.nextVisit} · {briefCount} things to mention
+          {header.nextVisit ? `For ${header.name}’s visit on ${header.nextVisit} · ` : ""}
+          {briefCount > 0 ? `${briefCount} things to mention` : "A cited summary for your vet"}
         </div>
       </div>
       {Ico.chevR({ s: 18, c: "#fff" })}
@@ -363,9 +370,11 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
       >
         <HeroStats
           stats={[
-            { k: `${header.streakDays}-day`, l: "check-in streak" },
-            { k: bandLabel(view.mobility.band), l: "mobility band" },
-            { k: header.nextVisit, l: "next vet visit" },
+            header.streakDays > 0
+              ? { k: `${header.streakDays}-day`, l: "check-in streak" }
+              : { k: "New", l: "let’s begin" },
+            { k: view.mobility.series.length ? bandLabel(view.mobility.band) : "—", l: "mobility band" },
+            { k: header.nextVisit ?? "—", l: "next vet visit" },
           ]}
         />
       </Hero>
@@ -394,8 +403,8 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
             </div>
           </Link>
         </div>
-        <PatternCard pattern={view.pattern} href={recallHref} />
-        <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />
+        {view.pattern.occurrences.length > 0 && <PatternCard pattern={view.pattern} href={recallHref} />}
+        {view.recovery.length > 0 && <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />}
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />
         <VetLine />
         <div style={{ height: 6 }} />

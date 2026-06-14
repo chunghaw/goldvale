@@ -8,7 +8,7 @@
  * time). Non-clinical: keeps and surfaces the owner's own media, never interprets it.
  */
 import { useMemo, useState } from "react";
-import Image from "next/image";
+import { Avatar } from "@/components/ui/Avatar";
 import { Ico } from "@/components/ui/icons";
 import { C } from "@/components/ui/tokens";
 import { loadSimilar, toggleMention } from "@/lib/actions/media";
@@ -87,7 +87,7 @@ function RecallSheet({ caption, analogues, onClose }: { caption: string; analogu
 }
 
 export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
-  petId: string; petName: string; petPhoto: string; view: MediaTimelineView;
+  petId: string; petName: string; petPhoto: string | null; view: MediaTimelineView;
 }) {
   const [mentions, setMentions] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(view.items.map((i) => [i.id, i.mentionAtVet])),
@@ -127,7 +127,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
       <div style={{ flexShrink: 0, position: "relative", overflow: "hidden", background: "linear-gradient(120deg, #4f8a7d 0%, #4a8076 45%, #54748f 100%)", padding: "24px 16px 16px" }}>
         <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 11 }}>
           <div style={{ width: 42, height: 42, borderRadius: 999, flexShrink: 0, padding: 2.5, background: "rgba(255,255,255,0.22)" }}>
-            <Image src={petPhoto} alt={petName} width={37} height={37} style={{ width: 37, height: 37, borderRadius: 999, objectFit: "cover", display: "block" }} />
+            <Avatar src={petPhoto} name={petName} size={37} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontFamily: "var(--serif)", fontSize: 19, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1 }}>{petName}&rsquo;s photos &amp; clips</div>
@@ -142,6 +142,14 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
             <span style={{ color: "#8a6410", flexShrink: 0 }}>{Ico.flag({ s: 15, c: "#8a6410" })}</span>
             <span style={{ flex: 1, fontSize: 12.5, color: "#6a5520", fontWeight: 600 }}>{mentionCount} flagged for {petName}&rsquo;s next vet visit</span>
             {Ico.chevR({ s: 15, c: "#8a6410" })}
+          </div>
+        )}
+
+        {view.items.length === 0 && (
+          <div style={{ textAlign: "center", padding: "40px 24px", color: C.muted }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, margin: "0 auto 14px", background: C.field, display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.library({ s: 24, c: C.mutedSoft })}</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.charcoal }}>No photos or clips yet</div>
+            <div style={{ fontSize: 12.5, lineHeight: 1.5, marginTop: 6, maxWidth: 240, marginLeft: "auto", marginRight: "auto" }}>Add one from the companion chat — a photo of how {petName} looks today, saved to the record.</div>
           </div>
         )}
 

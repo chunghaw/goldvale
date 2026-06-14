@@ -11,6 +11,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import Image from "next/image";
 import { Ico } from "@/components/ui/icons";
 import { C } from "@/components/ui/tokens";
+import { Avatar } from "@/components/ui/Avatar";
 import { sendCompanionMessage } from "@/lib/actions/companion";
 import type { CompanionCard } from "@/lib/ai/companion";
 import type { ChatMessageView } from "@/lib/data/chat";
@@ -173,7 +174,7 @@ function Typing() {
 export function CompanionScreen({
   petId, petName, petPhoto, initialMessages,
 }: {
-  petId: string; petName: string; petPhoto: string; initialMessages: ChatMessageView[];
+  petId: string; petName: string; petPhoto: string | null; initialMessages: ChatMessageView[];
 }) {
   const [messages, setMessages] = useState<ChatMessageView[]>(initialMessages);
   const [text, setText] = useState("");
@@ -228,7 +229,7 @@ export function CompanionScreen({
       <div style={{ flexShrink: 0, position: "relative", overflow: "hidden", background: "linear-gradient(120deg, #4f8a7d 0%, #4a8076 45%, #54748f 100%)", padding: "24px 16px 14px" }}>
         <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 11 }}>
           <div style={{ width: 42, height: 42, borderRadius: 999, flexShrink: 0, padding: 2.5, background: "rgba(255,255,255,0.22)" }}>
-            <Image src={petPhoto} alt={petName} width={37} height={37} style={{ width: 37, height: 37, borderRadius: 999, objectFit: "cover", display: "block" }} />
+            <Avatar src={petPhoto} name={petName} size={37} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontFamily: "var(--serif)", fontSize: 19, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1 }}>Goldvale companion</div>
