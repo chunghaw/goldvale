@@ -45,7 +45,7 @@ How to help:
 - If they describe a possible emergency or red flag (sudden inability to bear weight, collapse, loss of coordination, can't urinate, severe distress, bleeding), call escalateToVet and tell them to contact their vet now. Do NOT assess it.
 - For a photo, say you've saved it and can't assess it; name observable things worth the vet seeing (redness/heat/discharge/swelling) and offer to flag it. Never interpret the image as a condition.
 
-Keep replies short, warm, and plain. Always route real concern back to the vet.`;
+Keep replies short, warm, and plain — 1–3 conversational sentences. Write plain text only: NO markdown, asterisks, bold, headings, bullet/numbered lists, or emoji (they render as raw characters in the chat). If you need to offer examples, weave them into a sentence rather than listing them. Always route real concern back to the vet.`;
 
 export async function runCompanion(opts: {
   petId: string;

@@ -50,7 +50,7 @@ function Sparkline({ history }: { history: number[] }) {
   );
 }
 
-function VetFlagRow({ redFlags }: { redFlags?: RedFlag[] }) {
+function VetFlagRow({ redFlags, petId }: { redFlags?: RedFlag[]; petId: string }) {
   const show = redFlags && redFlags.length > 0;
   return (
     <Card style={{ borderColor: "rgba(192,73,43,0.22)", background: "linear-gradient(170deg, #fff, #fdf3f0)" }}>
@@ -61,7 +61,7 @@ function VetFlagRow({ redFlags }: { redFlags?: RedFlag[] }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13.5, fontWeight: 650, lineHeight: 1.3 }}>Noticed something worrying?</div>
           <div style={{ fontSize: 12, marginTop: 1 }}>
-            <a href="#contact-vet" style={{ color: C.danger, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>
+            <a href={`/pets/${petId}/vet-contact`} style={{ color: C.danger, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>
               Contact your vet now
             </a>
           </div>
@@ -194,7 +194,7 @@ function GatedView({ petId, view }: { petId: string; view: ExerciseTrackView }) 
         </div>
       </Card>
 
-      <VetFlagRow />
+      <VetFlagRow petId={petId} />
       <div style={{ height: 8 }} />
       <BackToDashboard petId={petId} />
     </div>
@@ -271,7 +271,7 @@ function ActiveView({ header, view, ex, setEx, onLog, saving }: {
         </div>
       )}
 
-      <VetFlagRow redFlags={view.redFlags} />
+      <VetFlagRow redFlags={view.redFlags} petId={header.id} />
       <div style={{ height: 8 }} />
       <BackToDashboard petId={header.id} />
     </div>

@@ -94,7 +94,7 @@ function MobilityMiniCard({ series, improvement }: { series: number[]; improveme
   );
 }
 
-function VetAlertCard() {
+function VetAlertCard({ petId }: { petId: string }) {
   return (
     <div style={{ marginTop: 11, background: "linear-gradient(168deg, #fff, #fdf1ee)", border: `1px solid ${C.danger}44`, borderRadius: 14, padding: 15, boxShadow: "0 6px 18px rgba(192,73,43,0.12)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
@@ -104,14 +104,14 @@ function VetAlertCard() {
       <div style={{ fontSize: 12.5, color: "#6a4a44", lineHeight: 1.5 }}>
         I can&rsquo;t assess what&rsquo;s happening — but what you&rsquo;re describing is the kind of thing a vet should see promptly.
       </div>
-      <a href="#contact-vet" className="gv-press" style={{ width: "100%", marginTop: 13, padding: "12px", borderRadius: 12, cursor: "pointer", background: C.danger, color: "#fff", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", boxSizing: "border-box" }}>
+      <a href={`/pets/${petId}/vet-contact`} className="gv-press" style={{ width: "100%", marginTop: 13, padding: "12px", borderRadius: 12, cursor: "pointer", background: C.danger, color: "#fff", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", boxSizing: "border-box" }}>
         {Ico.phone({ s: 16, c: "#fff" })} <span>Contact your vet now</span>
       </a>
     </div>
   );
 }
 
-function Cards({ cards, name }: { cards: CompanionCard[]; name: string }) {
+function Cards({ cards, name, petId }: { cards: CompanionCard[]; name: string; petId: string }) {
   return (
     <>
       {cards.map((card, i) => {
@@ -120,7 +120,7 @@ function Cards({ cards, name }: { cards: CompanionCard[]; name: string }) {
           case "vetbrief": return <VetBriefChip key={i} />;
           case "recall": return <RecallCard key={i} occurrences={card.occurrences} />;
           case "mobility": return <MobilityMiniCard key={i} series={card.series} improvement={card.improvement} />;
-          case "redflag": return <VetAlertCard key={i} />;
+          case "redflag": return <VetAlertCard key={i} petId={petId} />;
           default: return null;
         }
       })}
@@ -144,14 +144,14 @@ function OwnerBubble({ m }: { m: ChatMessageView }) {
   );
 }
 
-function AgentBubble({ m, name }: { m: ChatMessageView; name: string }) {
+function AgentBubble({ m, name, petId }: { m: ChatMessageView; name: string; petId: string }) {
   return (
     <div style={{ display: "flex", gap: 9, paddingRight: 24 }}>
       <AgentMark s={28} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "12px 14px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)" }}>
           {m.text && <div style={{ fontSize: 14.5, lineHeight: 1.5, color: C.charcoal }}>{m.text}</div>}
-          <Cards cards={m.cards} name={name} />
+          <Cards cards={m.cards} name={name} petId={petId} />
         </div>
       </div>
     </div>
@@ -245,7 +245,7 @@ export function CompanionScreen({
       <div ref={scrollRef} className="gv-scroll" style={{ flex: 1, overflowY: "auto", padding: "14px 14px 8px" }}>
         {empty ? (
           <div style={{ padding: "8px 2px" }}>
-            <AgentBubble name={petName} m={{ id: "intro", role: "assistant", cards: [], media: [], text: `Hello — I'm so glad you're here. I'm here to help you keep track of ${petName} and get ready for the vet. I can't diagnose — but I remember everything, so you don't have to.` }} />
+            <AgentBubble name={petName} petId={petId} m={{ id: "intro", role: "assistant", cards: [], media: [], text: `Hello — I'm so glad you're here. I'm here to help you keep track of ${petName} and get ready for the vet. I can't diagnose — but I remember everything, so you don't have to.` }} />
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 16, paddingLeft: 37 }}>
               {SUGGESTIONS.map((s, i) => {
                 const label = s.replace("{name}", petName);
@@ -259,7 +259,7 @@ export function CompanionScreen({
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "6px 2px" }}>
-            {messages.map((m) => m.role === "owner" ? <OwnerBubble key={m.id} m={m} /> : <AgentBubble key={m.id} m={m} name={petName} />)}
+            {messages.map((m) => m.role === "owner" ? <OwnerBubble key={m.id} m={m} /> : <AgentBubble key={m.id} m={m} name={petName} petId={petId} />)}
             {sending && <Typing />}
           </div>
         )}
