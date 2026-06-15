@@ -125,7 +125,7 @@ export function RecallScreen({
         >
           Back to {header.name}&rsquo;s dashboard
         </Link>
-        <VetLine />
+        <VetLine petId={header.id} />
         <div style={{ height: 6 }} />
       </div>
     </main>

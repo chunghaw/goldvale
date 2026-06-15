@@ -542,7 +542,7 @@ function Confirmation({
         Back to today&rsquo;s check-in
       </button>
 
-      <VetLine paddingTop={4} />
+      <VetLine petId={header.id} paddingTop={4} />
       <div style={{ height: 8 }} />
     </div>
   );
@@ -669,7 +669,7 @@ export function CheckinScreen({ header, config }: { header: PetHeader; config: C
             {error && (
               <div style={{ fontSize: 12.5, color: C.danger, textAlign: "center", fontWeight: 600 }}>{error}</div>
             )}
-            <VetLine paddingTop={4} />
+            <VetLine petId={header.id} paddingTop={4} />
             <div style={{ height: 6 }} />
           </div>
         </>

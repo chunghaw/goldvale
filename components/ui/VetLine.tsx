@@ -2,14 +2,16 @@
  * The bounded "contact your vet now" element — the ONLY place the danger colour
  * appears. Red flags route here; Goldvale never makes the judgement itself
  * (lib/domain/guardrails.ts). Rendered as a plain link so it works in server
- * components; wire `href` to real vet-contact routing when available.
+ * components; routes to the real /pets/[id]/vet-contact escalation screen.
  */
 import { C } from "./tokens";
 
 export function VetLine({
-  href = "#contact-vet",
+  petId,
+  href,
   paddingTop = 6,
 }: {
+  petId: string;
   href?: string;
   paddingTop?: number;
 }) {
@@ -25,7 +27,7 @@ export function VetLine({
     >
       Noticed something worrying?{" "}
       <a
-        href={href}
+        href={href ?? `/pets/${petId}/vet-contact`}
         style={{
           color: C.danger,
           fontWeight: 650,

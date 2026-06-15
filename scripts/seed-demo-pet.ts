@@ -39,6 +39,7 @@ async function main() {
   // ── relational: owner → pet → plan → protocol ──────────────────────────────
   const [owner] = await db.insert(owners).values({
     email: DEMO_OWNER_EMAIL, displayName: "Demo Owner",
+    vetClinic: "Riverside Veterinary Clinic", vetPhone: "+61 2 9555 0142",
   }).returning();
 
   await db.insert(pets).values({

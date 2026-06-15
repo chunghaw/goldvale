@@ -26,6 +26,10 @@ export const owners = pgTable("owners", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
   displayName: text("display_name"),
+  // the owner's own vet clinic — the destination for the "contact your vet now"
+  // escalation path. Captured (optionally) at onboarding; never used to judge.
+  vetClinic: text("vet_clinic"),
+  vetPhone: text("vet_phone"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

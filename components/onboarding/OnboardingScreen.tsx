@@ -51,6 +51,8 @@ interface FormData {
   conditions: string[];
   template: string | null;
   onsetDate: string;
+  vetClinic: string;
+  vetPhone: string;
   hasPlan: "yes" | "no" | null;
   prescriber: string;
   exercises: string[];
@@ -293,6 +295,20 @@ function StepPlan({ data, set, toggleEx }: { data: FormData; set: <K extends key
       <div style={{ fontFamily: "var(--serif)", fontSize: 25, fontWeight: 500, letterSpacing: -0.4 }}>Your vet&rsquo;s plan</div>
       <div style={{ fontSize: 13, color: C.muted, marginTop: 5, lineHeight: 1.45 }}>Has your vet given a rehab or exercise plan? We&rsquo;ll store it so you can follow along.</div>
 
+      <div style={{ marginTop: 18, display: "flex", gap: 12 }}>
+        <div style={{ flex: 1.4 }}>
+          <FieldLabel optional>Vet clinic</FieldLabel>
+          <input value={data.vetClinic} onChange={(e) => set("vetClinic", e.target.value)} placeholder="Riverside Veterinary" style={inputStyle} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <FieldLabel optional>Clinic phone</FieldLabel>
+          <input value={data.vetPhone} onChange={(e) => set("vetPhone", e.target.value)} placeholder="+61 2 9555 0142" inputMode="tel" autoComplete="tel" style={inputStyle} />
+        </div>
+      </div>
+      <div style={{ fontSize: 11.5, color: C.mutedSoft, marginTop: 7, lineHeight: 1.4 }}>
+        So &ldquo;contact your vet now&rdquo; reaches the right place in one tap.
+      </div>
+
       <div style={{ display: "flex", gap: 9, marginTop: 18 }}>
         {([{ k: "yes", label: "Yes, I have one" }, { k: "no", label: "Not yet" }] as const).map((o) => {
           const on = data.hasPlan === o.k;
@@ -432,7 +448,7 @@ function AllSet({ data, onStart, saving }: { data: FormData; onStart: () => void
         </Primary>
         <div style={{ textAlign: "center", fontSize: 12, color: C.muted, padding: "14px 0 2px", lineHeight: 1.5 }}>
           Noticed something worrying?{" "}
-          <a href="#contact-vet" style={{ color: C.danger, fontWeight: 650, textDecoration: "underline", textUnderlineOffset: 2 }}>Contact your vet now</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=emergency+vet+near+me" target="_blank" rel="noopener noreferrer" style={{ color: C.danger, fontWeight: 650, textDecoration: "underline", textUnderlineOffset: 2 }}>Contact your vet now</a>
         </div>
       </div>
     </div>
@@ -447,6 +463,7 @@ export function OnboardingScreen() {
   const [data, setData] = useState<FormData>({
     name: "", species: null, breed: "", age: "", photo: false, senior: false,
     conditions: [], template: null, onsetDate: "",
+    vetClinic: "", vetPhone: "",
     hasPlan: null, prescriber: "", exercises: [], meds: [],
   });
 
@@ -480,6 +497,8 @@ export function OnboardingScreen() {
         conditions: data.conditions,
         template: data.template,
         onsetDate: data.onsetDate,
+        vetClinic: data.vetClinic,
+        vetPhone: data.vetPhone,
         hasPlan: data.hasPlan,
         prescriber: data.prescriber,
         exercises: data.exercises,

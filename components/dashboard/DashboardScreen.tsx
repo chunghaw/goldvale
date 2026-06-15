@@ -406,7 +406,7 @@ export function DashboardScreen({ header, view }: { header: PetHeader; view: Das
         {view.pattern.occurrences.length > 0 && <PatternCard pattern={view.pattern} href={recallHref} />}
         {view.recovery.length > 0 && <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />}
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />
-        <VetLine />
+        <VetLine petId={header.id} />
         <div style={{ height: 6 }} />
       </div>
     </main>

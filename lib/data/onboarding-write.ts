@@ -28,6 +28,9 @@ export interface OnboardingInput {
   template?: string | null;
   /** free-text surgery/onset date */
   onsetDate?: string;
+  /** owner's vet clinic + phone — the escalation destination (optional, captured-only) */
+  vetClinic?: string;
+  vetPhone?: string;
   hasPlan?: "yes" | "no" | null;
   prescriber?: string;
   /** exercises ids the vet prescribed */
@@ -61,6 +64,8 @@ export async function createPetFromOnboarding(input: OnboardingInput): Promise<s
   const [owner] = await db.insert(owners).values({
     email: `owner-${randomUUID()}@goldvale.app`,
     displayName: "Goldvale owner",
+    vetClinic: input.vetClinic?.trim() || null,
+    vetPhone: input.vetPhone?.trim() || null,
   }).returning({ id: owners.id });
 
   const [pet] = await db.insert(pets).values({
