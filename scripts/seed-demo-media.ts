@@ -6,15 +6,17 @@
  * Seeds THROUGH saveMedia() (the exact live path: S3 upload → Titan embed →
  * media_assets insert), so what the demo shows is what the app would have written.
  *
- * Idempotent: wipes Oscar's media_assets first. All photos (no fake videos — we
- * have no real video files, so the "clips" count honestly stays 0).
+ * Idempotent: wipes Oscar's media_assets first. 10 real photos + 2 real video
+ * clips (free-for-commercial Mixkit footage shipped in handoff/media/assets/),
+ * so the library honestly reads "10 photos · 2 clips".
  *
  * Standalone:  npx tsx --env-file=.env scripts/seed-demo-media.ts
  * Also called best-effort by scripts/seed-demo-pet.ts so one command rebuilds all.
  *
  * Story (TPLO Week-5 post-op): a 6-photo incision HEALING series oldest→newest,
- * plus a first-walk, a rest, a garden potter, and a back-step. Captions are owner
- * observations — non-clinical: no diagnosis, grading, or staging.
+ * plus a first-walk, a rest, a garden potter, and a back-step, and two short
+ * movement clips. Captions are owner observations — non-clinical: no diagnosis,
+ * grading, or staging.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -52,10 +54,31 @@ const PHOTOS: SeedPhoto[] = [
   { file: "media-clip-stairs.jpg", caption: "Taking the back step slowly", daysAgo: 1 },
 ];
 
+interface SeedVideo {
+  file: string;
+  caption: string;
+  daysAgo: number;
+  durationSec: number;
+  mentionAtVet?: boolean;
+}
+
+// Real free-for-commercial Mixkit clips (Mixkit License: commercial OK, no
+// attribution). Captions are owner observations — non-clinical.
+const VIDEOS: SeedVideo[] = [
+  { file: "media-clip-forest-walk.mp4", caption: "Out for a woodland walk — moving freely", daysAgo: 7, durationSec: 11 },
+  { file: "media-clip-park-run.mp4", caption: "Trotting over to me at the park", daysAgo: 4, durationSec: 11 },
+];
+
 /** Read a JPEG from the asset dir and build a base64 data URL. */
 function dataUrlFor(file: string): string {
   const buf = readFileSync(join(ASSET_DIR, file));
   return `data:image/jpeg;base64,${buf.toString("base64")}`;
+}
+
+/** Read an mp4 from the asset dir and build a base64 data URL. */
+function videoDataUrlFor(file: string): string {
+  const buf = readFileSync(join(ASSET_DIR, file));
+  return `data:video/mp4;base64,${buf.toString("base64")}`;
 }
 
 export async function seedDemoMedia(): Promise<void> {
@@ -64,7 +87,7 @@ export async function seedDemoMedia(): Promise<void> {
   // ── idempotent: clear Oscar's existing media first ──
   await db.delete(mediaAssets).where(eq(mediaAssets.petId, OSCAR_PET_ID));
 
-  let seeded = 0;
+  let photos = 0;
   let embedded = 0;
   for (const p of PHOTOS) {
     const id = await saveMedia({
@@ -75,7 +98,7 @@ export async function seedDemoMedia(): Promise<void> {
       mentionAtVet: p.mentionAtVet ?? false,
       recordedAt: daysAgo(p.daysAgo),
     });
-    seeded++;
+    photos++;
     // verify the Titan embed landed (saveMedia degrades to null if Bedrock fails)
     const [row] = await db.select({ embedding: mediaAssets.embedding })
       .from(mediaAssets).where(eq(mediaAssets.id, id));
@@ -83,7 +106,22 @@ export async function seedDemoMedia(): Promise<void> {
     else console.warn(`  ⚠ ${p.file} stored without an embedding (visual recall will skip it)`);
   }
 
-  console.log(`✓ Seeded ${seeded} media photos for Oscar (${embedded}/${seeded} embedded)`);
+  // ── real video clips (no embedding — videos aren't part of visual recall) ──
+  let videos = 0;
+  for (const v of VIDEOS) {
+    await saveMedia({
+      petId: OSCAR_PET_ID,
+      kind: "video",
+      dataUrl: videoDataUrlFor(v.file),
+      caption: v.caption,
+      durationSec: v.durationSec,
+      mentionAtVet: v.mentionAtVet ?? false,
+      recordedAt: daysAgo(v.daysAgo),
+    });
+    videos++;
+  }
+
+  console.log(`✓ Seeded ${photos} photos (${embedded}/${photos} embedded) + ${videos} clips for Oscar`);
 }
 
 // Run standalone when invoked directly.

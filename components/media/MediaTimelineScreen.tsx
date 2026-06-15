@@ -19,18 +19,26 @@ function dur(sec: number | null): string {
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
 }
 
-function Tile({ it, petName, mentioned, onMention, onRecall }: {
-  it: MediaItemView; petName: string; mentioned: boolean; onMention: () => void; onRecall: () => void;
+function Tile({ it, petName, mentioned, onMention, onRecall, onPlay }: {
+  it: MediaItemView; petName: string; mentioned: boolean; onMention: () => void; onRecall: () => void; onPlay: () => void;
 }) {
+  const isVideo = it.kind === "video";
   return (
     <div style={{ position: "relative", borderRadius: 14, overflow: "hidden", background: C.field, border: `1px solid ${C.hairSoft}` }}>
       <div style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden" }}>
-        <img src={it.url} alt={it.caption ?? `${petName} media`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-        {it.kind === "video" && (
+        {isVideo ? (
+          // poster frame (no separate poster image): seek a touch past the start
+          <video src={`${it.url}#t=0.5`} muted playsInline preload="metadata" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        ) : (
+          <img src={it.url} alt={it.caption ?? `${petName} media`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        )}
+        {isVideo && (
           <>
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.28))" }} />
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 34, height: 34, borderRadius: 999, background: "rgba(0,0,0,0.42)", display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.play({ s: 16, c: "#fff" })}</div>
-            {it.durationSec ? <div style={{ position: "absolute", bottom: 7, right: 7, background: "rgba(0,0,0,0.5)", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6, fontVariantNumeric: "tabular-nums" }}>{dur(it.durationSec)}</div> : null}
+            <button className="gv-press" onClick={onPlay} aria-label={`Play ${it.caption ?? `${petName} clip`}`} style={{ position: "absolute", inset: 0, border: "none", background: "transparent", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: 34, height: 34, borderRadius: 999, background: "rgba(0,0,0,0.42)", display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.play({ s: 16, c: "#fff" })}</span>
+            </button>
+            {it.durationSec ? <div style={{ position: "absolute", bottom: 7, right: 7, background: "rgba(0,0,0,0.5)", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6, fontVariantNumeric: "tabular-nums", pointerEvents: "none" }}>{dur(it.durationSec)}</div> : null}
           </>
         )}
         <button className="gv-press" onClick={onMention} aria-label="Mention at vet" style={{ position: "absolute", top: 7, right: 7, width: 28, height: 28, borderRadius: 999, border: "none", cursor: "pointer", background: mentioned ? C.gold : "rgba(0,0,0,0.38)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: mentioned ? "0 2px 6px rgba(214,152,30,0.5)" : "none" }}>{Ico.flag({ s: 14, c: "#fff" })}</button>
@@ -86,6 +94,22 @@ function RecallSheet({ caption, analogues, onClose }: { caption: string; analogu
   );
 }
 
+function VideoLightbox({ item, onClose }: { item: MediaItemView; onClose: () => void }) {
+  return (
+    <div style={{ position: "absolute", inset: 0, zIndex: 40, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 18px" }}>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,18,20,0.86)" }} />
+      <button className="gv-press" onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 16, right: 16, zIndex: 1, width: 34, height: 34, borderRadius: 999, border: "1px solid rgba(255,255,255,0.28)", background: "rgba(0,0,0,0.4)", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.close({ s: 17, c: "#fff" })}</button>
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "100%" }}>
+        <video src={item.url} controls autoPlay playsInline style={{ maxWidth: "100%", maxHeight: "72vh", borderRadius: 14, background: "#000", display: "block" }} />
+        <div style={{ marginTop: 14, textAlign: "center", maxWidth: 320 }}>
+          {item.caption && <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.25 }}>{item.caption}</div>}
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.66)", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{item.dateLabel}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
   petId: string; petName: string; petPhoto: string | null; view: MediaTimelineView;
 }) {
@@ -93,6 +117,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
     Object.fromEntries(view.items.map((i) => [i.id, i.mentionAtVet])),
   );
   const [recall, setRecall] = useState<{ caption: string; analogues: MediaAnalogue[] | null } | null>(null);
+  const [activeVideo, setActiveVideo] = useState<MediaItemView | null>(null);
 
   const groups = useMemo(() => {
     const out: { label: string; items: MediaItemView[] }[] = [];
@@ -158,7 +183,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
             <div style={{ fontSize: 12, fontWeight: 700, color: C.muted, letterSpacing: 0.2, marginBottom: 10, paddingLeft: 2 }}>{g.label}</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {g.items.map((it) => (
-                <Tile key={it.id} it={it} petName={petName} mentioned={!!mentions[it.id]} onMention={() => onMention(it)} onRecall={() => onRecall(it)} />
+                <Tile key={it.id} it={it} petName={petName} mentioned={!!mentions[it.id]} onMention={() => onMention(it)} onRecall={() => onRecall(it)} onPlay={() => setActiveVideo(it)} />
               ))}
             </div>
           </div>
@@ -171,6 +196,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
       </div>
 
       {recall && <RecallSheet caption={recall.caption} analogues={recall.analogues} onClose={() => setRecall(null)} />}
+      {activeVideo && <VideoLightbox item={activeVideo} onClose={() => setActiveVideo(null)} />}
     </main>
   );
 }
