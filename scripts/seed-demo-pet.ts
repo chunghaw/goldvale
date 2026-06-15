@@ -23,6 +23,7 @@ import {
 import { bandFor, crossedMcid } from "../lib/domain/mobility";
 import { embedTexts } from "../lib/ai/bedrock";
 import { DEMO_OWNER_EMAIL, OSCAR_PET_ID } from "../lib/data/ids";
+import { seedDemoMedia } from "./seed-demo-media";
 
 const NOW = new Date("2026-06-09T09:00:00Z");
 const DAY = 24 * 60 * 60 * 1000;
@@ -160,6 +161,15 @@ async function main() {
     console.log(`✓ Embedded ${jrows.length} journal + ${srows.length} mobility vectors`);
   } catch (e) {
     console.warn("⚠ Embedding skipped (Bedrock unreachable) — run scripts/backfill-embeddings.ts later:", (e as Error).message);
+  }
+
+  // ── media + visual recall: seed Oscar's photo timeline through the live
+  //    saveMedia() path (S3 + Titan). Best-effort so the relational demo still
+  //    seeds if S3/Bedrock are unreachable. Idempotent — safe to re-run. ──
+  try {
+    await seedDemoMedia();
+  } catch (e) {
+    console.warn("⚠ Media seed skipped (S3/Bedrock unreachable) — run scripts/seed-demo-media.ts later:", (e as Error).message);
   }
 
   // ── analytics: refresh the materialized views so reads see the new history ──
