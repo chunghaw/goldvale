@@ -6,7 +6,6 @@
  * Non-clinical: this is RECALL of what the owner logged — it ranks similarity, it
  * never interprets, grades, or diagnoses.
  */
-import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Hero } from "@/components/ui/Hero";
 import { VetLine } from "@/components/ui/VetLine";
@@ -108,24 +107,6 @@ export function RecallScreen({
           {pattern.vetFraming} These are {header.name}&rsquo;s own notes, surfaced for your vet — not a diagnosis.
         </div>
 
-        <Link
-          href={`/pets/${header.id}`}
-          className="gv-press"
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: 13,
-            border: `1px solid ${C.hair}`,
-            background: "#fff",
-            color: C.charcoal,
-            fontSize: 13.5,
-            fontWeight: 650,
-            textAlign: "center",
-            textDecoration: "none",
-          }}
-        >
-          Back to {header.name}&rsquo;s dashboard
-        </Link>
         <VetLine petId={header.id} />
         <div style={{ height: 6 }} />
       </div>

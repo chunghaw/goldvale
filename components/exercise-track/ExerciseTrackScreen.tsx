@@ -195,8 +195,7 @@ function GatedView({ petId, view }: { petId: string; view: ExerciseTrackView }) 
       </Card>
 
       <VetFlagRow petId={petId} />
-      <div style={{ height: 8 }} />
-      <BackToDashboard petId={petId} />
+      <div style={{ height: 10 }} />
     </div>
   );
 }
@@ -272,18 +271,8 @@ function ActiveView({ header, view, ex, setEx, onLog, saving }: {
       )}
 
       <VetFlagRow redFlags={view.redFlags} petId={header.id} />
-      <div style={{ height: 8 }} />
-      <BackToDashboard petId={header.id} />
+      <div style={{ height: 10 }} />
     </div>
-  );
-}
-
-function BackToDashboard({ petId }: { petId: string }) {
-  return (
-    <Link href={`/pets/${petId}`} className="gv-press" style={{
-      width: "100%", padding: "12px", borderRadius: 13, border: `1px solid ${C.hair}`, background: "#fff",
-      color: C.charcoal, fontSize: 13.5, fontWeight: 650, textAlign: "center", textDecoration: "none",
-    }}>Back to dashboard</Link>
   );
 }
 

@@ -85,13 +85,17 @@ function Primary({ children, onClick, disabled }: { children: ReactNode; onClick
   );
 }
 
-function TopBar({ stepIdx, onBack, onSkip, canSkip }: { stepIdx: number; onBack: () => void; onSkip: () => void; canSkip: boolean }) {
+function TopBar({ stepIdx, onBack, onSkip, canSkip }: { stepIdx: number; onBack?: () => void; onSkip: () => void; canSkip: boolean }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-      <button className="gv-press" onClick={onBack} aria-label="Back" style={{
-        width: 34, height: 34, borderRadius: 999, border: `1px solid ${C.hair}`, background: "#fff",
-        display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
-      }}>{Ico.chevL({ s: 17, c: C.charcoal })}</button>
+      {onBack ? (
+        <button className="gv-press" onClick={onBack} aria-label="Back" style={{
+          width: 34, height: 34, borderRadius: 999, border: `1px solid ${C.hair}`, background: "#fff",
+          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
+        }}>{Ico.chevL({ s: 17, c: C.charcoal })}</button>
+      ) : (
+        <span style={{ width: 34, flexShrink: 0 }} aria-hidden />
+      )}
       <div style={{ flex: 1, display: "flex", gap: 5 }}>
         {Array.from({ length: CAPTURE_STEPS }).map((_, i) => (
           <div key={i} style={{ flex: 1, height: 5, borderRadius: 999, background: i < stepIdx ? C.sage : "#dbe3df", transition: "background .3s ease" }} />
@@ -102,64 +106,6 @@ function TopBar({ stepIdx, onBack, onSkip, canSkip }: { stepIdx: number; onBack:
       ) : (
         <span style={{ flexShrink: 0, fontSize: 12, color: C.mutedSoft, fontWeight: 600, fontVariantNumeric: "tabular-nums", width: 30, textAlign: "right" }}>{stepIdx}/{CAPTURE_STEPS}</span>
       )}
-    </div>
-  );
-}
-
-function Welcome({ onNext }: { onNext: () => void }) {
-  const rows = [
-    { ic: Ico.heart, a: ACC.pet, t: "Track", d: "A gentle daily note of how they’re doing." },
-    { ic: Ico.sparkles, a: ACC.cond, t: "Remember", d: "Goldvale spots the patterns you’d miss day to day." },
-    { ic: Ico.activity, a: ACC.plan, t: "Prepare", d: "Walk into every vet visit with the full picture." },
-  ];
-  return (
-    <div className="gv-step" style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      <div style={{
-        position: "relative", overflow: "hidden", borderRadius: 22,
-        background: "linear-gradient(150deg, #4f8a7d 0%, #46796f 42%, #50708a 100%)",
-        boxShadow: "0 14px 30px rgba(58,107,96,0.26)", padding: "28px 22px 26px", textAlign: "center",
-      }}>
-        <svg width="220" height="220" viewBox="0 0 220 220" style={{ position: "absolute", top: -64, right: -60, opacity: 0.16 }}>
-          <circle cx="110" cy="110" r="92" fill="none" stroke="#fff" strokeWidth="1.5" />
-          <circle cx="110" cy="110" r="66" fill="none" stroke="#fff" strokeWidth="1.5" />
-          <circle cx="110" cy="110" r="40" fill="none" stroke="#fff" strokeWidth="1.5" />
-        </svg>
-        <div style={{ position: "relative" }}>
-          <div style={{ width: 64, height: 64, borderRadius: 999, margin: "0 auto 16px", background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.28)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {Ico.paw({ s: 30, c: "#fff" })}
-          </div>
-          <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.8)", fontWeight: 650, letterSpacing: 1.4, textTransform: "uppercase" }}>Goldvale</div>
-          <div style={{ fontFamily: "var(--serif)", fontSize: 30, fontWeight: 500, letterSpacing: -0.6, lineHeight: 1.1, color: "#fff", marginTop: 8 }}>A calmer way to care</div>
-          <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.9)", lineHeight: 1.5, marginTop: 12, maxWidth: 280, marginLeft: "auto", marginRight: "auto" }}>
-            For the senior and chronically-ill pets who need a little extra looking-after.
-          </div>
-        </div>
-      </div>
-
-      <div style={{ padding: "22px 6px 8px", display: "flex", flexDirection: "column", gap: 16 }}>
-        {rows.map((r) => (
-          <div key={r.t} style={{ display: "flex", gap: 13, alignItems: "flex-start" }}>
-            <div style={{ width: 38, height: 38, borderRadius: 12, flexShrink: 0, background: r.a.soft, color: r.a.c, display: "flex", alignItems: "center", justifyContent: "center" }}>{r.ic({ s: 19, c: r.a.c })}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 600, letterSpacing: -0.2 }}>{r.t}</div>
-              <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.45, marginTop: 1 }}>{r.d}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: "13px 14px", margin: "12px 4px 0" }}>
-        <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 17, c: C.sage })}</span>
-        <div style={{ fontSize: 12.5, color: "#42504b", lineHeight: 1.5 }}>
-          Goldvale helps you <strong style={{ color: C.charcoal, fontWeight: 700 }}>track, remember, and prepare</strong> — it doesn&rsquo;t diagnose. Your vet decides.
-        </div>
-      </div>
-
-      <div style={{ flex: 1, minHeight: 18 }} />
-      <div style={{ padding: "8px 4px 4px" }}>
-        <Primary onClick={onNext}>Get started {Ico.chevR({ s: 17, c: "#fff" })}</Primary>
-        <div style={{ textAlign: "center", fontSize: 12, color: C.muted, marginTop: 13 }}>Takes about two minutes · everything&rsquo;s optional but the basics.</div>
-      </div>
     </div>
   );
 }
@@ -457,7 +403,7 @@ function AllSet({ data, onStart, saving }: { data: FormData; onStart: () => void
 
 export function OnboardingScreen() {
   const router = useRouter();
-  const [step, setStep] = useState(0); // 0 welcome · 1 pet · 2 conditions · 3 plan · 4 meds · 5 allset
+  const [step, setStep] = useState(1); // 1 pet · 2 conditions · 3 plan · 4 meds · 5 allset (the value prop lives on the landing, so we open straight on setup)
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<FormData>({
@@ -511,17 +457,15 @@ export function OnboardingScreen() {
     }
   }
 
-  const fullBleed = step === 0 || step === 5;
+  const fullBleed = step === 5;
   let body: ReactNode;
   let footer: ReactNode = null;
   let top: ReactNode = null;
 
-  if (step === 0) {
-    body = <Welcome onNext={() => go(1)} />;
-  } else if (step === 5) {
+  if (step === 5) {
     body = <AllSet data={data} onStart={handleStart} saving={saving} />;
   } else {
-    top = <TopBar stepIdx={step} onBack={() => go(step - 1)} onSkip={() => go(step + 1)} canSkip={step >= 2} />;
+    top = <TopBar stepIdx={step} onBack={step > 1 ? () => go(step - 1) : undefined} onSkip={() => go(step + 1)} canSkip={step >= 2} />;
     if (step === 1) body = <StepPet data={data} set={set} />;
     else if (step === 2) body = <StepConditions data={data} set={set} toggleCond={toggleCond} />;
     else if (step === 3) body = <StepPlan data={data} set={set} toggleEx={toggleEx} />;
