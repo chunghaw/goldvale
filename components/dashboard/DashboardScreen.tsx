@@ -408,7 +408,14 @@ export function DashboardScreen({ header, view, isDemo = false }: { header: PetH
         {view.recovery.length > 0 && <RecoveryCard phases={view.recovery} protocolLabel={view.protocolLabel} exercisesHref={`/pets/${header.id}/exercises`} />}
         <VetBriefCard header={header} briefCount={view.briefCount} href={briefHref} />
         <VetLine petId={header.id} />
-        {!isDemo && <SignOutButton />}
+        {isDemo ? (
+          <div style={{ textAlign: "center", padding: "8px 0 2px", fontSize: 12.5, color: C.muted, lineHeight: 1.5 }}>
+            You&rsquo;re exploring the demo ·{" "}
+            <Link href="/signup" style={{ color: C.sage, fontWeight: 700, textDecoration: "none" }}>Set up your own pet</Link>
+          </div>
+        ) : (
+          <SignOutButton />
+        )}
         <div style={{ height: 6 }} />
       </div>
     </main>

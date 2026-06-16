@@ -169,6 +169,12 @@ textarea.gv-note:focus { outline: none; border-color: var(--sage) !important; ba
    footer. The inner .gv-auth-center uses `margin: auto 0`, so the content sits
    vertically centered when it fits and falls back to top-aligned + scrollable
    when it doesn't (no flex-centering clip), across every phone resolution. */
+/* Fill the real visible area: the dynamic viewport on phones, the framed device
+   screen on desktop (never the whole window). Reused by any full-screen flow. */
+.gv-screen-fill { min-height: 100dvh; }
+@media (min-width: 600px) {
+  .gv-screen-fill { min-height: 100%; }
+}
 .gv-auth-page {
   display: flex;
   flex-direction: column;

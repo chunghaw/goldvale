@@ -9,6 +9,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthHero, FieldLabel, NonClinicalLine, PrimaryButton, authInputStyle } from "./authShared";
+import { BackButton } from "@/components/ui/BackButton";
 import { C } from "@/components/ui/tokens";
 import { logIn } from "@/lib/actions/auth";
 
@@ -41,6 +42,7 @@ export function LoginScreen({ demoPetId }: { demoPetId: string }) {
 
   return (
     <main className="gv-auth-page">
+      <BackButton href="/" label="Back to welcome" />
       <div className="gv-auth-center">
       <AuthHero title="Welcome back" subtitle="Pick up right where you and your companion left off." />
 

@@ -9,6 +9,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthHero, FieldLabel, NonClinicalLine, PrimaryButton, authInputStyle } from "./authShared";
+import { BackButton } from "@/components/ui/BackButton";
 import { C } from "@/components/ui/tokens";
 import { MIN_PASSWORD_LENGTH } from "@/lib/domain/credentials";
 import { signUp } from "@/lib/actions/auth";
@@ -43,6 +44,7 @@ export function SignupScreen() {
 
   return (
     <main className="gv-auth-page">
+      <BackButton href="/" label="Back to welcome" />
       <div className="gv-auth-center">
       <AuthHero title="Set up your pet" subtitle="A calm home for everything your senior or chronically-ill companion needs." />
 
