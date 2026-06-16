@@ -261,6 +261,7 @@ export function VetBriefScreen({ header, brief }: { header: PetHeader; brief: Br
       <Hero
         avatarSrc={header.photoUrl}
         avatarAlt={header.name}
+        back={`/pets/${header.id}`}
         eyebrow={`Brief for ${header.vetName}`}
         title={`${header.name}’s vet brief`}
         badge={header.nextVisit ? (

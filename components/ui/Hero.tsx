@@ -5,6 +5,7 @@
  */
 import type { ReactNode } from "react";
 import { Avatar } from "./Avatar";
+import { BackButton } from "./BackButton";
 
 export function Hero({
   avatarSrc,
@@ -12,6 +13,7 @@ export function Hero({
   eyebrow,
   title,
   badge,
+  back,
   children,
 }: {
   avatarSrc: string | null;
@@ -19,6 +21,8 @@ export function Hero({
   eyebrow: string;
   title: ReactNode;
   badge?: ReactNode;
+  /** when set, a back/exit chevron is shown top-left, linking here */
+  back?: string;
   children?: ReactNode;
 }) {
   return (
@@ -53,7 +57,8 @@ export function Hero({
         <path d="M2 50 Q30 6 60 30 T118 18" fill="none" stroke="#fff" strokeWidth="1.4" />
       </svg>
 
-      <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 13 }}>
+      <div style={{ position: "relative", display: "flex", alignItems: "center", gap: back ? 11 : 13 }}>
+        {back && <BackButton href={back} label="Back to dashboard" light />}
         <div
           style={{
             width: 58,

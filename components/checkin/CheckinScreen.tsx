@@ -34,6 +34,7 @@ function Header({ header, config, progress }: { header: PetHeader; config: Check
       <Hero
         avatarSrc={header.photoUrl}
         avatarAlt={header.name}
+        back={`/pets/${header.id}`}
         eyebrow={config.dateLabel}
         title={`${header.name}’s day`}
         badge={header.phaseLabel}

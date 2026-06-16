@@ -9,6 +9,7 @@
  */
 import { useMemo, useState } from "react";
 import { Avatar } from "@/components/ui/Avatar";
+import { BackButton } from "@/components/ui/BackButton";
 import { Ico } from "@/components/ui/icons";
 import { C } from "@/components/ui/tokens";
 import { loadSimilar, toggleMention } from "@/lib/actions/media";
@@ -150,12 +151,13 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
   return (
     <main style={{ width: "100%", maxWidth: 440, margin: "0 auto", height: "100dvh", maxHeight: "100%", display: "flex", flexDirection: "column", background: C.cream, position: "relative" }}>
       <div style={{ flexShrink: 0, position: "relative", overflow: "hidden", background: "linear-gradient(120deg, #4f8a7d 0%, #4a8076 45%, #54748f 100%)", padding: "24px 16px 16px" }}>
-        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 11 }}>
-          <div style={{ width: 42, height: 42, borderRadius: 999, flexShrink: 0, padding: 2.5, background: "rgba(255,255,255,0.22)" }}>
-            <Avatar src={petPhoto} name={petName} size={37} />
+        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 10 }}>
+          <BackButton href={`/pets/${petId}`} label={`Back to ${petName}'s dashboard`} light />
+          <div style={{ width: 34, height: 34, borderRadius: 999, flexShrink: 0, padding: 2, background: "rgba(255,255,255,0.22)" }}>
+            <Avatar src={petPhoto} name={petName} size={30} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: "var(--serif)", fontSize: 19, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1 }}>{petName}&rsquo;s photos &amp; clips</div>
+            <div style={{ fontFamily: "var(--serif)", fontSize: 17.5, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{petName}&rsquo;s photos &amp; clips</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.82)", fontWeight: 500, marginTop: 1, fontVariantNumeric: "tabular-nums" }}>{view.photoCount} photos · {view.videoCount} clips</div>
           </div>
         </div>

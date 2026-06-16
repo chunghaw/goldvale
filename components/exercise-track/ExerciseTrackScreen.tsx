@@ -330,6 +330,7 @@ export function ExerciseTrackScreen({ header, view }: { header: PetHeader; view:
       <Hero
         avatarSrc={header.photoUrl}
         avatarAlt={header.name}
+        back={`/pets/${header.id}`}
         eyebrow="Home rehab"
         title={`${header.name}’s rehab`}
         badge={view.gated ? "No plan yet" : header.phaseLabel}

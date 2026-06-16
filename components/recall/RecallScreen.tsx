@@ -31,6 +31,7 @@ export function RecallScreen({
       <Hero
         avatarSrc={header.photoUrl}
         avatarAlt={header.name}
+        back={`/pets/${header.id}`}
         eyebrow="Pattern memory"
         title="Days like this"
         badge={<>{Ico.sparkles({ s: 12, c: "#fff" })} kNN</>}
