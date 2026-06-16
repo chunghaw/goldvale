@@ -8,8 +8,10 @@
  */
 import { revalidatePath } from "next/cache";
 import { persistCheckin, type SaveCheckinInput } from "@/lib/data/checkin-write";
+import { requirePetAccess } from "@/lib/auth/access";
 
 export async function saveCheckin(input: SaveCheckinInput): Promise<{ ok: true }> {
+  await requirePetAccess(input.petId);
   await persistCheckin(input);
   revalidatePath(`/pets/${input.petId}`);
   return { ok: true };

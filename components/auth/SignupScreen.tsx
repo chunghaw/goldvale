@@ -50,23 +50,23 @@ export function SignupScreen() {
 
       <form onSubmit={onSubmit} style={{ padding: "0 4px", display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <FieldLabel>Your name <span style={{ color: C.mutedSoft, fontWeight: 500, fontSize: 10.5 }}>optional</span></FieldLabel>
+          <FieldLabel htmlFor="signup-name">Your name <span style={{ color: C.mutedSoft, fontWeight: 500, fontSize: 10.5 }}>optional</span></FieldLabel>
           <input
-            type="text" autoComplete="name" value={displayName}
+            id="signup-name" type="text" autoComplete="name" value={displayName}
             onChange={(e) => setDisplayName(e.target.value)} placeholder="e.g. Sam" style={authInputStyle}
           />
         </div>
         <div>
-          <FieldLabel>Email</FieldLabel>
+          <FieldLabel htmlFor="signup-email">Email</FieldLabel>
           <input
-            type="email" autoComplete="email" inputMode="email" required value={email}
+            id="signup-email" type="email" autoComplete="email" inputMode="email" required value={email}
             onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={authInputStyle}
           />
         </div>
         <div>
-          <FieldLabel>Password</FieldLabel>
+          <FieldLabel htmlFor="signup-password">Password</FieldLabel>
           <input
-            type="password" autoComplete="new-password" required minLength={MIN_PASSWORD_LENGTH} value={password}
+            id="signup-password" type="password" autoComplete="new-password" required minLength={MIN_PASSWORD_LENGTH} value={password}
             onChange={(e) => setPassword(e.target.value)} placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`} style={authInputStyle}
           />
         </div>

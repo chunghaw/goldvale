@@ -48,16 +48,16 @@ export function LoginScreen({ demoPetId }: { demoPetId: string }) {
 
       <form onSubmit={onSubmit} style={{ padding: "0 4px", display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <FieldLabel>Email</FieldLabel>
+          <FieldLabel htmlFor="login-email">Email</FieldLabel>
           <input
-            type="email" autoComplete="email" inputMode="email" required value={email}
+            id="login-email" type="email" autoComplete="email" inputMode="email" required value={email}
             onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={authInputStyle}
           />
         </div>
         <div>
-          <FieldLabel>Password</FieldLabel>
+          <FieldLabel htmlFor="login-password">Password</FieldLabel>
           <input
-            type="password" autoComplete="current-password" required value={password}
+            id="login-password" type="password" autoComplete="current-password" required value={password}
             onChange={(e) => setPassword(e.target.value)} placeholder="Your password" style={authInputStyle}
           />
         </div>

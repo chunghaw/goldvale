@@ -15,11 +15,13 @@ import {
 } from "@/lib/data/chat";
 import { saveMedia } from "@/lib/data/media-write";
 import { decodeDataUrl, presignGet } from "@/lib/storage/s3";
+import { requirePetAccess } from "@/lib/auth/access";
 
 export async function sendCompanionMessage(
   input: { petId: string; text: string; imageDataUrl?: string },
 ): Promise<{ owner: ChatMessageView; assistant: ChatMessageView }> {
   const { petId, text } = input;
+  await requirePetAccess(petId);
   const db = getDb();
   const [pet] = await db.select({ name: pets.name }).from(pets).where(eq(pets.id, petId)).limit(1);
   const petName = pet?.name ?? "your pet";

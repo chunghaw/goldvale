@@ -51,9 +51,9 @@ export function NonClinicalLine() {
   );
 }
 
-export function FieldLabel({ children }: { children: ReactNode }) {
+export function FieldLabel({ children, htmlFor }: { children: ReactNode; htmlFor?: string }) {
   return (
-    <div style={{ fontSize: 12.5, fontWeight: 650, color: C.charcoal, marginBottom: 7 }}>{children}</div>
+    <label htmlFor={htmlFor} style={{ display: "block", fontSize: 12.5, fontWeight: 650, color: C.charcoal, marginBottom: 7 }}>{children}</label>
   );
 }
 

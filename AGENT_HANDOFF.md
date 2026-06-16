@@ -38,7 +38,8 @@ Six features (full detail in `docs/proposals/H0_GOLDVALE_BRIEF.html`): ① mobil
 | Database | **AWS Aurora PostgreSQL + pgvector** — relational + time-series + vector + analytics (the one backend) |
 | ORM | Drizzle (`db/schema.sql` is canonical DDL; `lib/db/schema.ts` is the typed query layer) |
 | AI | Vercel AI SDK + **Amazon Bedrock (Claude)**; Titan/Cohere embeddings (1024-dim) |
-| Auth/pay | Auth.js + Stripe (Iteration 4) |
+| Auth/pay | **Auth.js / next-auth v5 — email+password accounts, DONE** (JWT session, bcrypt); Stripe later |
+| Media/storage | **S3** (private bucket, presigned GET) — photo library + playable video clips |
 
 ---
 
@@ -58,7 +59,9 @@ Six features (full detail in `docs/proposals/H0_GOLDVALE_BRIEF.html`): ① mobil
 
 ## 6. Current build state (✅ done + tested)
 
-Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldvale`, branch `main`. `tsc --noEmit` clean, **25 vitest tests pass**, `npm run lint` + `next build` green (all 3 routes compile). `handoff/` + `design/` are eslint-ignored (raw design mocks).
+Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldvale`, branch `main`. `tsc --noEmit` clean, **39 vitest tests pass**, `npm run lint` + `next build` green. `handoff/` + `design/` are eslint-ignored (raw design mocks).
+
+**The product is feature-complete and demo-ready.** Entry is now a **landing page** (`/`): *Set up your own pet · Log in · Explore the live demo (Oscar)*. Real **email+password accounts** (signup → your own pet; the demo pet stays public). Screens: landing, login, signup, onboarding (multi-step, creates a real pet under your account), dashboard, daily check-in, companion AI chat (Bedrock + tools, multimodal photo-in-chat), pgvector **text recall**, media library with **image visual-recall** (kNN over Titan image embeddings) + **playable video clips**, vet brief, exercise track, and a real **vet-contact escalation** screen. Every pet sub-page has a back-to-dashboard control; the whole app is frame/resolution-robust (`.gv-screen-fill` / `.gv-auth-page`).
 
 | Area | Files |
 | --- | --- |
@@ -74,6 +77,13 @@ Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldv
 | **AWS go-live (done)** | Aurora PG 17.7 Serverless v2 (us-east-1, public, password auth) live. **Bedrock live**: Titan embeddings (1024-dim) + **Claude `us.anthropic.claude-sonnet-4-6`** (all Anthropic models need a `us.`/`global.` inference-profile id — bare id = "on-demand not supported"). `.env` has working `DATABASE_URL` + AWS keys. `scripts/`: `migrate` · `seed` · **`seed-demo-pet`** (Oscar's 34-day history) · **`backfill-embeddings`** (Titan → pgvector) · `smoke` (4-layer) · `bedrock-models` (list invokable ids) · `bedrock-smoke` · `check-view` · `check-recall`. Demo pet = **Oscar** (`OSCAR_PET_ID`, `lib/data/ids.ts`). |
 | **pgvector recall (live in UI)** | `recallSimilarJournal()` (`lib/data/queries.ts`) embeds a query + kNN over `journal_entries` (HNSW cosine). Surfaced at `/pets/[id]/recall` (`components/recall/RecallScreen.tsx`), deep-linked from the dashboard + check-in. Verified live on Vercel. |
 | **Check-in write (live)** | `persistCheckin` (`lib/data/checkin-write.ts`) + `saveCheckin` server action (`lib/actions/checkin.ts`) insert across the time-series + pgvector layers (note embedded via Titan). |
+| **Accounts (Auth.js v5)** | `auth.ts` (Credentials + JWT, `session.user.ownerId`), `lib/auth/passwords.ts` (bcrypt), `lib/domain/credentials.ts` (pure validation, tested), `lib/actions/auth.ts` (signUp/logIn/logOut), `app/{login,signup}/page.tsx` + `components/auth/*`. `owners.password_hash` (nullable; demo owner has none → unloggable). Env: `AUTH_SECRET`, `AUTH_TRUST_HOST=true`. |
+| **Ownership guards** | `app/pets/[id]/layout.tsx` gates page renders (demo public, else session-owned). **`lib/auth/access.ts` `requirePetAccess(petId)` gates every server action** (checkin/companion/exercises/media) — pages alone don't protect direct action POSTs. `lib/data/ownership.ts` (`ownerOwnsPet`, `mostRecentPetId`). |
+| **Companion agent (live)** | `lib/ai/companion.ts` — Bedrock Claude + tools over Aurora (logToJournal · recallPastNotes · getMobilityTrend · addVetBriefQuestion · escalateToVet); final reply through the non-clinical guardrail; replies forced to plain text. Multimodal photo-in-chat. `components/companion/CompanionScreen.tsx`, `lib/actions/companion.ts`, `lib/data/chat.ts`. |
+| **Media + visual recall + video** | `lib/data/media.ts` (timeline + `getSimilarMedia` kNN), `lib/data/media-write.ts` (`saveMedia` → S3 + Titan image embed), `lib/storage/s3.ts`, `lib/actions/media.ts`, `components/media/MediaTimelineScreen.tsx` (first-frame `<video>` thumbs + tap-to-play lightbox). Seeded by `scripts/seed-demo-media.ts` (incision healing series + 2 Mixkit clips). |
+| **Vet-contact escalation** | `lib/data/vet-contact.ts` (`getVetContact`, `telHref`), `components/vet-contact/VetContactScreen.tsx`, `/pets/[id]/vet-contact`. One-tap call to the saved clinic + emergency-vet map + the protocol's red-flag rules as vet reference. `owners.vet_clinic/vet_phone`. |
+| **Onboarding (wired to auth)** | `components/onboarding/OnboardingScreen.tsx` (opens on the pet form — Welcome removed as a landing dup), `lib/data/onboarding-write.ts` `createPetFromOnboarding(input, ownerId)` (creates the pet under the session owner). |
+| **Nav / UX** | `components/ui/BackButton.tsx` + Hero `back` slot — back-to-dashboard on every sub-page; demo dashboard exit / Sign out; frame-aware sizing (`app/globals.css`). |
 | **🚀 DEPLOYED to Vercel** | **https://goldvale.vercel.app** (project `chung-haws-projects/goldvale`, GitHub-connected → auto-deploys on push to `main`). All 8 env vars set on Production; Aurora SG opened to `0.0.0.0/0:5432` for Vercel egress (`scripts/sg-demo.ts open`/`close` — **re-lock after the hackathon**). All routes 200 with live Aurora+Bedrock data. |
 | Docs | `CLAUDE.md`, `docs/BUILD_PLAN.md`, `HANDOFF.md` (frontend), `docs/proposals/*.html` |
 
@@ -81,11 +91,13 @@ Repo: **github.com/chunghaw/goldvale**, local `C:\Users\EdmundTan\projects\goldv
 
 ## 7. What's pending / blocked
 
-**Go-live is DONE — Aurora + Bedrock + both AI features are live and verified.** No remaining infra blockers. The full vertical slice works on real data: the 3 screens read live, the check-in **writes** live, and pgvector recall is exposed in the UI.
+**Everything on the critical path is DONE.** Aurora + Bedrock + S3 are live; all four data-model layers are exercised (relational · time-series · pgvector **text** recall · pgvector **image** recall); accounts work; the demo is feature-complete and showable on real data with no mock anywhere a judge sees.
 
-1. **Check-in save — DONE.** `lib/data/checkin-write.ts` (`persistCheckin`, pure/testable) + `lib/actions/checkin.ts` (`"use server"` wrapper, revalidates `/pets/[id]`). CheckinScreen calls it; inserts `daily_checkins` + partitioned `exercise_session_events` + `medication_events` + `journal_entries` (note embedded via Titan). Verified live by `scripts/check-save.ts` (round-trips +1 each table, then cleans up).
-2. **Recall UI — DONE.** `/pets/[id]/recall` (`app/pets/[id]/recall/page.tsx` + `components/recall/RecallScreen.tsx`) runs live `recallSimilarJournal` and ranks the owner's own journal days by meaning; deep-linked from the dashboard PatternCard + the check-in confirmation. Degrades gracefully if Bedrock/DB is unreachable.
-3. **Next up (no blockers):** deploy to Vercel (wire the `.env` vars as Vercel env), then onboarding + exercise-track screens, and Iterations 2–5 (`docs/BUILD_PLAN.md`). Token choice = cooled (made).
+Remaining / deferred (none block the demo):
+1. **Stripe / monetization** — accounts are in place; payments would be the next layer (post-hackathon or a stretch iteration).
+2. **Demo hygiene** — the demo pet (Oscar) is a **shared, public, writable** record (so the interactive demo works without an account); test interactions pollute it. Reseed before judging: `npx tsx --env-file=.env scripts/seed-demo-pet.ts` (now also embeds vectors + seeds media inline; reset chat by deleting Oscar's `chat_threads` row).
+3. **Re-lock the Aurora SG** (`scripts/sg-demo.ts close`) after the hackathon — it's open to `0.0.0.0/0:5432` for Vercel egress.
+4. **Optional polish** — submission assets (video, architecture diagram, screenshots in `docs/screenshots/`), further a11y, multi-pet UI.
 
 ---
 
@@ -106,15 +118,15 @@ Pragmatic data engineer (SQL / dbt / Microsoft Fabric / ACHA migration). Values:
 - **Companion agent (`lib/ai/companion.ts`).** Bedrock Claude + tool-use over Aurora (logToJournal · recallPastNotes · getMobilityTrend · addVetBriefQuestion · escalateToVet); final reply passes the non-clinical guardrail; tool calls → rich cards. Verified live. `scripts/check-companion.ts` smokes it; `scripts/seed-companion-demo.ts` seeds Oscar's starter thread. **GenPup-M is higher = worse** — the trend tool passes `direction`/`betterThanBaseline` so the agent never reads a lower score as worse.
 - **Vercel deploy (CLI).** `vercel deploy --prod --yes`. GitHub is connected so pushes to `main` also auto-deploy. Env vars are **Sensitive** so `vercel env pull` shows them blank — that's normal, NOT empty; verify via the app, not the pull.
 - **⚠️ Setting Vercel env vars from PowerShell adds a UTF-8 BOM.** Piping a value (`$v | vercel env add` *or* `... | node vc.js env add`) prepends a `﻿` BOM → `DATABASE_URL` becomes 121 chars and throws `Invalid URL`; every value is corrupted. **Fix that works:** write the value to a BOM-free temp file (`[IO.File]::WriteAllText($f,$v,(New-Object System.Text.UTF8Encoding $false))`) and feed it via `Start-Process node -ArgumentList @($vc,'env','add',$k,'production') -RedirectStandardInput $f -Wait`. A temporary `app/api/debug` route (env lengths/heads + a `select 1`) is the fastest way to diagnose this class of issue — delete it after.
-- **Secrets** live only in `.env` (gitignored via `.env*` + `!.env.example`). Never commit keys.
+- **Secrets** live only in `.env` (gitignored via `.env*` + `!.env.example`). Never commit keys. **Env now also needs:** `AUTH_SECRET` (next-auth JWT signing), `AUTH_TRUST_HOST=true` (Vercel), `S3_BUCKET` (+ the AWS keys, reused for S3). All set on Vercel Production (BOM-free — see the BOM gotcha above).
+- **Server actions must self-guard.** The `app/pets/[id]/layout.tsx` ownership check only gates page renders; React Server Actions are direct POSTs that bypass it. Every action taking a `petId` calls `requirePetAccess(petId)` (`lib/auth/access.ts`) — demo pet open, every other pet session-owned. Don't add a pet-scoped action without it.
 - **Custom `.claude/agents` register on a fresh session**, not mid-session — a mid-session workflow must use the default agent with roles inlined.
 
 ---
 
 ## 10. Immediate next action
 
-The 3 demo screens are built and showable on demo data. The critical-path move now is **make them real** — which needs AWS:
-- **AWS values →** create `.env`, `npx tsx scripts/migrate.ts` + `scripts/seed.ts`, then replace the `getPetView` body in `lib/data/pets.ts` with real Aurora queries (relational pet/plan + time-series check-ins/scores + pgvector recall + the adherence/baseline MVs) — the `PetView` shape and every component stay unchanged. Then wire the check-in **save** server action and the pgvector pattern-memory recall (live Bedrock embeddings via `narrateSafe`).
-- **More design screens (onboarding, exercise-track) →** same pattern: presentational component in `components/` + typed view-model in `lib/data` + a route.
-
-Design and AWS proceed in parallel.
+The product is **feature-complete and deployed**. Work now is iterative polish + submission prep:
+- **Before judging:** reseed Oscar (`scripts/seed-demo-pet.ts`) so the shared demo is pristine; finalize submission assets (≤3-min video, architecture diagram, `docs/screenshots/`); re-lock the Aurora SG after.
+- **If continuing the product:** Stripe/monetization, multi-pet UI, deeper a11y. Same pattern as everything else — presentational component in `components/` + typed view-model in `lib/data` + a route + a server action guarded by `requirePetAccess`.
+- **Security note:** any NEW server action that takes a `petId` MUST call `requirePetAccess(petId)` (the page-layout guard does not protect direct action POSTs).

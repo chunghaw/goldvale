@@ -7,8 +7,10 @@
  */
 import { revalidatePath } from "next/cache";
 import { logExerciseSessions, type LogSessionInput } from "@/lib/data/exercise-write";
+import { requirePetAccess } from "@/lib/auth/access";
 
 export async function logSession(input: LogSessionInput): Promise<{ ok: true; count: number }> {
+  await requirePetAccess(input.petId);
   const count = await logExerciseSessions(input);
   revalidatePath(`/pets/${input.petId}/exercises`);
   revalidatePath(`/pets/${input.petId}`);
