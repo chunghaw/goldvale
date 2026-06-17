@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="760" viewBox="0 0 1040 760" font-family="-apple-system, Segoe UI, Roboto, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="830" viewBox="0 0 1080 830" font-family="-apple-system, Segoe UI, Roboto, sans-serif">
   <defs>
     <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#4f8a7d"/><stop offset="0.45" stop-color="#46796f"/><stop offset="1" stop-color="#50708a"/>
@@ -9,98 +9,114 @@
     <style>
       .h{fill:#20262a;font-weight:700}.s{fill:#687069}.w{fill:#fff}.lbl{fill:#5b6b66;font-size:12px}
       .card{fill:#fff;stroke:#dde3df}.tag{font-size:11px;font-weight:700;letter-spacing:.4px}
+      .row{font-size:12.5px;fill:#2a2f33}.note{font-size:11px;fill:#687069}
+      .chip{fill:#f2f5f3;stroke:#e8ece9}.chipt{font-size:12px;fill:#2a2f33}
     </style>
   </defs>
 
-  <rect width="1040" height="760" fill="#eef1ef"/>
-  <text x="40" y="52" font-size="27" font-weight="700" fill="#20262a">Goldvale — one Aurora backend, four load-bearing layers</text>
-  <text x="40" y="78" font-size="14" class="s">A calm daily companion + home-rehab tracker for senior/chronic dogs &amp; cats · H0 hackathon (Vercel + AWS)</text>
+  <rect width="1080" height="830" fill="#eef1ef"/>
+  <text x="40" y="50" font-size="26" font-weight="700" fill="#20262a">Goldvale — one Aurora backend, four load-bearing layers</text>
+  <text x="40" y="76" font-size="13.5" class="s">A calm daily companion + home-rehab tracker for senior / chronically-ill dogs &amp; cats · H0 hackathon (Vercel + AWS Aurora)</text>
 
-  <!-- USER -->
+  <!-- OWNER -->
   <g>
-    <rect x="40" y="108" width="220" height="92" rx="16" class="card"/>
-    <text x="64" y="146" font-size="16" class="h">📱 Owner (mobile PWA)</text>
-    <text x="64" y="170" class="lbl">20-second daily check-in</text>
-    <text x="64" y="188" class="lbl">trend · recall · vet-ready brief</text>
+    <rect x="40" y="104" width="252" height="88" rx="16" class="card"/>
+    <text x="62" y="140" font-size="15" class="h">📱 Owner — mobile-first web app</text>
+    <text x="62" y="162" class="lbl">accounts · or the public live demo</text>
+    <text x="62" y="180" class="lbl">20-sec check-in · trend · recall · brief</text>
   </g>
+  <line x1="166" y1="192" x2="166" y2="236" stroke="#8a938e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="178" y="220" font-size="11" class="s">HTTPS</text>
 
   <!-- VERCEL -->
   <g>
-    <rect x="40" y="240" width="500" height="150" rx="18" fill="#fff" stroke="#dde3df"/>
-    <rect x="40" y="240" width="500" height="40" rx="18" fill="#20262a"/>
-    <text x="62" y="266" font-size="15" class="w" font-weight="700">▲ Vercel — Next.js 16 (App Router · React 19 · TS)</text>
-    <g font-size="12.5" fill="#2a2f33">
-      <rect x="60" y="300" width="200" height="32" rx="9" fill="#f2f5f3" stroke="#e8ece9"/>
-      <text x="74" y="321">Server Components — reads</text>
-      <rect x="60" y="342" width="200" height="32" rx="9" fill="#f2f5f3" stroke="#e8ece9"/>
-      <text x="74" y="363">Server Actions — check-in writes</text>
-      <rect x="276" y="300" width="246" height="32" rx="9" fill="#f2f5f3" stroke="#e8ece9"/>
-      <text x="290" y="321">lib/domain — deterministic scoring</text>
-      <rect x="276" y="342" width="246" height="32" rx="9" fill="#fbeee0" stroke="#e9d4b3"/>
-      <text x="290" y="363" fill="#8a6410">assertNonClinical() guardrail</text>
-    </g>
+    <rect x="40" y="236" width="520" height="184" rx="18" fill="#fff" stroke="#dde3df"/>
+    <rect x="40" y="236" width="520" height="40" rx="18" fill="#20262a"/>
+    <text x="62" y="262" font-size="14.5" class="w" font-weight="700">▲ Vercel — Next.js 16 · React 19 · TypeScript</text>
+    <rect x="60" y="288" width="238" height="32" rx="9" class="chip"/><text x="74" y="309" class="chipt">Auth.js — accounts + ownership guard</text>
+    <rect x="310" y="288" width="232" height="32" rx="9" class="chip"/><text x="324" y="309" class="chipt">lib/domain — deterministic scoring</text>
+    <rect x="60" y="328" width="238" height="32" rx="9" class="chip"/><text x="74" y="349" class="chipt">Server Components — live reads</text>
+    <rect x="310" y="328" width="232" height="32" rx="9" class="chip"/><text x="324" y="349" class="chipt">Server Actions — guarded writes</text>
+    <rect x="60" y="368" width="482" height="34" rx="9" fill="#fbeee0" stroke="#e9d4b3"/>
+    <text x="74" y="390" font-size="12" fill="#8a6410">assertNonClinical() — non-clinical guardrail on every model line</text>
   </g>
-  <text x="290" y="226" font-size="12" class="s" text-anchor="middle">HTTPS</text>
-  <line x1="150" y1="200" x2="150" y2="240" stroke="#8a938e" stroke-width="1.5" marker-end="url(#arr)"/>
 
   <!-- BEDROCK -->
   <g>
-    <rect x="600" y="240" width="400" height="150" rx="18" fill="#fff" stroke="#dde3df"/>
-    <rect x="600" y="240" width="400" height="40" rx="18" fill="#b3654a"/>
-    <text x="622" y="266" font-size="15" class="w" font-weight="700">🤖 Amazon Bedrock (Vercel AI SDK)</text>
-    <rect x="620" y="300" width="360" height="34" rx="9" fill="#f6efe9" stroke="#e9d9cd"/>
-    <text x="636" y="322" font-size="12.5" fill="#2a2f33">Claude Sonnet 4.6 — narrates trends, never diagnoses</text>
-    <rect x="620" y="344" width="360" height="34" rx="9" fill="#f6efe9" stroke="#e9d9cd"/>
-    <text x="636" y="366" font-size="12.5" fill="#2a2f33">Titan Text Embeddings v2 — 1024-dim vectors</text>
+    <rect x="612" y="236" width="428" height="156" rx="18" fill="#fff" stroke="#dde3df"/>
+    <rect x="612" y="236" width="428" height="40" rx="18" fill="#b3654a"/>
+    <text x="634" y="262" font-size="14.5" class="w" font-weight="700">🤖 Amazon Bedrock — via Vercel AI SDK</text>
+    <rect x="632" y="288" width="388" height="30" rx="9" fill="#f6efe9" stroke="#e9d9cd"/><text x="646" y="308" class="chipt">Claude Sonnet 4.6 — narrates trends, never diagnoses</text>
+    <rect x="632" y="322" width="388" height="30" rx="9" fill="#f6efe9" stroke="#e9d9cd"/><text x="646" y="342" class="chipt">Titan Text Embeddings v2 — journal text → 1024-d</text>
+    <rect x="632" y="356" width="388" height="30" rx="9" fill="#f6efe9" stroke="#e9d9cd"/><text x="646" y="376" class="chipt">Titan Multimodal Image v1 — photos → vectors</text>
   </g>
-  <line x1="540" y1="330" x2="600" y2="330" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="570" y="322" font-size="11" class="s" text-anchor="middle">narrate /</text>
-  <text x="570" y="346" font-size="11" class="s" text-anchor="middle">embed</text>
+  <line x1="560" y1="306" x2="612" y2="306" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="586" y="299" font-size="10.5" class="s" text-anchor="middle">narrate</text>
+  <text x="586" y="324" font-size="10.5" class="s" text-anchor="middle">embed</text>
+
+  <!-- S3 -->
+  <g>
+    <rect x="612" y="408" width="428" height="52" rx="14" fill="#fff" stroke="#dde3df"/>
+    <text x="634" y="431" font-size="13.5" class="h">🗄  Amazon S3 — private media bucket</text>
+    <text x="634" y="450" class="note">photos + video clips · presigned GET · the searchable vectors live in Aurora</text>
+  </g>
+  <line x1="560" y1="404" x2="612" y2="430" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="556" y="398" font-size="10.5" class="s" text-anchor="end">store / serve</text>
 
   <!-- AURORA -->
   <g>
-    <rect x="40" y="430" width="960" height="290" rx="20" fill="url(#hero)"/>
-    <text x="64" y="470" font-size="18" class="w" font-weight="700">AWS Aurora PostgreSQL — Serverless v2 (pgvector)</text>
-    <text x="64" y="492" font-size="12.5" fill="#dfeae6">the ONE backend · Drizzle ORM · SSL · the deliberate data model the DB judges score</text>
+    <rect x="40" y="482" width="1000" height="318" rx="20" fill="url(#hero)"/>
+    <text x="64" y="520" font-size="18" class="w" font-weight="700">AWS Aurora PostgreSQL — Serverless v2 · pgvector</text>
+    <text x="64" y="542" font-size="12.5" fill="#dfeae6">the ONE backend · Drizzle ORM · SSL · the deliberate data model the DB judges score — relational, time-series &amp; semantic on the same rows</text>
 
-    <!-- 4 layer cards -->
+    <!-- 1 RELATIONAL -->
     <g>
-      <rect x="64" y="514" width="220" height="178" rx="14" fill="#ffffff"/>
-      <text x="82" y="544" class="tag" fill="#5b7a99">1 · RELATIONAL</text>
-      <text x="82" y="572" font-size="13" fill="#2a2f33">owners · pets</text>
-      <text x="82" y="594" font-size="13" fill="#2a2f33">exercise_plans · plan_items</text>
-      <text x="82" y="616" font-size="13" fill="#2a2f33">protocols · red_flag_rules</text>
-      <text x="82" y="638" font-size="13" fill="#2a2f33">scale_instruments</text>
-      <text x="82" y="672" font-size="11.5" fill="#687069">licensing-gated scales</text>
+      <rect x="64" y="562" width="232" height="222" rx="14" fill="#fff"/>
+      <text x="82" y="590" class="tag" fill="#5b7a99">1 · RELATIONAL</text>
+      <text x="82" y="616" class="row">owners (+ password_hash)</text>
+      <text x="82" y="637" class="row">pets · pet_caregivers</text>
+      <text x="82" y="658" class="row">exercise_plans · plan_items</text>
+      <text x="82" y="679" class="row">protocols · red_flag_rules</text>
+      <text x="82" y="700" class="row">scale_instruments</text>
+      <text x="82" y="744" class="note">accounts + per-owner ownership;</text>
+      <text x="82" y="760" class="note">licensing-gated clinical scales</text>
     </g>
+    <!-- 2 TIME-SERIES -->
     <g>
-      <rect x="296" y="514" width="220" height="178" rx="14" fill="#ffffff"/>
-      <text x="314" y="544" class="tag" fill="#3f8f86">2 · TIME-SERIES</text>
-      <text x="314" y="572" font-size="13" fill="#2a2f33">daily_checkins</text>
-      <text x="314" y="594" font-size="13" fill="#2a2f33">mobility_score_events</text>
-      <text x="314" y="616" font-size="13" fill="#2a2f33">exercise_session_events</text>
-      <text x="314" y="638" font-size="13" fill="#2a2f33">medication_events</text>
-      <text x="314" y="672" font-size="11.5" fill="#687069">range-partitioned by month</text>
+      <rect x="304" y="562" width="232" height="222" rx="14" fill="#fff"/>
+      <text x="322" y="590" class="tag" fill="#3f8f86">2 · TIME-SERIES</text>
+      <text x="322" y="616" class="row">daily_checkins</text>
+      <text x="322" y="637" class="row">mobility_score_events</text>
+      <text x="322" y="658" class="row">exercise_session_events</text>
+      <text x="322" y="679" class="row">medication_events</text>
+      <text x="322" y="700" class="row">bcs_mcs_events</text>
+      <text x="322" y="744" class="note">exercise sessions are</text>
+      <text x="322" y="760" class="note">range-partitioned by month</text>
     </g>
+    <!-- 3 PGVECTOR -->
     <g>
-      <rect x="528" y="514" width="220" height="178" rx="14" fill="#ffffff"/>
-      <text x="546" y="544" class="tag" fill="#7d6b96">3 · PGVECTOR</text>
-      <text x="546" y="572" font-size="13" fill="#2a2f33">journal_entries</text>
-      <text x="546" y="594" font-size="13" fill="#2a2f33">literature_chunks</text>
-      <text x="546" y="616" font-size="13" fill="#2a2f33">mobility/pose embeddings</text>
-      <text x="546" y="650" font-size="11.5" fill="#687069">HNSW cosine kNN —</text>
-      <text x="546" y="668" font-size="11.5" fill="#687069">"resembles a past flare"</text>
+      <rect x="544" y="562" width="232" height="222" rx="14" fill="#fff"/>
+      <text x="562" y="590" class="tag" fill="#7d6b96">3 · PGVECTOR — TWO MODALITIES</text>
+      <text x="562" y="616" class="row">journal_entries — text</text>
+      <text x="562" y="637" class="row">media_assets — image</text>
+      <text x="562" y="658" class="row">literature_chunks</text>
+      <text x="562" y="690" class="note" font-weight="700" fill="#5b6b66">HNSW cosine kNN:</text>
+      <text x="562" y="710" class="note">text → “resembles a flare 5 wks ago”</text>
+      <text x="562" y="726" class="note">image → “incision today vs last month”</text>
+      <text x="562" y="760" class="note">one query, no second datastore</text>
     </g>
+    <!-- 4 ANALYTICS -->
     <g>
-      <rect x="760" y="514" width="220" height="178" rx="14" fill="#ffffff"/>
-      <text x="778" y="544" class="tag" fill="#b3654a">4 · ANALYTICS</text>
-      <text x="778" y="572" font-size="13" fill="#2a2f33">rolling_baseline_mv</text>
-      <text x="778" y="594" font-size="13" fill="#2a2f33">adherence_rollup_mv</text>
-      <text x="778" y="628" font-size="11.5" fill="#687069">materialized views —</text>
-      <text x="778" y="646" font-size="11.5" fill="#687069">baselines, MCID flags,</text>
-      <text x="778" y="664" font-size="11.5" fill="#687069">weekly adherence</text>
+      <rect x="784" y="562" width="232" height="222" rx="14" fill="#fff"/>
+      <text x="802" y="590" class="tag" fill="#b3654a">4 · ANALYTICS</text>
+      <text x="802" y="616" class="row">rolling_baseline_mv</text>
+      <text x="802" y="637" class="row">adherence_rollup_mv</text>
+      <text x="802" y="681" class="note">materialized views —</text>
+      <text x="802" y="697" class="note">per-pet baselines, MCID</text>
+      <text x="802" y="713" class="note">crossings, weekly adherence;</text>
+      <text x="802" y="729" class="note">refreshed on write</text>
     </g>
   </g>
-  <line x1="290" y1="390" x2="290" y2="430" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="330" y="414" font-size="11" class="s">Drizzle · SSL</text>
+  <line x1="300" y1="420" x2="300" y2="482" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="312" y="462" font-size="11" class="s">Drizzle · SSL</text>
 </svg>
