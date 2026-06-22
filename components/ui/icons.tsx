@@ -1,5 +1,5 @@
 /**
- * Lucide-style line icons used across the Goldvale screens, ported verbatim from
+ * Lucide-style line icons used across the Oscar screens, ported verbatim from
  * the design handoff. Stroke-based, currentColor by default; `s` sizes, `c` colours,
  * `w` overrides stroke width.
  */

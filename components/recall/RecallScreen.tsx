@@ -1,6 +1,6 @@
 /**
  * Pattern-memory recall surface — "days like this". The pgvector kNN payoff made
- * visible: Goldvale embeds the surfaced pattern and finds the owner's own past
+ * visible: Oscar embeds the surfaced pattern and finds the owner's own past
  * journal days that resemble it *by meaning*, then frames them for the vet.
  *
  * Non-clinical: this is RECALL of what the owner logged — it ranks similarity, it
@@ -48,7 +48,7 @@ export function RecallScreen({
             color: "rgba(255,255,255,0.94)",
           }}
         >
-          {pattern.lead} <strong style={{ fontWeight: 700 }}>{pattern.emphasis}</strong>. Goldvale matched the days{" "}
+          {pattern.lead} <strong style={{ fontWeight: 700 }}>{pattern.emphasis}</strong>. We matched the days{" "}
           {header.name} logged that resemble this — by meaning, not keywords.
         </div>
       </Hero>

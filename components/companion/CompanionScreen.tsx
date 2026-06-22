@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Goldvale companion chat (mobile) — a non-clinical scribe/vet-prep agent. Renders
+ * Oscar companion chat (mobile) — a non-clinical scribe/vet-prep agent. Renders
  * the live thread from Aurora; sending calls the Bedrock agent (server action),
  * which logs/recalls/flags via tools and returns "rich cards" rendered in the
  * reply. Every reply is guardrail-checked server-side. (Photo/video attach lands in
@@ -234,7 +234,7 @@ export function CompanionScreen({
             <Avatar src={petPhoto} name={petName} size={30} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: "var(--serif)", fontSize: 17.5, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Goldvale companion</div>
+            <div style={{ fontFamily: "var(--serif)", fontSize: 17.5, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Your companion</div>
             <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.82)", fontWeight: 500, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Here for {petName} · always remembers</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#fff", fontWeight: 650, background: "rgba(255,255,255,0.18)", padding: "4px 8px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.24)", flexShrink: 0 }}>
@@ -285,7 +285,7 @@ export function CompanionScreen({
           <div style={{ flex: 1, display: "flex", alignItems: "center", background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 22, padding: "4px 6px 4px 15px", minHeight: 42 }}>
             <input
               value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
-              placeholder={`Tell Goldvale about ${petName}…`}
+              placeholder={`Tell us about ${petName}…`}
               style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: 14.5, fontFamily: "inherit", color: C.charcoal, padding: "7px 0" }}
             />
             <button className="gv-press" onClick={handleSend} disabled={!canSend} aria-label="Send" style={{ width: 34, height: 34, borderRadius: 999, flexShrink: 0, cursor: canSend ? "pointer" : "not-allowed", border: "none", background: canSend ? "linear-gradient(165deg, #54948a, #437a6d)" : "#dbe3df", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: canSend ? "0 3px 9px rgba(63,123,109,0.3)" : "none" }}>{Ico.send({ s: 16, c: canSend ? "#fff" : "#9aa49e" })}</button>
@@ -293,7 +293,7 @@ export function CompanionScreen({
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 9 }}>
           {Ico.shield({ s: 12, c: C.mutedSoft })}
-          <span style={{ fontSize: 10.5, color: C.muted, fontWeight: 500, textAlign: "center", lineHeight: 1.3 }}>Goldvale remembers and prepares — it doesn&rsquo;t diagnose. Your vet decides.</span>
+          <span style={{ fontSize: 10.5, color: C.muted, fontWeight: 500, textAlign: "center", lineHeight: 1.3 }}>Here to remember and prepare — it doesn&rsquo;t diagnose. Your vet decides.</span>
         </div>
       </div>
     </main>

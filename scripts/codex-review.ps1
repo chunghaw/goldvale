@@ -1,6 +1,6 @@
 #requires -Version 5.1
 <#
-.SYNOPSIS  Codex review bridge for Goldvale's build -> review loop.
+.SYNOPSIS  Codex review bridge for Oscar's build -> review loop.
 .DESCRIPTION
   Feeds the current git diff to the OpenAI Codex CLI and returns a JSON verdict.
   If Codex isn't installed, prints CODEX_NOT_INSTALLED + the diff so the reviewer
@@ -8,7 +8,7 @@
 #>
 param(
   [string]$BaseRef = "",
-  [string]$Context = "Review this Goldvale change (Next.js + Drizzle/Aurora + Bedrock). Review adversarially. The CARDINAL rule: NON-CLINICAL — the app must never diagnose, grade, stage, or prescribe; clinical scores come from lib/domain (deterministic), never the LLM; every model output must pass assertNonClinical(); red flags route to the vet. Also check: correctness, Drizzle/timezone bugs, scale-licensing (no reproducing gated forms), schema.ts vs db/schema.sql drift, missing tests."
+  [string]$Context = "Review this Oscar change (Next.js + Drizzle/Aurora + Bedrock). Review adversarially. The CARDINAL rule: NON-CLINICAL — the app must never diagnose, grade, stage, or prescribe; clinical scores come from lib/domain (deterministic), never the LLM; every model output must pass assertNonClinical(); red flags route to the vet. Also check: correctness, Drizzle/timezone bugs, scale-licensing (no reproducing gated forms), schema.ts vs db/schema.sql drift, missing tests."
 )
 $ErrorActionPreference = "Stop"
 

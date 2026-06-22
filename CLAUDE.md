@@ -1,8 +1,8 @@
-# CLAUDE.md — Goldvale
+# CLAUDE.md — Oscar
 
 > **New session?** Read **`AGENT_HANDOFF.md`** for the current state, decision history, and the exact next step — then this file, `docs/BUILD_PLAN.md`, and `HANDOFF.md`.
 
-Goldvale is a calm daily companion + home-rehab tracker for owners of **senior or chronically-ill dogs and cats**. Built for the **H0 hackathon** ("Hack the Zero Stack with Vercel v0 + AWS Databases"), **Monetizable B2C** track. Submission deadline **2026-06-29 17:00 PDT**.
+Oscar is a calm daily companion + home-rehab tracker for owners of **senior or chronically-ill dogs and cats**. Built for the **H0 hackathon** ("Hack the Zero Stack with Vercel v0 + AWS Databases"), **Monetizable B2C** track. Submission deadline **2026-06-29 17:00 PDT**.
 
 ## North-star
 
@@ -21,7 +21,7 @@ A 20-second daily check-in (QoL + mobility) that trends a **validated mobility s
 
 ## Critical rules
 
-1. **NON-CLINICAL — the cardinal rule.** Goldvale tracks, remembers, prepares; it never diagnoses, grades, stages, or prescribes. **Clinical scores are computed by deterministic code (`lib/domain`), never the LLM.** The LLM only narrates trends and poses "questions for your vet." Run every model output through `assertNonClinical()`. Red flags route to "contact your vet now," never a judgment.
+1. **NON-CLINICAL — the cardinal rule.** Oscar tracks, remembers, prepares; it never diagnoses, grades, stages, or prescribes. **Clinical scores are computed by deterministic code (`lib/domain`), never the LLM.** The LLM only narrates trends and poses "questions for your vet." Run every model output through `assertNonClinical()`. Red flags route to "contact your vet now," never a judgment.
 2. **Aurora is the one backend.** Genuinely exercise **relational + time-series + pgvector + analytics** — that's what the AWS-database judges score. No second datastore.
 3. **Scale licensing.** Only embed **CC-BY GenPup-M** + freely-available **HCPI**. LOAD / CBPI / FMPI / COAST are **vet-administered** — store the vet-supplied result, never reproduce the form.
 4. **Real data in the demo path.** Validated scales + real open literature; no mock data in anything a judge sees.

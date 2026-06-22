@@ -46,9 +46,9 @@
 | "Contact your vet now" | bounded danger → vet routing | per `lib/domain/guardrails.ts` |
 
 ## Copy to keep verbatim
-- Welcome promise: "Goldvale helps you track, remember, and prepare — it doesn't diagnose. Your vet decides."
-- Conditions subhead: "Tap anything your vet has already mentioned. This just helps Goldvale remember — it's not a diagnosis."
-- Plan guardrail: "We store your vet's plan exactly as given. Goldvale never changes a dose or recommends exercises."
+- Welcome promise: "Oscar helps you track, remember, and prepare — it doesn't diagnose. Your vet decides."
+- Conditions subhead: "Tap anything your vet has already mentioned. This just helps Oscar remember — it's not a diagnosis."
+- Plan guardrail: "We store your vet's plan exactly as given. Oscar never changes a dose or recommends exercises."
 - All set: "You're all set" / "Start Oscar's first check-in".
 
 ## Non-clinical guardrail

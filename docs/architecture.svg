@@ -15,7 +15,7 @@
   </defs>
 
   <rect width="1080" height="830" fill="#eef1ef"/>
-  <text x="40" y="50" font-size="26" font-weight="700" fill="#20262a">Goldvale — one Aurora backend, four load-bearing layers</text>
+  <text x="40" y="50" font-size="26" font-weight="700" fill="#20262a">Oscar — one Aurora backend, four load-bearing layers</text>
   <text x="40" y="76" font-size="13.5" class="s">A calm daily companion + home-rehab tracker for senior / chronically-ill dogs &amp; cats · H0 hackathon (Vercel + AWS Aurora)</text>
 
   <!-- OWNER -->

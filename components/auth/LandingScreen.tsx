@@ -13,7 +13,7 @@ const ACC = { pet: A.sage, cond: A.slate, plan: A.teal };
 export function LandingScreen({ demoPetId }: { demoPetId: string }) {
   const rows = [
     { ic: Ico.heart, a: ACC.pet, t: "Track", d: "A gentle daily note of how they’re doing." },
-    { ic: Ico.sparkles, a: ACC.cond, t: "Remember", d: "Goldvale spots the patterns you’d miss day to day." },
+    { ic: Ico.sparkles, a: ACC.cond, t: "Remember", d: "Spots the patterns you’d miss day to day." },
     { ic: Ico.activity, a: ACC.plan, t: "Prepare", d: "Walk into every vet visit with the full picture." },
   ];
   return (

@@ -1,4 +1,4 @@
-// Goldvale — Dashboard (mobile). The longitudinal mobility story.
+// Oscar — Dashboard (mobile). The longitudinal mobility story.
 // Grounded in lib/domain/mobility.ts (GenPup-M 0–108, higher=worse, bands,
 // MCID=8 vs own baseline), progression.ts (6 clean sessions ≥14d → vet nudge,
 // phrased as a question), seed-data.ts (TPLO phases, exercises), guardrails.
@@ -238,7 +238,7 @@ function MobilityCard() {
       <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginTop: 12, paddingTop: 13, borderTop: `1px solid ${C.hairSoft}` }}>
         <span style={{ color: A.mob.c, flexShrink: 0, marginTop: 1 }}>{Ico.sparkles({ s: 14, c: A.mob.c })}</span>
         <div style={{ fontSize: 12.5, color: '#4a544f', lineHeight: 1.45 }}>
-          An <strong style={{ color: C.charcoal, fontWeight: 700 }}>{BASELINE - CURRENT}-point</strong> improvement vs Oscar’s own baseline — past the {MCID}-point mark Goldvale treats as meaningful. Worth mentioning at your next visit, not a diagnosis.
+          An <strong style={{ color: C.charcoal, fontWeight: 700 }}>{BASELINE - CURRENT}-point</strong> improvement vs Oscar’s own baseline — past the {MCID}-point mark Oscar treats as meaningful. Worth mentioning at your next visit, not a diagnosis.
         </div>
       </div>
     </Card>

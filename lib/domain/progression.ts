@@ -1,7 +1,7 @@
 /**
  * FITT progression NUDGE — a suggestion, never an action.
  *
- * Goldvale never advances a pet's exercise dose on its own. When readiness criteria
+ * Oscar never advances a pet's exercise dose on its own. When readiness criteria
  * are met it surfaces "consider asking your vet about progressing" — phrased as a
  * question. The vet decides and doses. (Active-exercise completion is the signal;
  * passive-modality logging is not.)
@@ -33,7 +33,7 @@ export function isCleanSession(s: Session): boolean {
 }
 
 /**
- * Returns true if Goldvale should surface the "ask your vet about progressing"
+ * Returns true if Oscar should surface the "ask your vet about progressing"
  * nudge. Pure + deterministic; NEVER auto-advances — the UI shows it as a question.
  *
  * @param sessionsNewestFirst sessions ordered newest → oldest

@@ -1,4 +1,4 @@
-# Goldvale — design handoff (3 demo-critical screens)
+# Oscar — design handoff (3 demo-critical screens)
 
 Designed in claude.ai/design, ready to wire. These mirror the `design/incoming/` staging
 structure from `HANDOFF.md` — drop each folder into `design/incoming/`, or read the code +

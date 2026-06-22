@@ -29,7 +29,7 @@
 
 ## Copy to keep verbatim
 - Hero: "Brief for Dr. Okafor" / "Oscar's vet brief"
-- Footer: "Goldvale prepares and remembers. It doesn't diagnose — your vet reads the full picture."
+- Footer: "Oscar prepares and remembers. It doesn't diagnose — your vet reads the full picture."
 
 ## Non-clinical guardrail
 The brief **assembles what was observed** and the owner curates it. No item asserts a diagnosis; the progression item is a question; the share action hands the vet a record, not a recommendation.

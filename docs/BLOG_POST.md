@@ -1,10 +1,10 @@
-# Building Goldvale: when your data is relational, time-series, *and* semantic at once
+# Building Oscar: when your data is relational, time-series, *and* semantic at once
 
-*A build log for the H0 hackathon (Vercel + AWS Databases). Live demo: https://goldvale.vercel.app · Repo: https://github.com/chunghaw/goldvale · #H0Hackathon*
+*A build log for the H0 hackathon (Vercel + AWS Databases). Live demo: https://goldvale.vercel.app · Repo: https://github.com/chunghaw/oscar · #H0Hackathon*
 
 > **[EDIT ME FIRST]** Open with one or two sentences in your own voice about *why you built this* — a specific pet, a specific vet visit, the thing that annoyed you. Judges respond to a real person. Then keep the rest and trim to taste.
 
-I built **Goldvale**, a calm daily companion and home-rehabilitation tracker for owners of senior or chronically-ill dogs and cats. The hard part of caring for an aging pet isn't the vet visit — it's the months in between, where you're trying to notice a slow decline and walk into the next appointment with more than "he's been a bit slow lately." Goldvale is a 20-second daily check-in that trends a validated mobility score, stores the vet's rehab plan, and — when something feels off — answers *"has this happened before?"*
+I built **Oscar**, a calm daily companion and home-rehabilitation tracker for owners of senior or chronically-ill dogs and cats. The hard part of caring for an aging pet isn't the vet visit — it's the months in between, where you're trying to notice a slow decline and walk into the next appointment with more than "he's been a bit slow lately." Oscar is a 20-second daily check-in that trends a validated mobility score, stores the vet's rehab plan, and — when something feels off — answers *"has this happened before?"*
 
 This post is about the one decision the whole thing hangs on: **the database.**
 
@@ -30,7 +30,7 @@ The payoff: **recall is a query, not an integration.**
 
 ## The fun part: two kinds of similarity search on the same rows
 
-The feature I'm proudest of is that Goldvale does *two* modalities of vector recall, and both are just SQL against rows that already exist:
+The feature I'm proudest of is that Oscar does *two* modalities of vector recall, and both are just SQL against rows that already exist:
 
 - **Text recall.** The owner's journal notes are embedded with **Amazon Titan Text Embeddings v2** (1024-dim) and indexed with pgvector's HNSW. When a "slower rising" pattern surfaces, I embed it and kNN-rank the owner's *own* journal days by meaning. The three stiff mornings come back at ~55/55/41% similarity; the one "good day — trotted to the door" correctly lands last at 5%. That's the whole point of vectors over keywords.
 
@@ -40,7 +40,7 @@ Two kinds of "what does this resemble?" — text and image — and the database 
 
 ## The non-negotiable: non-clinical *by architecture*
 
-Goldvale is health-adjacent, which means it must never pretend to be a vet. I didn't enforce that with prompt-wishing. I enforced it structurally:
+Oscar is health-adjacent, which means it must never pretend to be a vet. I didn't enforce that with prompt-wishing. I enforced it structurally:
 
 - **Every clinical number is computed by deterministic code** (`lib/domain`, pure and unit-tested) — the GenPup-M mobility score, the MCID crossing, the FITT progression nudge. The LLM never produces a score.
 - **Bedrock's Claude only narrates** the numbers and poses "questions for your vet."

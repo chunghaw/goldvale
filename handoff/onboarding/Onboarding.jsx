@@ -1,4 +1,4 @@
-// Goldvale — Onboarding (mobile). Calm, skippable multi-step setup.
+// Oscar — Onboarding (mobile). Calm, skippable multi-step setup.
 // CAPTURES what the owner/vet already know — it never assesses, grades, or diagnoses.
 // Field map (see notes.md): owners.display_name · pets(name, species, breed, date_of_birth,
 // is_senior, chronic_conditions[]) · protocol_instances(template_id, onset_date) ·
@@ -131,7 +131,7 @@ function Welcome({ onNext }) {
           <div style={{ width: 64, height: 64, borderRadius: 999, margin: '0 auto 16px', background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {Ico.paw({ s: 30, c: '#fff' })}
           </div>
-          <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.8)', fontWeight: 650, letterSpacing: 1.4, textTransform: 'uppercase' }}>Goldvale</div>
+          <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.8)', fontWeight: 650, letterSpacing: 1.4, textTransform: 'uppercase' }}>Oscar</div>
           <div style={{ fontFamily: 'var(--serif)', fontSize: 30, fontWeight: 500, letterSpacing: -0.6, lineHeight: 1.1, color: '#fff', marginTop: 8 }}>
             A calmer way to care
           </div>
@@ -145,7 +145,7 @@ function Welcome({ onNext }) {
       <div style={{ padding: '22px 6px 8px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         {[
           { ic: Ico.heart, a: A.pet, t: 'Track', d: 'A gentle daily note of how they’re doing.' },
-          { ic: Ico.sparkles, a: A.cond, t: 'Remember', d: 'Goldvale spots the patterns you’d miss day to day.' },
+          { ic: Ico.sparkles, a: A.cond, t: 'Remember', d: 'Oscar spots the patterns you’d miss day to day.' },
           { ic: Ico.activity, a: A.plan, t: 'Prepare', d: 'Walk into every vet visit with the full picture.' },
         ].map((r) => (
           <div key={r.t} style={{ display: 'flex', gap: 13, alignItems: 'flex-start' }}>
@@ -162,7 +162,7 @@ function Welcome({ onNext }) {
       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: '13px 14px', margin: '12px 4px 0' }}>
         <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 17, c: C.sage })}</span>
         <div style={{ fontSize: 12.5, color: '#42504b', lineHeight: 1.5 }}>
-          Goldvale helps you <strong style={{ color: C.charcoal, fontWeight: 700 }}>track, remember, and prepare</strong> — it doesn’t diagnose. Your vet decides.
+          Oscar helps you <strong style={{ color: C.charcoal, fontWeight: 700 }}>track, remember, and prepare</strong> — it doesn’t diagnose. Your vet decides.
         </div>
       </div>
 
@@ -239,7 +239,7 @@ function StepPet({ data, set }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: '12px 14px' }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 650 }}>This is a senior pet</div>
-            <div style={{ fontSize: 11.5, color: C.muted, marginTop: 1, lineHeight: 1.4 }}>Tunes Goldvale’s reminders to a gentler pace.</div>
+            <div style={{ fontSize: 11.5, color: C.muted, marginTop: 1, lineHeight: 1.4 }}>Tunes Oscar’s reminders to a gentler pace.</div>
           </div>
           <button className="gv-press" onClick={() => set('senior', !data.senior)} aria-label="Senior toggle" style={{
             width: 48, height: 29, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0,
@@ -273,7 +273,7 @@ function StepConditions({ data, set, toggleCond }) {
     <div className="gv-step">
       <div style={{ padding: '2px 2px 4px' }}>
         <div style={{ fontFamily: 'var(--serif)', fontSize: 25, fontWeight: 500, letterSpacing: -0.4 }}>What’s going on?</div>
-        <div style={{ fontSize: 13, color: C.muted, marginTop: 5, lineHeight: 1.45 }}>Tap anything your vet has already mentioned. This just helps Goldvale remember — it’s not a diagnosis.</div>
+        <div style={{ fontSize: 13, color: C.muted, marginTop: 5, lineHeight: 1.45 }}>Tap anything your vet has already mentioned. This just helps Oscar remember — it’s not a diagnosis.</div>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9, marginTop: 18 }}>
@@ -381,7 +381,7 @@ function StepPlan({ data, set, toggleEx }) {
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 12, padding: '11px 13px' }}>
             <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 15, c: C.sage })}</span>
-            <div style={{ fontSize: 11.5, color: '#4a544f', lineHeight: 1.45 }}>We store your vet’s plan exactly as given. Goldvale never changes a dose or recommends exercises.</div>
+            <div style={{ fontSize: 11.5, color: '#4a544f', lineHeight: 1.45 }}>We store your vet’s plan exactly as given. Oscar never changes a dose or recommends exercises.</div>
           </div>
         </div>
       )}

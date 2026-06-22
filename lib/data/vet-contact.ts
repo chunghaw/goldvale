@@ -2,7 +2,7 @@
  * The "contact your vet now" escalation destination — the data behind the cardinal
  * safety affordance. This layer ROUTES the owner to their vet and surfaces REFERENCE
  * material (the vet-supplied red-flag rows for the pet's protocol). It never assesses,
- * grades, or judges the pet's current state — Goldvale doesn't decide what's urgent.
+ * grades, or judges the pet's current state — Oscar doesn't decide what's urgent.
  *
  * Pure helper (telHref) is unit-tested; getVetContact is a thin relational read.
  */

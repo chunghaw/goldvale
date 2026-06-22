@@ -2,7 +2,7 @@
 
 /**
  * Vet-prep brief (mobile) — the curated summary the owner brings to a visit.
- * Goldvale surfaces "things to mention" (a trend, a recalled pattern, a question);
+ * Oscar surfaces "things to mention" (a trend, a recalled pattern, a question);
  * the owner toggles each in/out and adds their own questions. It PREPARES and
  * REMEMBERS — no item asserts a diagnosis, and the progression item stays a
  * question (mention bodies are guardrail-checked in lib/data/demo.ts).
@@ -289,7 +289,7 @@ export function VetBriefScreen({ header, brief }: { header: PetHeader; brief: Br
           />
           <div style={{ fontSize: 12.5, color: C.muted, marginTop: -4, marginBottom: 13, lineHeight: 1.45 }}>
             {brief.mentions.length > 0
-              ? "Goldvale surfaced these from your check-ins. Tap to choose what goes in the brief."
+              ? "We surfaced these from your check-ins. Tap to choose what goes in the brief."
               : `Nothing to flag yet. As you log check-ins, photos, and rehab, the things worth mentioning to ${header.name}’s vet will gather here.`}
           </div>
           {brief.mentions.length > 0 && (
@@ -339,7 +339,7 @@ export function VetBriefScreen({ header, brief }: { header: PetHeader; brief: Br
         </button>
 
         <div style={{ fontSize: 11.5, color: C.muted, textAlign: "center", lineHeight: 1.5, padding: "2px 14px" }}>
-          Goldvale prepares and remembers. It doesn&rsquo;t diagnose — your vet reads the full picture.
+          We prepare and remember — it doesn&rsquo;t diagnose. Your vet reads the full picture.
         </div>
         <div style={{ height: 6 }} />
       </div>

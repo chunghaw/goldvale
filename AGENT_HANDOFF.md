@@ -7,15 +7,15 @@
 
 ## 1. Your role (the prompt)
 
-You are the **orchestrator + builder** for **Goldvale**. You decompose work, implement it (Next.js / TypeScript / Drizzle / Bedrock), and keep `main` demo-ready. A reviewer ("Codex") and an evaluation gate sit in the loop:
+You are the **orchestrator + builder** for **Oscar**. You decompose work, implement it (Next.js / TypeScript / Drizzle / Bedrock), and keep `main` demo-ready. A reviewer ("Codex") and an evaluation gate sit in the loop:
 
 **Build → Codex review → evaluation gate → fix → next.** Run features through the `feature-loop` workflow (`.claude/workflows/feature-loop.js`). A feature only ships when it passes the 6-point **Definition of Done** (see `docs/BUILD_PLAN.md`): works on real data · data-model integrity · **non-clinical guardrails** · AWS features exercised · `tsc`+`vitest` green · demo-ready.
 
-**The cardinal rule — NON-CLINICAL:** Goldvale tracks, remembers, and prepares; it never diagnoses, grades, stages, or prescribes. Clinical scores are computed by **deterministic code in `lib/domain`, never the LLM**. Every model output passes `assertNonClinical()` (use `narrateSafe()`). Red flags route to "contact your vet now."
+**The cardinal rule — NON-CLINICAL:** Oscar tracks, remembers, and prepares; it never diagnoses, grades, stages, or prescribes. Clinical scores are computed by **deterministic code in `lib/domain`, never the LLM**. Every model output passes `assertNonClinical()` (use `narrateSafe()`). Red flags route to "contact your vet now."
 
 ---
 
-## 2. What Goldvale is
+## 2. What Oscar is
 
 A calm daily companion + **home-rehabilitation tracker** for owners of **senior or chronically-ill dogs/cats**. A 20-second daily check-in (QoL + mobility) trends a **validated mobility score**, logs the vet-prescribed rehab plan, uses **pgvector** to surface "this flare resembles 5 weeks ago" pattern memory, and packages a cited, **vet-ready brief**. It supports the vet's plan — the vet decides.
 
@@ -46,7 +46,7 @@ Six features (full detail in `docs/proposals/H0_GOLDVALE_BRIEF.html`): ① mobil
 ## 5. Decision log (the "why")
 
 - **Pivoted off the original product (Prism)** when the prior hackathon's $100 GCP credits dried up → switched to H0 (AWS+Vercel), which fits the user's stack (Vercel Pro, SQL/dbt). The old `prism` repo is **dead/disposable** (see §9).
-- **Chose a new product, not Prism**, and after research picked **Goldvale** (senior-pet care) over other pet/stock/mental-health ideas. Then a **monetization pass reframed the field**: lost-pet ("Reunipet") scored highest on craft but **2/5 on revenue realism** (search is a free/nonprofit commodity); dog-training ("Tideline") had the best proven money but is crowded; **Goldvale won on balance** — original niche + sticky daily loop + rich data model.
+- **Chose a new product, not Prism**, and after research picked **Oscar** (senior-pet care) over other pet/stock/mental-health ideas. Then a **monetization pass reframed the field**: lost-pet ("Reunipet") scored highest on craft but **2/5 on revenue realism** (search is a free/nonprofit commodity); dog-training ("Tideline") had the best proven money but is crowded; **Oscar won on balance** — original niche + sticky daily loop + rich data model.
 - **Added animal physiotherapy** — mobility decline is the #1 senior/chronic burden and home-manageable, so it threads through every surface (not bolted on).
 - **AWS DB = Aurora PostgreSQL + pgvector** (over DSQL/DynamoDB): relational + time-series + vector + analytics in one engine = the richest "deliberate data modeling" story for these judges, and fits the user's SQL strength.
 - **AI = Bedrock Claude via Vercel AI SDK** (hits both sponsors).

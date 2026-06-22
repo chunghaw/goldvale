@@ -88,7 +88,7 @@ function RecallSheet({ caption, analogues, onClose }: { caption: string; analogu
 
         <div style={{ margin: "8px 18px 0", display: "flex", gap: 9, alignItems: "flex-start", background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 13, padding: "11px 13px" }}>
           <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 15, c: C.sage })}</span>
-          <div style={{ fontSize: 11.5, color: "#42504b", lineHeight: 1.5 }}>Side by side, so you can see the change yourself. Goldvale keeps the record — it doesn&rsquo;t diagnose. Your vet reads the full picture.</div>
+          <div style={{ fontSize: 11.5, color: "#42504b", lineHeight: 1.5 }}>Side by side, so you can see the change yourself. We keep the record — it doesn&rsquo;t diagnose. Your vet reads the full picture.</div>
         </div>
       </div>
     </div>
@@ -193,7 +193,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "6px 14px 14px", textAlign: "center" }}>
           {Ico.shield({ s: 13, c: C.mutedSoft })}
-          <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>Goldvale keeps the record. It doesn&rsquo;t diagnose — your vet reads the full picture.</span>
+          <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>We keep the record — it doesn&rsquo;t diagnose. Your vet reads the full picture.</span>
         </div>
       </div>
 

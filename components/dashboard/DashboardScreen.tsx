@@ -302,7 +302,7 @@ function CompanionCard({ name, href }: { name: string; href: string }) {
         {Ico.sparkles({ s: 20, c: "#fff" })}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500 }}>Talk to Goldvale</div>
+        <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500 }}>Talk to your companion</div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", marginTop: 1 }}>Chat, log a note, ask what {name} did last week</div>
       </div>
       {Ico.chevR({ s: 18, c: "#fff" })}

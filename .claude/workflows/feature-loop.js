@@ -1,7 +1,7 @@
 export const meta = {
   name: 'feature-loop',
-  description: 'Build a Goldvale feature, then run adversarial Codex review and auto-fix until clean (tsc + vitest green, non-clinical guardrails intact).',
-  whenToUse: 'Implementing any Goldvale feature with builder -> reviewer -> fix running autonomously.',
+  description: 'Build a Oscar feature, then run adversarial Codex review and auto-fix until clean (tsc + vitest green, non-clinical guardrails intact).',
+  whenToUse: 'Implementing any Oscar feature with builder -> reviewer -> fix running autonomously.',
   phases: [{ title: 'Build' }, { title: 'Review' }, { title: 'Fix' }],
 }
 
@@ -22,7 +22,7 @@ const REVIEW_SCHEMA = {
 phase('Build')
 log(`Building: ${feature}`)
 let build = await agent(
-  `Implement this Goldvale feature end-to-end with Vitest tests, following CLAUDE.md (NON-CLINICAL cardinal rule; pure core in lib/domain; Aurora via Drizzle; narrateSafe for any LLM copy). Run \`npx tsc --noEmit\` and \`npm run test\`; fix until green. Commit locally (do not push).\n\n${feature}`,
+  `Implement this Oscar feature end-to-end with Vitest tests, following CLAUDE.md (NON-CLINICAL cardinal rule; pure core in lib/domain; Aurora via Drizzle; narrateSafe for any LLM copy). Run \`npx tsc --noEmit\` and \`npm run test\`; fix until green. Commit locally (do not push).\n\n${feature}`,
   { label: 'build', phase: 'Build', agentType: 'builder' }
 )
 

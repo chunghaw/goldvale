@@ -3,7 +3,7 @@
  * affordance (VetLine routes here). This screen ROUTES the owner to their vet and
  * shows REFERENCE material from the vet's own recovery plan. It is calm guidance,
  * not an alarm, and it NEVER diagnoses, grades, or judges the pet's current state —
- * Goldvale helps the owner reach the people who decide what's urgent.
+ * Oscar helps the owner reach the people who decide what's urgent.
  *
  * Server component: no client state. The danger colour appears only on the call-to-
  * action accent, consistent with VetLine being the one place it lives.
@@ -200,7 +200,7 @@ export function VetContactScreen({
       >
         <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 17, c: C.sage })}</span>
         <div style={{ fontSize: 12.5, color: "#42504b", lineHeight: 1.5 }}>
-          Goldvale doesn&rsquo;t diagnose or decide what&rsquo;s urgent — it helps you reach the people who do.
+          We don&rsquo;t diagnose or decide what&rsquo;s urgent — we help you reach the people who do.
         </div>
       </div>
     </main>

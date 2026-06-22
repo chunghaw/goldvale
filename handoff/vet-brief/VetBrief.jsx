@@ -1,4 +1,4 @@
-// Goldvale — Vet brief (mobile). The curated summary the owner brings to a visit.
+// Oscar — Vet brief (mobile). The curated summary the owner brings to a visit.
 // Grounded in lib/domain/*: GenPup-M (34/108, baseline 42, MCID=8, Mild band),
 // progression.ts (6 clean sessions ≥14d → ask vet, question-framed), pattern
 // memory recall, seed meds. Non-clinical: it PREPARES for the vet, never diagnoses.
@@ -54,7 +54,7 @@ const MENTIONS = [
   {
     id: 'mobility', icon: Ico.trend, accent: A.snap,
     title: 'Mobility improved 8 points',
-    body: 'GenPup-M is 34 now vs 42 four weeks ago — past the point Goldvale flags as meaningful. Still in the “mild” band.',
+    body: 'GenPup-M is 34 now vs 42 four weeks ago — past the point Oscar flags as meaningful. Still in the “mild” band.',
     tag: 'Trend',
   },
   {
@@ -248,7 +248,7 @@ function VetBriefApp() {
           <Card>
             <SectionHead icon={Ico.share({ s: 18, c: A.mention.c })} accent={A.mention} title="Things to mention" hint={`${includedCount} of ${MENTIONS.length}`} />
             <div style={{ fontSize: 12.5, color: C.muted, marginTop: -4, marginBottom: 13, lineHeight: 1.45 }}>
-              Goldvale surfaced these from your check-ins. Tap to choose what goes in the brief.
+              Oscar surfaced these from your check-ins. Tap to choose what goes in the brief.
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
               {MENTIONS.map((m) => (
@@ -276,7 +276,7 @@ function VetBriefApp() {
           </button>
 
           <div style={{ fontSize: 11.5, color: C.muted, textAlign: 'center', lineHeight: 1.5, padding: '2px 14px' }}>
-            Goldvale prepares and remembers. It doesn’t diagnose — your vet reads the full picture.
+            Oscar prepares and remembers. It doesn’t diagnose — your vet reads the full picture.
           </div>
           <div style={{ height: 6 }} />
         </div>

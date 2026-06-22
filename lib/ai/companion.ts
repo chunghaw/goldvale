@@ -1,5 +1,5 @@
 /**
- * The Goldvale companion agent — a non-clinical scribe/vet-prep assistant.
+ * The Oscar companion agent — a non-clinical scribe/vet-prep assistant.
  *
  * Bedrock Claude (Sonnet 4.6) with tool-use against Aurora: it logs observations to
  * the journal, recalls the owner's own past notes (pgvector), narrates their own
@@ -34,7 +34,7 @@ export interface CompanionReply {
   cards: CompanionCard[];
 }
 
-const SYSTEM = (petName: string) => `You are Goldvale, a calm companion for the owner of a senior or chronically-ill pet named ${petName}.
+const SYSTEM = (petName: string) => `You are a calm, caring companion for the owner of a senior or chronically-ill pet named ${petName}.
 You are a COMPANION, SCRIBE, and VET-PREP assistant — NOT a veterinarian. You NEVER diagnose, grade, stage, or prescribe, and you never say what a condition "is".
 
 How to help:

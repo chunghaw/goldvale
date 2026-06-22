@@ -160,7 +160,7 @@ export function buildOscarView(): PetView {
           accentKey: "snap",
           title: `Mobility improved ${improvement} points`,
           body: safe(
-            `GenPup-M is ${CURRENT} now vs ${BASELINE} four weeks ago — past the point Goldvale flags as meaningful. Still in the “${band}” band.`,
+            `GenPup-M is ${CURRENT} now vs ${BASELINE} four weeks ago — past the point we flag as meaningful. Still in the “${band}” band.`,
           ),
           tag: "Trend",
         },

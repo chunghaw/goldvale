@@ -1,4 +1,4 @@
-// Goldvale — Capture sheet (mobile bottom sheet). Opens from companion chat / daily check-in.
+// Oscar — Capture sheet (mobile bottom sheet). Opens from companion chat / daily check-in.
 // "Add a photo or video" → photo / clip / library, caption, target chip. Non-clinical:
 // clips are compared to Oscar's OWN past clips, never graded. Grounded in:
 // media_assets(pet_id, kind, url, caption, embedding, recorded_at, journal_entry_id,
@@ -138,7 +138,7 @@
                 {kind === 'video' && (
                   <div className="gv-rise" style={{ display: 'flex', gap: 9, alignItems: 'flex-start', background: 'var(--slate-soft)', border: `1px solid ${C.hairSoft}`, borderRadius: 13, padding: '11px 13px', marginBottom: 16 }}>
                     <span style={{ color: '#46617d', flexShrink: 0, marginTop: 1 }}>{I.video({ s: 15, c: '#46617d' })}</span>
-                    <div style={{ fontSize: 11.5, color: '#3c4a57', lineHeight: 1.5 }}>A short clip (≤15s) of Oscar moving. For your records and your vet — Goldvale compares clips to Oscar’s <strong style={{ fontWeight: 700 }}>own past clips</strong>, it doesn’t grade his gait.</div>
+                    <div style={{ fontSize: 11.5, color: '#3c4a57', lineHeight: 1.5 }}>A short clip (≤15s) of Oscar moving. For your records and your vet — Oscar compares clips to Oscar’s <strong style={{ fontWeight: 700 }}>own past clips</strong>, it doesn’t grade his gait.</div>
                   </div>
                 )}
 

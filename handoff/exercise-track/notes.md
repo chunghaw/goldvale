@@ -12,7 +12,7 @@
 > **Demo aid:** a small "Demo state" segmented control sits *above* the device frame so reviewers can flip Gated / Active / Logged. It is **not** part of the product UI — delete `<StateSwitcher>` on integration; the real app derives the state from whether a plan exists + a logging action.
 
 ## The cardinal rule (gating + nudge)
-The **vet prescribes; Goldvale only logs**. The screen is gated behind a vet plan, and the progression signal is a **question routed to the owner/vet — never an "advance dose" action**. No exercise is ever shown or suggested without a prescribed plan.
+The **vet prescribes; Oscar only logs**. The screen is gated behind a vet plan, and the progression signal is a **question routed to the owner/vet — never an "advance dose" action**. No exercise is ever shown or suggested without a prescribed plan.
 
 ## States
 ### A · Gated (no plan)
@@ -46,7 +46,7 @@ A confirmation bottom sheet over the active state: "Logged — that's how progre
 | "Add your vet's plan" | → plan capture (`exercise_plans` + `plan_items`) | reuses onboarding step 4 |
 
 ## Copy to keep verbatim
-- Gated: "Your vet sets the plan. Goldvale doesn't prescribe exercises. Once you add your vet's plan, we'll track it here — dose, tolerance, and progress."
+- Gated: "Your vet sets the plan. Oscar doesn't prescribe exercises. Once you add your vet's plan, we'll track it here — dose, tolerance, and progress."
 - Nudge: "Oscar has handled this dose well for 2+ weeks. That can be a sign he's ready for a little more — but it's your vet's call, never ours. Want to raise it with Dr. Okafor?"
 - Logged: "Logged — that's how progress shows."
 - Tolerance: Handled / A bit tired / Sore / Refused.

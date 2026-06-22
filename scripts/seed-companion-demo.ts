@@ -37,7 +37,7 @@ async function main() {
     { threadId: thread.id, role: "owner", text: "How's his mobility doing overall?" },
     {
       threadId: thread.id, role: "assistant",
-      text: "Oscar is doing better than his own baseline this week — about 8 points better, which is past the mark Goldvale treats as meaningful. Worth mentioning at your next visit, not a diagnosis.",
+      text: "Oscar is doing better than his own baseline this week — about 8 points better, which is past the mark Oscar treats as meaningful. Worth mentioning at your next visit, not a diagnosis.",
       cards: [{ type: "mobility", series: [42, 40, 39, 37, 36, 34], improvement: 8 }],
     },
   ]);

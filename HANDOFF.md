@@ -1,4 +1,4 @@
-# Frontend Handoff — claude.ai/design → Goldvale
+# Frontend Handoff — claude.ai/design → Oscar
 
 How design work in **claude.ai/design** becomes wired, typed screens in this app. The backend (Aurora schema, domain core, Bedrock adapters) is already built, so anything you design maps onto **real data** — no throwaway work.
 

@@ -1,8 +1,8 @@
-# Goldvale
+# Oscar
 
 > A calm daily companion + home-rehab tracker for senior and chronically-ill pets.
 
-Goldvale turns the scattered day-to-day observations of caring for an aging or chronically-ill dog or cat into a longitudinal **mobility-and-wellbeing story**. It weaves in home **physiotherapy** — trending a validated mobility score and logging the vet-prescribed rehab plan — uses **vector search** to surface "this flare resembles 5 weeks ago" pattern memory, and packages everything into a cited, **vet-ready brief**.
+Oscar turns the scattered day-to-day observations of caring for an aging or chronically-ill dog or cat into a longitudinal **mobility-and-wellbeing story**. It weaves in home **physiotherapy** — trending a validated mobility score and logging the vet-prescribed rehab plan — uses **vector search** to surface "this flare resembles 5 weeks ago" pattern memory, and packages everything into a cited, **vet-ready brief**.
 
 It is explicitly **non-clinical**: it remembers, spots patterns, and prepares you — while your vet diagnoses, prescribes, and decides.
 

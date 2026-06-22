@@ -20,7 +20,7 @@
 
 **States:** `idle` (three tiles, Save disabled) · `photo` (thumbnail + "Photo ready/Clip ready" + caption + targets + Save enabled) · `recording` (full-screen viewfinder, REC timer, ≤15s progress, guidance, stop button).
 
-**Video framing (non-clinical, verbatim):** "A short clip (≤15s) of Oscar moving. For your records and your vet — Goldvale compares clips to Oscar's **own past clips**, it doesn't grade his gait."
+**Video framing (non-clinical, verbatim):** "A short clip (≤15s) of Oscar moving. For your records and your vet — Oscar compares clips to Oscar's **own past clips**, it doesn't grade his gait."
 
 | UI element | Field | Notes |
 | --- | --- | --- |
@@ -49,8 +49,8 @@
 ## Copy to keep verbatim
 - "Oscar's photos & clips"
 - "Similar days"
-- "Goldvale keeps the record. It doesn't diagnose — your vet reads the full picture."
-- Video: "…Goldvale compares clips to Oscar's own past clips, it doesn't grade his gait."
+- "Oscar keeps the record. It doesn't diagnose — your vet reads the full picture."
+- Video: "…Oscar compares clips to Oscar's own past clips, it doesn't grade his gait."
 
 ## Non-clinical guardrail
-Capture and recall **keep and surface the owner's own media** — Goldvale never interprets an image or clip as a condition. "Similar days" shows the owner's own photos side by side so *they* can see change; video comparison is self-similarity only (`pose_consistency_events`), never a gait diagnosis. Flagged media route to the vet brief; the disclaimer is always visible.
+Capture and recall **keep and surface the owner's own media** — Oscar never interprets an image or clip as a condition. "Similar days" shows the owner's own photos side by side so *they* can see change; video comparison is self-similarity only (`pose_consistency_events`), never a gait diagnosis. Flagged media route to the vet brief; the disclaimer is always visible.

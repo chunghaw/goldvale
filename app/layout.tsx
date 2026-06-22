@@ -22,9 +22,9 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Goldvale — a calm daily companion for senior pets",
+  title: "Oscar — a calm daily companion for senior pets",
   description:
-    "A 20-second daily check-in that trends a validated mobility score, remembers patterns, and prepares a vet-ready brief. Goldvale supports your vet's plan — it never diagnoses.",
+    "A 20-second daily check-in that trends a validated mobility score, remembers patterns, and prepares a vet-ready brief. It supports your vet's plan — it never diagnoses.",
 };
 
 export default function RootLayout({

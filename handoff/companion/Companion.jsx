@@ -1,4 +1,4 @@
-// Goldvale — AI Companion chat (mobile). Companion + scribe + vet-prep assistant.
+// Oscar — AI Companion chat (mobile). Companion + scribe + vet-prep assistant.
 // CARDINAL RULE: never diagnoses, grades, stages, or prescribes. It logs what you tell it,
 // recalls your own past notes, narrates your own trends, routes concerns to your vet.
 // Grounded in: chat_threads · chat_messages(role, text, media_url) · media_assets(kind,url,
@@ -44,7 +44,7 @@ function AgentMark({ s = 28 }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// RICH CARDS (embedded inside Goldvale bubbles)
+// RICH CARDS (embedded inside Oscar bubbles)
 // ════════════════════════════════════════════════════════════════════════════
 function LoggedChip() {
   return (
@@ -193,7 +193,7 @@ function Header() {
           <img src="assets/oscar.jpg" alt="Oscar" style={{ width: '37px', height: '37px', borderRadius: '999px', objectFit: 'cover', display: 'block' }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: 'var(--serif)', fontSize: 19, fontWeight: 500, color: '#fff', letterSpacing: -0.2, lineHeight: 1.1 }}>Goldvale companion</div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 19, fontWeight: 500, color: '#fff', letterSpacing: -0.2, lineHeight: 1.1 }}>Oscar companion</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.82)', fontWeight: 500, marginTop: 1 }}>Here for Oscar · always remembers</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 10.5, color: '#fff', fontWeight: 650, background: 'rgba(255,255,255,0.18)', padding: '5px 10px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.24)', flexShrink: 0 }}>
@@ -277,7 +277,7 @@ function InputBar({ value, onChange, onSend, attached, onAttach, onRemoveAttach,
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: `1px solid ${C.hair}`, borderRadius: 22, padding: '4px 6px 4px 15px', minHeight: 42 }}>
           <input
             value={value} onChange={(e) => onChange(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') onSend(); }}
-            placeholder="Tell Goldvale about Oscar…"
+            placeholder="Tell Oscar about Oscar…"
             style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 14.5, fontFamily: 'inherit', color: C.charcoal, padding: '7px 0' }}
           />
           <button className="gv-press" onClick={onSend} disabled={!canSend} aria-label="Send" style={{
@@ -292,7 +292,7 @@ function InputBar({ value, onChange, onSend, attached, onAttach, onRemoveAttach,
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 9 }}>
         {Ico.shield({ s: 12, c: C.mutedSoft })}
         <span style={{ fontSize: 10.5, color: C.muted, fontWeight: 500, textAlign: 'center', lineHeight: 1.3 }}>
-          Goldvale remembers and prepares — it doesn’t diagnose. Your vet decides.
+          Oscar remembers and prepares — it doesn’t diagnose. Your vet decides.
         </span>
       </div>
     </div>

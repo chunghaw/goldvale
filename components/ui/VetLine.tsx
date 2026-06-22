@@ -1,6 +1,6 @@
 /**
  * The bounded "contact your vet now" element — the ONLY place the danger colour
- * appears. Red flags route here; Goldvale never makes the judgement itself
+ * appears. Red flags route here; Oscar never makes the judgement itself
  * (lib/domain/guardrails.ts). Rendered as a plain link so it works in server
  * components; routes to the real /pets/[id]/vet-contact escalation screen.
  */

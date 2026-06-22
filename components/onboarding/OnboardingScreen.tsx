@@ -166,7 +166,7 @@ function StepPet({ data, set }: { data: FormData; set: <K extends keyof FormData
         <div style={{ display: "flex", alignItems: "center", gap: 12, background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: "12px 14px" }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 650 }}>This is a senior pet</div>
-            <div style={{ fontSize: 11.5, color: C.muted, marginTop: 1, lineHeight: 1.4 }}>Tunes Goldvale&rsquo;s reminders to a gentler pace.</div>
+            <div style={{ fontSize: 11.5, color: C.muted, marginTop: 1, lineHeight: 1.4 }}>Tunes the reminders to a gentler pace.</div>
           </div>
           <button className="gv-press" onClick={() => set("senior", !data.senior)} aria-pressed={data.senior} aria-label="Senior toggle" style={{
             width: 48, height: 29, borderRadius: 999, border: "none", cursor: "pointer", flexShrink: 0,
@@ -185,7 +185,7 @@ function StepConditions({ data, set, toggleCond }: { data: FormData; set: <K ext
   return (
     <div className="gv-step">
       <div style={{ fontFamily: "var(--serif)", fontSize: 25, fontWeight: 500, letterSpacing: -0.4 }}>What&rsquo;s going on?</div>
-      <div style={{ fontSize: 13, color: C.muted, marginTop: 5, lineHeight: 1.45 }}>Tap anything your vet has already mentioned. This just helps Goldvale remember — it&rsquo;s not a diagnosis.</div>
+      <div style={{ fontSize: 13, color: C.muted, marginTop: 5, lineHeight: 1.45 }}>Tap anything your vet has already mentioned. This just helps us remember — it&rsquo;s not a diagnosis.</div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginTop: 18 }}>
         {CONDITIONS.map((c) => {
@@ -293,7 +293,7 @@ function StepPlan({ data, set, toggleEx }: { data: FormData; set: <K extends key
           </div>
           <div style={{ display: "flex", gap: 8, alignItems: "flex-start", background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 12, padding: "11px 13px" }}>
             <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 15, c: C.sage })}</span>
-            <div style={{ fontSize: 11.5, color: "#4a544f", lineHeight: 1.45 }}>We store your vet&rsquo;s plan exactly as given. Goldvale never changes a dose or recommends exercises.</div>
+            <div style={{ fontSize: 11.5, color: "#4a544f", lineHeight: 1.45 }}>We store your vet&rsquo;s plan exactly as given. We never change a dose or recommend exercises.</div>
           </div>
         </div>
       )}

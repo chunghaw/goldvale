@@ -1,4 +1,4 @@
-// Goldvale — Media timeline / Visual recall (mobile). Route /pets/[id]/media.
+// Oscar — Media timeline / Visual recall (mobile). Route /pets/[id]/media.
 // Date-grouped grid of photos + clips; each with caption + "mention at vet" toggle.
 // "Similar days" opens a VISUAL RECALL strip (same subject over time). Non-clinical:
 // keeps the record, never diagnoses. Grounded in: media_assets(pet_id, kind, url, caption,
@@ -139,7 +139,7 @@
           {/* non-clinical line */}
           <div style={{ margin: '8px 18px 0', display: 'flex', gap: 9, alignItems: 'flex-start', background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 13, padding: '11px 13px' }}>
             <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{I.shield({ s: 15, c: C.sage })}</span>
-            <div style={{ fontSize: 11.5, color: '#42504b', lineHeight: 1.5 }}>Side by side, so you can see the change yourself. Goldvale keeps the record — it doesn’t diagnose. Your vet reads the full picture.</div>
+            <div style={{ fontSize: 11.5, color: '#42504b', lineHeight: 1.5 }}>Side by side, so you can see the change yourself. Oscar keeps the record — it doesn’t diagnose. Your vet reads the full picture.</div>
           </div>
 
           <div style={{ padding: '14px 18px 0' }}>
@@ -188,7 +188,7 @@
             {/* footer disclaimer */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '6px 14px 14px', textAlign: 'center' }}>
               {I.shield({ s: 13, c: C.mutedSoft })}
-              <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>Goldvale keeps the record. It doesn’t diagnose — your vet reads the full picture.</span>
+              <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>Oscar keeps the record. It doesn’t diagnose — your vet reads the full picture.</span>
             </div>
           </div>
 

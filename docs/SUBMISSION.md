@@ -1,18 +1,18 @@
-# Goldvale — H0 hackathon submission assets
+# Oscar — H0 hackathon submission assets
 
 **Live demo:** https://goldvale.vercel.app — opens on a landing page; **"Explore the live
 demo"** goes to Oscar's dashboard (no account needed), or **"Set up your own pet"** creates
 a real account. Every screen links from the dashboard.
 
-**Repo:** https://github.com/chunghaw/goldvale (public, MIT) · **Vercel team:** `team_1NrzZKgn3I3Rh1M8ZHukgoOw`
+**Repo:** https://github.com/chunghaw/oscar (public, MIT) · **Vercel team:** `team_1NrzZKgn3I3Rh1M8ZHukgoOw`
 
-> Goldvale tracks, remembers, and prepares — it **never diagnoses**. Clinical scores
+> Oscar tracks, remembers, and prepares — it **never diagnoses**. Clinical scores
 > are computed by deterministic code (`lib/domain`), never the LLM; every model line
 > passes `assertNonClinical()`.
 
 ## Project description (paste-ready — edit into your own voice before submitting)
 
-**Goldvale is a calm daily companion and home-rehabilitation tracker for owners of senior or chronically-ill dogs and cats.** A 20-second daily check-in trends a validated mobility score (GenPup-M), stores the vet's rehab plan, and — when something feels off — answers *"has this happened before?"* by searching the pet's own history by meaning. It supports the vet's plan; it never diagnoses.
+**Oscar is a calm daily companion and home-rehabilitation tracker for owners of senior or chronically-ill dogs and cats.** A 20-second daily check-in trends a validated mobility score (GenPup-M), stores the vet's rehab plan, and — when something feels off — answers *"has this happened before?"* by searching the pet's own history by meaning. It supports the vet's plan; it never diagnoses.
 
 **Who it's for:** the person managing a slow decline at home between vet visits — an aging dog with arthritis, a cat recovering from cruciate surgery. They want to notice patterns and walk into each appointment with the full picture, not a vague "he's been a bit slow lately."
 

@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared project settings (committed). Allowlist lets Goldvale sub-agents run the routine dev loop (npm/npx, tsc, vitest, drizzle, local git, Postgres MCP, Playwright) without prompting. Outward-facing actions (git push, deploys) stay gated.",
+  "$comment": "Shared project settings (committed). Allowlist lets Oscar sub-agents run the routine dev loop (npm/npx, tsc, vitest, drizzle, local git, Postgres MCP, Playwright) without prompting. Outward-facing actions (git push, deploys) stay gated.",
   "permissions": {
     "allow": [
       "PowerShell(npm *)", "PowerShell(npx *)", "PowerShell(node *)",

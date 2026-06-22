@@ -1,7 +1,7 @@
 /**
- * Non-clinical guardrails — the cardinal rule of Goldvale.
+ * Non-clinical guardrails — the cardinal rule of Oscar.
  *
- * Goldvale tracks, remembers, and prepares; it never diagnoses, grades, stages, or
+ * Oscar tracks, remembers, and prepares; it never diagnoses, grades, stages, or
  * prescribes. Bedrock Claude narrates trends and poses "questions for your vet";
  * this module enforces the boundary on any model-generated copy BEFORE it reaches
  * the user. Run every LLM output through assertNonClinical().

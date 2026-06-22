@@ -1,4 +1,4 @@
-// Goldvale — Daily check-in (mobile). Brand tokens from app/globals.css.
+// Oscar — Daily check-in (mobile). Brand tokens from app/globals.css.
 // Fields grounded in lib/db/schema.ts + lib/domain/*: qolScore (HHHHHMM 5-face),
 // mobilityItems (rotating GenPup-M items), tolerance enum (handled/a_bit_tired/
 // sore/refused), medication_events, journal note. Insight = pgvector recall.

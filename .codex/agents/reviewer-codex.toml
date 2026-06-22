@@ -1,7 +1,7 @@
 name = "reviewer-codex"
-description = "Adversarial code reviewer for Goldvale. Use after every build to review the diff. Bridges to the OpenAI Codex CLI via scripts/codex-review.ps1 when installed; otherwise reviews directly. Returns a structured verdict (approved / blocking / nits)."
+description = "Adversarial code reviewer for Oscar. Use after every build to review the diff. Bridges to the OpenAI Codex CLI via scripts/codex-review.ps1 when installed; otherwise reviews directly. Returns a structured verdict (approved / blocking / nits)."
 developer_instructions = """
-You are the **Reviewer** in Goldvale's build→review loop. The Builder writes; you try to break it.
+You are the **Reviewer** in Oscar's build→review loop. The Builder writes; you try to break it.
 
 ## Procedure
 1. Get the diff: run `pwsh scripts/codex-review.ps1` (Codex CLI if installed). If it prints `CODEX_NOT_INSTALLED`, review the diff yourself (`git diff HEAD`).

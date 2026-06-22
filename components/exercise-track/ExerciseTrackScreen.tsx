@@ -2,7 +2,7 @@
 
 /**
  * Exercise track (mobile) — the vet-plan-GATED rehab tracker. The vet prescribes;
- * Goldvale only LOGS adherence and, when earned (lib/domain/progression), surfaces a
+ * Oscar only LOGS adherence and, when earned (lib/domain/progression), surfaces a
  * QUESTION-framed "ask your vet about progressing" nudge — never an advance-dose
  * action, never a diagnosis. No exercise is shown without an active plan.
  *
@@ -167,7 +167,7 @@ function GatedView({ petId, view }: { petId: string; view: ExerciseTrackView }) 
         </div>
         <div style={{ fontFamily: "var(--serif)", fontSize: 21, fontWeight: 500, letterSpacing: -0.3, lineHeight: 1.2 }}>Your vet sets the plan</div>
         <div style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.5, marginTop: 9, maxWidth: 270, marginLeft: "auto", marginRight: "auto" }}>
-          Goldvale doesn&rsquo;t prescribe exercises. Once you add your vet&rsquo;s plan, we&rsquo;ll track it here — dose, tolerance, and progress.
+          We don&rsquo;t prescribe exercises. Once you add your vet&rsquo;s plan, we&rsquo;ll track it here — dose, tolerance, and progress.
         </div>
         <Link href="/onboarding" className="gv-press" style={{
           width: "100%", marginTop: 20, padding: "14px", borderRadius: 14, border: "none", cursor: "pointer", textDecoration: "none",

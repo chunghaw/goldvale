@@ -58,7 +58,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
           <div style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.5, maxWidth: 264, margin: "0 auto" }}>
             {series.length === 1
               ? `First GenPup-M score logged: ${current}/108. The trend appears once there's a second to compare.`
-              : "Your mobility trend will appear here — Goldvale charts each GenPup-M check-in against the pet's own baseline."}
+              : "Your mobility trend will appear here — we chart each GenPup-M check-in against the pet's own baseline."}
           </div>
         </div>
       </Card>
@@ -160,7 +160,7 @@ export function MobilityChart({ trend, bandLabel }: { trend: MobilityTrend; band
         <span style={{ color: ACCENT.c, flexShrink: 0, marginTop: 1 }}>{Ico.sparkles({ s: 14, c: ACCENT.c })}</span>
         <div style={{ fontSize: 12.5, color: "#4a544f", lineHeight: 1.45 }}>
           An <strong style={{ color: C.charcoal, fontWeight: 700 }}>{improvement}-point</strong>{" "}improvement vs the pet&rsquo;s own
-          baseline — past the {mcid}-point mark Goldvale treats as meaningful. Worth mentioning at your next visit, not a diagnosis.
+          baseline — past the {mcid}-point mark we treat as meaningful. Worth mentioning at your next visit, not a diagnosis.
         </div>
       </div>
     </Card>

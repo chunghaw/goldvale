@@ -1,4 +1,4 @@
-# Goldvale — demo video script (≤3 min)
+# Oscar — demo video script (≤3 min)
 
 **Target:** ~2:15. Voiceover ~250 words (clean TTS — test it first; if it sounds robotic, slow it ~5%). Show the app working; land the database moment once. Don't read the README.
 
@@ -13,7 +13,7 @@
 
 ### Beat 2 — What it is + the daily check-in  (0:22–0:45)
 **Screen:** Oscar's dashboard, then tap into the **daily check-in** — show the mood faces and the rotating mobility items.
-**VO:** "Goldvale is a calm daily companion and home-rehab tracker for those pets. It starts with a twenty-second check-in — how they're moving, how they're doing."
+**VO:** "Oscar is a calm daily companion and home-rehab tracker for those pets. It starts with a twenty-second check-in — how they're moving, how they're doing."
 
 ### Beat 3 — The trend + the non-clinical decision  (0:45–1:08)
 **Screen:** Back to dashboard; the **mobility trend** chart (tap a point to show the score; the line rises).
@@ -21,7 +21,7 @@
 
 ### Beat 4 — THE DATABASE MOMENT  (1:08–1:50)  ← the peak
 **Screen:** Flash the **architecture diagram** (2 sec), then the **pattern-memory recall** screen — let the **% match** numbers sit on screen — then the **media "Similar days"** overlay with the incision series side by side.
-**VO:** "Now, the engineering. A senior pet's health record is relational, time-series, *and* semantic — all at once. So Goldvale keeps every bit of it in one Aurora Postgres instance with pgvector. When a stiff morning shows up, it searches the pet's own journal by meaning — *this flare resembles one from five weeks ago.* And it does the same with photos: *compare today's incision to last month.* Two kinds of similarity search — text and image — as plain SQL on the same rows. No second database, no sync."
+**VO:** "Now, the engineering. A senior pet's health record is relational, time-series, *and* semantic — all at once. So Oscar keeps every bit of it in one Aurora Postgres instance with pgvector. When a stiff morning shows up, it searches the pet's own journal by meaning — *this flare resembles one from five weeks ago.* And it does the same with photos: *compare today's incision to last month.* Two kinds of similarity search — text and image — as plain SQL on the same rows. No second database, no sync."
 
 ### Beat 5 — Companion + vet brief + safety  (1:50–2:15)
 **Screen:** The **companion chat** (send a message, a reply with a card appears), then the **vet brief**, then the **"Contact your vet now"** screen.
@@ -29,7 +29,7 @@
 
 ### Beat 6 — Close  (2:15–2:25)
 **Screen:** Architecture diagram held, or the landing logo.
-**VO:** "One Aurora backend, four load-bearing layers, doing real work on every request. Goldvale supports the vet's plan — it never replaces it."
+**VO:** "One Aurora backend, four load-bearing layers, doing real work on every request. Oscar supports the vet's plan — it never replaces it."
 
 ---
 
@@ -39,7 +39,7 @@
 3. Dashboard → tap a **mobility chart** point
 4. Dashboard → **Days like this** (pattern recall — hold on the % matches)
 5. Dashboard → **Photos & clips** → tap **Similar days** on an incision photo (the healing series)
-6. Dashboard → **Talk to Goldvale** → tap a suggestion chip → send → reply card
+6. Dashboard → **Talk to Oscar** → tap a suggestion chip → send → reply card
 7. Dashboard → **Prepare a vet brief**
 8. Any **Contact your vet now** link → the escalation screen
 

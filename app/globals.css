@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Goldvale brand — warm, calm, low-anxiety. See HANDOFF.md.
+  /* Oscar brand — warm, calm, low-anxiety. See HANDOFF.md.
      We ship the COOLED, higher-contrast reading of this system the screens were
      designed against (handoff/README.md): same hues, cooler/stronger contrast. */
   --background: #eef1ef;   /* cooled cream — base paper */
@@ -63,7 +63,7 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ── Goldvale interaction primitives (ported from the design host) ───────────── */
+/* ── Oscar interaction primitives (ported from the design host) ───────────── */
 .gv-scroll::-webkit-scrollbar { width: 0; height: 0; }
 .gv-scroll { scrollbar-width: none; }
 

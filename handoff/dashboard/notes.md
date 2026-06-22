@@ -28,7 +28,7 @@
 | "Contact your vet now" | bounded danger element → vet routing | `guardrails.ts` |
 
 ## Copy to keep verbatim
-- "An 8-point improvement vs Oscar's own baseline — past the 8-point mark Goldvale treats as meaningful. Worth mentioning at your next visit, not a diagnosis."
+- "An 8-point improvement vs Oscar's own baseline — past the 8-point mark Oscar treats as meaningful. Worth mentioning at your next visit, not a diagnosis."
 - Progression: "That can be a sign she's ready for a little more. It's your vet's call — want to raise it with Dr. Okafor?"
 
 ## Non-clinical guardrail

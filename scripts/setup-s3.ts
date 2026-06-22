@@ -1,5 +1,5 @@
 /**
- * Create the private S3 bucket for Goldvale media (photos/videos). Idempotent.
+ * Create the private S3 bucket for Oscar media (photos/videos). Idempotent.
  *   npx tsx --env-file=.env scripts/setup-s3.ts
  * Bucket stays private (Block Public Access on); the app serves objects via
  * short-lived presigned GET urls (lib/storage/s3.ts).

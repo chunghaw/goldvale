@@ -12,7 +12,7 @@ export const authInputStyle: CSSProperties = {
   padding: "12px 13px", fontSize: 14.5, color: C.charcoal, fontFamily: "inherit", outline: "none",
 };
 
-/** The Goldvale logo + tagline hero shared with onboarding's Welcome. */
+/** The Oscar logo + tagline hero shared with onboarding's Welcome. */
 export function AuthHero({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div style={{
@@ -29,7 +29,7 @@ export function AuthHero({ title, subtitle }: { title: string; subtitle: string 
         <div style={{ width: 64, height: 64, borderRadius: 999, margin: "0 auto 16px", background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.28)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           {Ico.paw({ s: 30, c: "#fff" })}
         </div>
-        <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.8)", fontWeight: 650, letterSpacing: 1.4, textTransform: "uppercase" }}>Goldvale</div>
+        <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.8)", fontWeight: 650, letterSpacing: 1.4, textTransform: "uppercase" }}>Oscar</div>
         <div style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 500, letterSpacing: -0.6, lineHeight: 1.12, color: "#fff", marginTop: 8 }}>{title}</div>
         <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.9)", lineHeight: 1.5, marginTop: 12, maxWidth: 280, marginLeft: "auto", marginRight: "auto" }}>
           {subtitle}
@@ -45,7 +45,7 @@ export function NonClinicalLine() {
     <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: C.field, border: `1px solid ${C.hairSoft}`, borderRadius: 14, padding: "13px 14px" }}>
       <span style={{ color: C.sage, flexShrink: 0, marginTop: 1 }}>{Ico.shield({ s: 17, c: C.sage })}</span>
       <div style={{ fontSize: 12.5, color: "#42504b", lineHeight: 1.5 }}>
-        Goldvale helps you <strong style={{ color: C.charcoal, fontWeight: 700 }}>track, remember, and prepare</strong> — it doesn&rsquo;t diagnose. Your vet decides.
+        Here to help you <strong style={{ color: C.charcoal, fontWeight: 700 }}>track, remember, and prepare</strong> — it doesn&rsquo;t diagnose. Your vet decides.
       </div>
     </div>
   );

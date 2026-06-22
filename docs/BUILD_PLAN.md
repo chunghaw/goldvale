@@ -1,4 +1,4 @@
-# Goldvale — Build Plan
+# Oscar — Build Plan
 
 H0 hackathon ("Hack the Zero Stack with Vercel v0 + AWS Databases"), **Monetizable B2C**. Deadline **2026-06-29 17:00 PDT**.
 

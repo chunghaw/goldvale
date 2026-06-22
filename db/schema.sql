@@ -1,5 +1,5 @@
 -- ╔══════════════════════════════════════════════════════════════════════════╗
--- ║ Goldvale — Aurora PostgreSQL schema (v0.1)                                 ║
+-- ║ Oscar — Aurora PostgreSQL schema (v0.1)                                 ║
 -- ║ Senior/chronic-care + home-rehab companion. H0 hackathon.                  ║
 -- ║                                                                            ║
 -- ║ ONE Aurora instance, four load-bearing layers (the judge-facing story):    ║

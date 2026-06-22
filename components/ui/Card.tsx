@@ -1,4 +1,4 @@
-/** The standard white surface used for every section on the Goldvale screens. */
+/** The standard white surface used for every section on the Oscar screens. */
 import type { CSSProperties, ReactNode } from "react";
 import { C } from "./tokens";
 

@@ -1,5 +1,5 @@
 /**
- * Shared design tokens for the Goldvale screens — the cooled, higher-contrast
+ * Shared design tokens for the Oscar screens — the cooled, higher-contrast
  * reading of app/globals.css the mocks were tuned against (handoff/README.md).
  *
  * Hex literals here mirror the CSS custom properties in globals.css; the soft/ink

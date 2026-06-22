@@ -1,5 +1,5 @@
-// Goldvale — Exercise track (mobile). The vet-plan-GATED rehab tracker.
-// The vet prescribes; Goldvale only LOGS adherence and, when earned, surfaces a
+// Oscar — Exercise track (mobile). The vet-plan-GATED rehab tracker.
+// The vet prescribes; Oscar only LOGS adherence and, when earned, surfaces a
 // QUESTION-framed "ask your vet about progressing" nudge. It never advances the dose.
 // Grounded in: plan_items + exercises(display_name, default_fitt, is_active_exercise) ·
 // exercise_session_events(planned_reps, completed_reps, tolerance) · adherence_rollup_mv ·
@@ -129,7 +129,7 @@ function GatedState({ onAddPlan }) {
           </div>
           <div style={{ fontFamily: 'var(--serif)', fontSize: 21, fontWeight: 500, letterSpacing: -0.3, lineHeight: 1.2 }}>Your vet sets the plan</div>
           <div style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.5, marginTop: 9, maxWidth: 270, marginLeft: 'auto', marginRight: 'auto' }}>
-            Goldvale doesn’t prescribe exercises. Once you add your vet’s plan, we’ll track it here — dose, tolerance, and progress.
+            Oscar doesn’t prescribe exercises. Once you add your vet’s plan, we’ll track it here — dose, tolerance, and progress.
           </div>
           <button className="gv-press" onClick={onAddPlan} style={{
             width: '100%', marginTop: 20, padding: '14px', borderRadius: 14, border: 'none', cursor: 'pointer',
