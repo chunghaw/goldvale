@@ -64,6 +64,10 @@ export function LandingScreen({ demoPetId }: { demoPetId: string }) {
           {Ico.paw({ s: 15, c: C.sage })} Explore the live demo
         </Link>
       </div>
+
+      <div style={{ textAlign: "center", fontSize: 11.5, color: C.mutedSoft, paddingTop: 18, letterSpacing: 0.2 }}>
+        In loving memory of Oscar {Ico.paw({ s: 11, c: C.mutedSoft })}
+      </div>
       </div>
     </main>
   );

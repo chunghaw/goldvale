@@ -1,6 +1,6 @@
 # Building Oscar: when your data is relational, time-series, *and* semantic at once
 
-*A build log for the H0 hackathon (Vercel + AWS Databases). Live demo: https://goldvale.vercel.app · Repo: https://github.com/chunghaw/oscar · #H0Hackathon*
+*A build log for the H0 hackathon (Vercel + AWS Databases). Live demo: https://oscarcare.vercel.app · Repo: https://github.com/chunghaw/oscar · #H0Hackathon*
 
 > **[EDIT ME FIRST]** Open with one or two sentences in your own voice about *why you built this* — a specific pet, a specific vet visit, the thing that annoyed you. Judges respond to a real person. Then keep the rest and trim to taste.
 

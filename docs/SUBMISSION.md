@@ -1,6 +1,6 @@
 # Oscar — H0 hackathon submission assets
 
-**Live demo:** https://goldvale.vercel.app — opens on a landing page; **"Explore the live
+**Live demo:** https://oscarcare.vercel.app — opens on a landing page; **"Explore the live
 demo"** goes to Oscar's dashboard (no account needed), or **"Set up your own pet"** creates
 a real account. Every screen links from the dashboard.
 

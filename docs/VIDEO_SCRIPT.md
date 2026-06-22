@@ -46,4 +46,4 @@
 ## Notes
 - **One DB sentence on screen** (optional lower-third over Beat 4): *"Relational + time-series + text-vector + image-vector — one Aurora instance."*
 - Keep cuts quick; let the **% match numbers** and the **incision side-by-side** breathe — those are the "look what one query does" shots.
-- End screen: live URL `goldvale.vercel.app` + repo + "#H0Hackathon".
+- End screen: live URL `oscarcare.vercel.app` + repo + "#H0Hackathon".
