@@ -35,6 +35,17 @@ export interface CompanionReply {
 }
 
 /**
+ * Upper bounds on the free-text the agent feeds its tools.
+ *
+ *   journal:  ~2000 chars covers a long observation paragraph; longer means a
+ *             malformed prompt or someone pasting raw logs — cap to bound the
+ *             embedding cost + injection surface.
+ *   query:    recall is a single phrase ("stiff getting up") — 500 chars is
+ *             already generous.
+ */
+export const COMPANION_TOOL_LIMITS = { journal: 2000, query: 500 } as const;
+
+/**
  * Safe fallback the chat shows when the agent or one of its tools fails. Must
  * stay non-clinical and route real concern back to the vet — verified at module
  * load so a careless edit can't ship clinical copy by accident.
@@ -96,7 +107,10 @@ export async function runCompanion(opts: {
   const tools = {
     logToJournal: tool({
       description: "Save an observation the owner just reported to the pet's journal record.",
-      inputSchema: z.object({ text: z.string().describe("the observation, in plain words") }),
+      inputSchema: z.object({
+        text: z.string().min(1).max(COMPANION_TOOL_LIMITS.journal)
+          .describe("the observation, in plain words"),
+      }),
       execute: async ({ text }: { text: string }) => {
         try {
           const embedding = await embedText(text);
@@ -111,7 +125,10 @@ export async function runCompanion(opts: {
     }),
     recallPastNotes: tool({
       description: "Find the owner's own past journal notes that resemble a topic, to surface a pattern.",
-      inputSchema: z.object({ query: z.string().describe("what to look for, e.g. 'stiff getting up'") }),
+      inputSchema: z.object({
+        query: z.string().min(1).max(COMPANION_TOOL_LIMITS.query)
+          .describe("what to look for, e.g. 'stiff getting up'"),
+      }),
       execute: async ({ query }: { query: string }) => {
         try {
           const hits = await recallSimilarJournal(petId, query, 3);
@@ -150,7 +167,9 @@ export async function runCompanion(opts: {
     }),
     addVetBriefQuestion: tool({
       description: "Flag a question or item to raise at the next vet visit.",
-      inputSchema: z.object({ question: z.string() }),
+      inputSchema: z.object({
+        question: z.string().min(1).max(COMPANION_TOOL_LIMITS.journal),
+      }),
       execute: async ({ question }: { question: string }) => {
         try {
           const text = `For the vet: ${question}`;
@@ -166,7 +185,9 @@ export async function runCompanion(opts: {
     }),
     escalateToVet: tool({
       description: "Use when the owner describes a possible emergency or red flag. Routes them to the vet; never assess it.",
-      inputSchema: z.object({ reason: z.string() }),
+      inputSchema: z.object({
+        reason: z.string().min(1).max(COMPANION_TOOL_LIMITS.journal),
+      }),
       execute: async () => {
         cards.push({ type: "redflag" });
         return { guidance: "Contact your vet now." };

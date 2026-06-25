@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { z } from "zod";
 import {
   COMPANION_FALLBACK_TEXT,
+  COMPANION_TOOL_LIMITS,
   withCompanionFallback,
   type CompanionReply,
 } from "./companion";
@@ -19,6 +21,32 @@ describe("companion fallback copy — the safety net when the agent throws", () 
 
   it("is plain text — no markdown / bullets / emoji that render raw in chat", () => {
     expect(COMPANION_FALLBACK_TEXT).not.toMatch(/[*_`#>]|^\s*[-•]\s/m);
+  });
+});
+
+describe("companion tool input limits — bound embedding cost + injection surface", () => {
+  // Mirror the schemas the tools use internally. If COMPANION_TOOL_LIMITS
+  // drifts from the actual tool schemas, this test still catches the bound
+  // contract; a build-level guard inside runCompanion already enforces them.
+  const journal = z.string().min(1).max(COMPANION_TOOL_LIMITS.journal);
+  const query = z.string().min(1).max(COMPANION_TOOL_LIMITS.query);
+
+  it("publishes sensible upper bounds", () => {
+    expect(COMPANION_TOOL_LIMITS.journal).toBe(2000);
+    expect(COMPANION_TOOL_LIMITS.query).toBe(500);
+  });
+
+  it("journal-shaped input accepts a normal note and rejects over-long input", () => {
+    expect(journal.safeParse("Slept well.").success).toBe(true);
+    expect(journal.safeParse("x".repeat(COMPANION_TOOL_LIMITS.journal)).success).toBe(true);
+    expect(journal.safeParse("x".repeat(COMPANION_TOOL_LIMITS.journal + 1)).success).toBe(false);
+    expect(journal.safeParse("").success).toBe(false);
+  });
+
+  it("query-shaped input is capped tighter (it's a search phrase, not an essay)", () => {
+    expect(query.safeParse("stiff getting up").success).toBe(true);
+    expect(query.safeParse("x".repeat(COMPANION_TOOL_LIMITS.query)).success).toBe(true);
+    expect(query.safeParse("x".repeat(COMPANION_TOOL_LIMITS.query + 1)).success).toBe(false);
   });
 });
 

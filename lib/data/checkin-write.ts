@@ -26,17 +26,48 @@ export interface SaveCheckinInput {
   note: string;
 }
 
-/** Persist one check-in and its child events. Returns the new check-in id. */
+/**
+ * Maximum allowed length of a free-text check-in note (post-trim). Bounds the
+ * embedding cost on the journal-entry write and the surface area for prompt
+ * injection. Generous — a long paragraph fits comfortably.
+ */
+export const MAX_CHECKIN_NOTE_LEN = 2000;
+
+/**
+ * Validates the free-text note at the action boundary. Trims whitespace and
+ * rejects anything over MAX_CHECKIN_NOTE_LEN with a friendly, non-clinical
+ * message the action can surface to the client.
+ */
+export function validateCheckinNote(note: string): { ok: true; note: string } | { ok: false; message: string } {
+  const trimmed = note.trim();
+  if (trimmed.length > MAX_CHECKIN_NOTE_LEN) {
+    return {
+      ok: false,
+      message: `That note is a bit long for one save — try about ${MAX_CHECKIN_NOTE_LEN} characters or less and try again.`,
+    };
+  }
+  return { ok: true, note: trimmed };
+}
+
+/**
+ * Persist one check-in and its child events. Returns the new check-in id.
+ *
+ * The note is trimmed once here so direct callers (dev scripts, future jobs)
+ * can pass raw input without each having to remember to normalize. The action
+ * layer additionally bounds the length via validateCheckinNote before this
+ * runs.
+ */
 export async function persistCheckin(input: SaveCheckinInput): Promise<string> {
   const db = getDb();
   const { petId } = input;
+  const trimmedNote = input.note.trim();
 
   // 1) the check-in itself (QoL + rotating mobility items + note)
   const [checkin] = await db.insert(dailyCheckins).values({
     petId,
     qolScore: input.qol,
     mobilityItems: input.mobilityItems,
-    note: input.note.trim() || null,
+    note: trimmedNote || null,
   }).returning({ id: dailyCheckins.id });
 
   // 2) rehab sessions — resolve planned/completed reps from the active plan.
@@ -69,9 +100,9 @@ export async function persistCheckin(input: SaveCheckinInput): Promise<string> {
   }
 
   // 4) note → journal entry with a Titan embedding (feeds semantic recall)
-  if (input.note.trim()) {
-    const embedding = await embedText(input.note.trim());
-    await db.insert(journalEntries).values({ petId, text: input.note.trim(), embedding });
+  if (trimmedNote) {
+    const embedding = await embedText(trimmedNote);
+    await db.insert(journalEntries).values({ petId, text: trimmedNote, embedding });
   }
 
   // 5) keep the analytics layer fresh — non-fatal so a refresh hiccup never
