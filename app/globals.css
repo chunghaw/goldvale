@@ -9,7 +9,7 @@
   --gold: #d6981e;         /* highlight only, used sparingly */
   --sage: #4f8a7d;         /* primary calm — actions + positive states */
   --danger: #c0492b;       /* ONLY the bounded "contact your vet now" element */
-  --muted: #687069;        /* readable secondary text */
+  --muted: #5a6359;        /* readable secondary text — darkened for WCAG AA on --field (#f2f5f3) */
   --muted-soft: #8a938e;   /* faint captions */
   --card: #ffffff;
   --radius: 18px;
