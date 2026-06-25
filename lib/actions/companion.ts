@@ -8,7 +8,7 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { pets, mediaAssets } from "@/lib/db/schema";
-import { runCompanion, type ChatTurn } from "@/lib/ai/companion";
+import { runCompanion, withCompanionFallback, type ChatTurn } from "@/lib/ai/companion";
 import {
   appendAssistant, appendOwner, getOrCreateThread, loadMessages,
   type ChatMessageView, type MediaRef, type StoredMediaRef,
@@ -42,7 +42,10 @@ export async function sendCompanionMessage(
 
   const ownerId = await appendOwner(threadId, text, storedMedia);
   const history = (await loadMessages(threadId)).map<ChatTurn>((m) => ({ role: m.role, text: m.text ?? "" }));
-  const reply = await runCompanion({ petId, petName, history, image });
+  // If the agent or any tool throws (Bedrock outage, embedText hiccup, DB
+  // blip), withCompanionFallback returns a safe non-clinical reply that still
+  // routes urgent concern to the vet — the client never sees a thrown chat.
+  const reply = await withCompanionFallback(() => runCompanion({ petId, petName, history, image }));
   const assistantId = await appendAssistant(threadId, reply.text, reply.cards);
 
   return {
