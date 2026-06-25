@@ -233,7 +233,7 @@ export function MediaTimelineScreen({ petId, petName, petPhoto, view }: {
         {groups.map((g) => (
           <div key={g.label} style={{ marginBottom: 18 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: C.muted, letterSpacing: 0.2, marginBottom: 10, paddingLeft: 2 }}>{g.label}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
               {g.items.map((it) => (
                 <Tile key={it.id} it={it} petName={petName} mentioned={!!mentions[it.id]} onMention={() => onMention(it)} onRecall={() => onRecall(it)} onPlay={() => setActiveVideo(it)} />
               ))}

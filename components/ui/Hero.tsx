@@ -85,7 +85,9 @@ export function Hero({
               lineHeight: 1.05,
               marginTop: 2,
               color: "#fff",
-              whiteSpace: "nowrap",
+              // wrap on narrow screens so long pet names don't get clipped
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
             }}
           >
             {title}

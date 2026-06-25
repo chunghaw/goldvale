@@ -133,7 +133,7 @@ function OwnerBubble({ m }: { m: ChatMessageView }) {
   const photo = m.media.find((x) => x.kind === "photo");
   return (
     <div style={{ display: "flex", justifyContent: "flex-end", paddingLeft: 44 }}>
-      <div style={{ maxWidth: "100%", background: "linear-gradient(165deg, #54948a, #437a6d)", color: "#fff", borderRadius: 20, borderBottomRightRadius: 7, padding: photo ? 6 : "11px 14px", boxShadow: "0 4px 12px rgba(63,123,109,0.22)" }}>
+      <div style={{ maxWidth: "clamp(220px, 78%, 360px)", wordBreak: "break-word", background: "linear-gradient(165deg, #54948a, #437a6d)", color: "#fff", borderRadius: 20, borderBottomRightRadius: 7, padding: photo ? 6 : "11px 14px", boxShadow: "0 4px 12px rgba(63,123,109,0.22)" }}>
         {photo && (
           <div style={{ borderRadius: 15, overflow: "hidden", marginBottom: m.text ? 8 : 0, lineHeight: 0 }}>
             <Image src={photo.url} alt={photo.caption ?? "sent"} width={210} height={150} style={{ width: "100%", maxWidth: 210, height: "auto", display: "block", objectFit: "cover" }} />
@@ -149,8 +149,8 @@ function AgentBubble({ m, name, petId }: { m: ChatMessageView; name: string; pet
   return (
     <div style={{ display: "flex", gap: 9, paddingRight: 24 }}>
       <AgentMark s={28} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "12px 14px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)" }}>
+      <div style={{ flex: 1, minWidth: 0, maxWidth: "clamp(220px, 84%, 360px)" }}>
+        <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "12px 14px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)", wordBreak: "break-word" }}>
           {m.text && <div style={{ fontSize: 14.5, lineHeight: 1.5, color: C.charcoal }}>{m.text}</div>}
           <Cards cards={m.cards} name={name} petId={petId} />
         </div>

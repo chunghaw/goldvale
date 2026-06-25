@@ -284,7 +284,7 @@ function RehabBlock({
               </div>
             </div>
             {st.done && (
-              <div className="gv-rise" style={{ display: "flex", gap: 6, marginTop: 11, paddingLeft: 38 }}>
+              <div className="gv-rise" style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 11, paddingLeft: 38 }}>
                 {tolerances.map((t) => {
                   const on = st.tol === t.id;
                   return (
