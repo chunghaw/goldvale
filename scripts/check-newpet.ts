@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import { createPetFromOnboarding } from "../lib/data/onboarding-write";
 import { getPetViewFromDb } from "../lib/data/queries";
 import { getMediaTimeline } from "../lib/data/media";
+import { clockFor } from "../lib/data/pets";
 import { getDb } from "../lib/db/client";
 import { owners, pets } from "../lib/db/schema";
 
@@ -20,7 +21,7 @@ async function main() {
   }, owner.id);
   console.log("new pet:", petId);
 
-  const v = await getPetViewFromDb(petId);
+  const v = await getPetViewFromDb(petId, clockFor(petId));
   if (!v) throw new Error("view null");
   const d = v.dashboard;
   console.log("HEADER   :", v.header.signalment, "| streak", v.header.streakDays, "| phase", JSON.stringify(v.header.phaseLabel), "| vet", v.header.vetName, "| next", v.header.nextVisit);
@@ -31,7 +32,7 @@ async function main() {
   console.log("RECOVERY :", d.recovery.map((p) => `${p.week}(${p.state})`).join(" "), "| protocol", d.protocolLabel);
   console.log("EX TRACK :", "gated", v.exerciseTrack.gated, "| ex", v.exerciseTrack.exercises.length, "| adh", v.exerciseTrack.adherencePct);
   console.log("BRIEF    :", JSON.stringify(v.brief.snapshot), "| meds", v.brief.meds.length, "| mentions", v.brief.mentions.length);
-  const media = await getMediaTimeline(petId);
+  const media = await getMediaTimeline(petId, clockFor(petId));
   console.log("MEDIA    :", media.photoCount, "photos,", media.videoCount, "clips");
 
   const db = getDb();

@@ -51,7 +51,6 @@ export async function recallSimilarJournal(petId: string, queryText: string, lim
   }));
 }
 
-const NOW = new Date("2026-06-09T09:00:00Z"); // demo "today"; swap to new Date() for live time
 const DAY = 24 * 60 * 60 * 1000;
 
 function safe(text: string): string {
@@ -72,7 +71,13 @@ const TPLO_PHASE_LABELS: Record<string, string> = {
   "4-8": "Build to 15–20 min walks",
 };
 
-export async function getPetViewFromDb(id: string): Promise<PetView | null> {
+/**
+ * `now` is the wall-clock used for age/streak/"this week" math. The demo pet is
+ * anchored to a frozen date so its seeded history reads consistently; for every
+ * other (real-user) pet, callers pass `new Date()` so trends and rollups track
+ * actual time. Inject explicitly so tests can drive deterministic clocks.
+ */
+export async function getPetViewFromDb(id: string, now: Date): Promise<PetView | null> {
   const db = getDb();
 
   const [pet] = await db.select().from(pets).where(eq(pets.id, id)).limit(1);
@@ -130,13 +135,13 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
 
   // ── derive: identity / header ───────────────────────────────────────────────
   const ageYears = pet.dateOfBirth
-    ? Math.floor((NOW.getTime() - new Date(pet.dateOfBirth).getTime()) / (365.25 * DAY))
+    ? Math.floor((now.getTime() - new Date(pet.dateOfBirth).getTime()) / (365.25 * DAY))
     : null;
   const signalment = [pet.name, ageYears ? `${ageYears} yr` : null, pet.breed].filter(Boolean).join(" · ");
-  const weekPostOp = protocol ? Math.floor(daysBetween(NOW, new Date(protocol.onsetDate)) / 7) : null;
+  const weekPostOp = protocol ? Math.floor(daysBetween(now, new Date(protocol.onsetDate)) / 7) : null;
   const phaseLabel = weekPostOp != null ? `Week ${weekPostOp} · post-op` : "";
   // a "next visit" only makes sense once there's a protocol/condition being followed
-  const nextVisit = protocol ? fmtShort.format(new Date(NOW.getTime() + 9 * DAY)) : null;
+  const nextVisit = protocol ? fmtShort.format(new Date(now.getTime() + 9 * DAY)) : null;
   const streakDays = consecutiveStreak(checkins.map((c) => c.recordedAt));
 
   // ── derive: mobility trend (domain-computed) ────────────────────────────────
@@ -188,10 +193,11 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
     redFlags,
     mods,
     adherenceMv: adherenceMv[0],
+    now,
   });
 
   // ── derive: pattern memory (time-series recall over mobility_items) ─────────
-  const pattern = patternFromCheckins(checkins);
+  const pattern = patternFromCheckins(checkins, now);
 
   // ── derive: recovery timeline (only if the pet actually has a protocol) ──────
   const PROTOCOL_LABELS: Record<string, string> = { tplo_post_op: "TPLO post-op", ivdd_conservative: "IVDD recovery" };
@@ -199,7 +205,7 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
   const protocolLabel = protocol ? PROTOCOL_LABELS[protocol.templateId] ?? "Recovery plan" : "";
 
   // ── derive: meds adherence (28-day window) ──────────────────────────────────
-  const medAgg = aggregateMeds(medRows);
+  const medAgg = aggregateMeds(medRows, now);
   const medAdherencePct = medAgg.total ? Math.round((medAgg.given / medAgg.total) * 100) : 0;
 
   // ── derive: QoL average (28-day window, 0–4 scale) ──────────────────────────
@@ -246,7 +252,7 @@ export async function getPetViewFromDb(id: string): Promise<PetView | null> {
       briefCount: mentions.length,
     },
     checkin: {
-      dateLabel: fmtDay.format(NOW),
+      dateLabel: fmtDay.format(now),
       qol: [
         { key: "Hard", sub: "Hard day" },
         { key: "Low", sub: "Low" },
@@ -319,6 +325,7 @@ function buildExerciseTrack(d: {
   redFlags: { label: string; guide: string | null }[];
   mods: { title: string; detail: string | null }[];
   adherenceMv: { sessions: string; adherence_ratio: string | null } | undefined;
+  now: Date;
 }): ExerciseTrackView {
   const exercises = d.items.map((it) => {
     const { fitt, planned } = fittFrom(it.sets, it.reps);
@@ -329,7 +336,7 @@ function buildExerciseTrack(d: {
   const ratio = d.adherenceMv?.adherence_ratio != null ? Number(d.adherenceMv.adherence_ratio) : null;
   const adherencePct = ratio != null ? Math.round(ratio * 100) : 0;
   const daysThisWeek = new Set(
-    d.sessions.filter((s) => daysBetween(NOW, s.recordedAt) < 7).map((s) => Math.floor(s.recordedAt.getTime() / DAY)),
+    d.sessions.filter((s) => daysBetween(d.now, s.recordedAt) < 7).map((s) => Math.floor(s.recordedAt.getTime() / DAY)),
   ).size;
   const adherenceDays = `${daysThisWeek} of 7 days`;
 
@@ -340,7 +347,7 @@ function buildExerciseTrack(d: {
   // last 14 days, session count per day (capped at 3) → bar intensity
   const history: number[] = [];
   for (let day = 13; day >= 0; day--) {
-    const n = d.sessions.filter((s) => daysBetween(NOW, s.recordedAt) === day).length;
+    const n = d.sessions.filter((s) => daysBetween(d.now, s.recordedAt) === day).length;
     history.push(Math.min(3, n));
   }
 
@@ -377,13 +384,13 @@ function consecutiveStreak(timestamps: Date[]): number {
 }
 
 /** Count "slower rising" (mobility_items.rising >= 2) days and frame as recall. */
-function patternFromCheckins(checkins: { recordedAt: Date; mobilityItems: unknown }[]): PatternMemory {
+function patternFromCheckins(checkins: { recordedAt: Date; mobilityItems: unknown }[], now: Date): PatternMemory {
   const flares = checkins
     .filter((c) => {
       const m = c.mobilityItems as { rising?: number } | null;
       return typeof m?.rising === "number" && m.rising >= 2;
     })
-    .filter((c) => daysBetween(NOW, c.recordedAt) <= 28)
+    .filter((c) => daysBetween(now, c.recordedAt) <= 28)
     .sort((a, b) => a.recordedAt.getTime() - b.recordedAt.getTime());
 
   const n = flares.length;
@@ -420,8 +427,8 @@ async function buildRecovery(
   return out;
 }
 
-function aggregateMeds(rows: { medName: string; given: boolean; recordedAt: Date }[]) {
-  const recent = rows.filter((r) => daysBetween(NOW, r.recordedAt) < 28);
+function aggregateMeds(rows: { medName: string; given: boolean; recordedAt: Date }[], now: Date) {
+  const recent = rows.filter((r) => daysBetween(now, r.recordedAt) < 28);
   const perMed: Record<string, { given: number; total: number }> = {};
   const order: string[] = [];
   for (const r of recent) {

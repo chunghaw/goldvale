@@ -1,9 +1,10 @@
 /** Verify the live PetView assembles correctly from Aurora. Throwaway dev check. */
 import { getPetViewFromDb } from "../lib/data/queries";
+import { clockFor } from "../lib/data/pets";
 import { OSCAR_PET_ID } from "../lib/data/ids";
 
 async function main() {
-  const v = await getPetViewFromDb(OSCAR_PET_ID);
+  const v = await getPetViewFromDb(OSCAR_PET_ID, clockFor(OSCAR_PET_ID));
   if (!v) throw new Error("Oscar not found — run seed-demo-pet.ts");
   const { header, dashboard: d, checkin, brief } = v;
   console.log("HEADER     :", header.signalment, "·", header.phaseLabel, "· streak", header.streakDays, "· vet", header.vetName, "· next", header.nextVisit);
