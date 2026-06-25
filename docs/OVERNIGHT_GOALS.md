@@ -84,3 +84,53 @@
 ## Progress log (append one line per commit: `<sha-or-pending> — item # — what changed — DoD status`)
 
 - (start here)
+- b9710fa — item #1 — live clock threaded through queries/media + clockFor(petId); demo stays frozen, real pets use new Date(); +3 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- fcafdeb — item #2 — REFRESH MV CONCURRENTLY both rollups after persistCheckin; non-fatal helper + 3 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 4dcd896 — item #3 — per-tool try/catch + withCompanionFallback + non-clinical safety-net reply; system prompt now honest about ok:false; +6 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 21f5e25 — item #4 — getSimilarMedia: scoped both reference-embedding subqueries to pet_id (defense in depth); +2 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 1fc4d82 — item #5 — FK constraints on exercise_session_events (pet→cascade, exercise→restrict) in schema.sql + schema.ts + idempotent migrate script; +4 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only; not run against Aurora)
+- 75a3370 — item #6 — companion tool schemas + check-in note bounded with non-clinical message at the action boundary; +8 tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 02c3b64 — item #7 — BANNED_PATTERNS broadened (incl. diagnoses/misdiagnoses + suggests verb + suspect/consistent with/resembl/typical of); 51-case adversarial corpus + 15 must-pass real-app strings — DoD: tsc/vitest/lint/build green, codex OK after 2 blocking fixes
+- a658aa1 — item #8 — requirePetAccess + ownerOwnsPet/mostRecentPetId + empty-pet PetView (band none, no NaN) — 3 new test files, +14 cases — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 6488b6e — item #9 — global :focus-visible outline using --sage; textarea.gv-note opts out; CSS-content test locks the rules — DoD: tsc/vitest/lint/build green
+- c3270d6 — item #10 — dashboard loading.tsx + companion Retry + recall sheet loading/error states + honest VetBrief clipboard share + aria-live on toasts/typing; +9 content-lock tests — DoD: tsc/vitest/lint/build green, codex OK (nits only)
+- 2ea7d50 — item #11 — QoL radiogroup/radio + role=alert on Checkin/Onboarding errors + ol/li recovery timeline with aria-current=step; +4 content-lock tests — DoD: tsc/vitest/lint/build green
+- 859300b — item #12 — Hero title wraps + media auto-fit minmax(140px) + tolerance pills wrap + clamp() chat bubbles; +4 content-lock tests — DoD: tsc/vitest/lint/build green
+- 84b6129 — item #13 — --muted darkened to #5a6359 (>=4.5:1 on field/card/background); WCAG luminance test pins values — DoD: tsc/vitest/lint/build green
+- b29eec0 — cleanups — escalateToVet logs reason; "1 time" singularization; partition manual-roll docs in schema.sql; +2 grammar lock tests — DoD: tsc/vitest/lint/build green
+
+---
+
+## Summary (run completed)
+
+**Shipped — every P1/P2/P3/P4 item + the three cleanups:**
+
+| # | Commit | Outcome |
+| --- | --- | --- |
+| 1 | b9710fa | Live clock threaded through queries/media; `clockFor(petId)` keeps the demo pet frozen, every other pet gets `new Date()`. |
+| 2 | fcafdeb | `persistCheckin` refreshes `adherence_rollup_mv` + `rolling_baseline_mv` CONCURRENTLY; non-fatal helper so a refresh hiccup never loses a check-in. |
+| 3 | 4dcd896 | Per-tool try/catch in the companion agent + `withCompanionFallback` + a non-clinical safety-net reply; system prompt now honest about `ok:false`. |
+| 4 | 21f5e25 | `getSimilarMedia` reference subqueries scoped to the same pet — defense in depth on top of `requirePetAccess`. |
+| 5 | 1fc4d82 | FK constraints on `exercise_session_events` (pet → cascade, exercise → restrict) in `schema.sql` + `schema.ts` + idempotent migration script. Not run against Aurora. |
+| 6 | 75a3370 | Companion tool schemas (`.min(1).max(2000|500)`) + `validateCheckinNote` at the action boundary; non-clinical friendly message on over-length. |
+| 7 | 02c3b64 | `BANNED_PATTERNS` broadened — covers "diagnoses/misdiagnoses", "suggests" verb, "suspect", "consistent with", "resembl*", "typical of". 36-case adversarial corpus + 15 must-pass real-app strings. |
+| 8 | a658aa1 | Ownership tests (`requirePetAccess`, `ownerOwnsPet`, `mostRecentPetId`) + empty-pet `PetView` (band "none", no NaN) via a thenable-Proxy Drizzle mock. |
+| 9 | 6488b6e | Global `:focus-visible` outline using `--sage`; `textarea.gv-note` opts out. CSS-content test pins the rules. |
+| 10 | c3270d6 | Dashboard `loading.tsx` skeleton + companion Retry pill + recall sheet loading/error states with Retry + honest VetBrief clipboard share + `aria-live` on toasts/typing. |
+| 11 | 2ea7d50 | QoL faces become a `role="radio"` group; Checkin/Onboarding errors get `role="alert"`; recovery timeline becomes `<ol>`/`<li>` with `aria-current="step"`. |
+| 12 | 859300b | Hero title wraps; media grid `repeat(auto-fit, minmax(140px, 1fr))`; tolerance pills wrap; chat bubbles capped via `clamp()`. |
+| 13 | 84b6129 | `--muted` darkened to `#5a6359` (≥4.5:1 on field/card/background per a WCAG luminance test). |
+| — | b29eec0 | Cleanups: `escalateToVet` logs the reason; "1 time / N times" singularization; partition manual-roll documented in `db/schema.sql`. |
+
+**Blocked:** none. Every item shipped; no live-Aurora work was required tonight.
+
+**Test delta:** 39 → 159 (+120 across 22 files). Every behavioural fix landed with a test (`vitest`); UI items got file-content locks. All four checks (`tsc`, `vitest`, `lint`, `next build`) are green on every commit.
+
+**Follow-ups intentionally deferred (Codex nits worth a follow-up issue):**
+
+- Layout-level (`app/pets/[id]/layout.tsx`) redirect coverage — needs a Next.js test harness; only the action-level gate is tested.
+- `buildBriefMarkdown` doesn't have its own pure-function tests for the empty-mentions / empty-snapshot / empty-meds branches.
+- Guardrail evasions still uncovered (low probability — model would have to fight the system prompt): "appears to be X", "looks like X", "indicates X", "Try giving …", "would benefit from …".
+- The FK migration script uses plain `ADD CONSTRAINT`; at any real scale, switch to `ADD CONSTRAINT … NOT VALID` + `VALIDATE CONSTRAINT` to avoid a long write-lock.
+- Aurora SG (`0.0.0.0/0:5432`) is still open per AGENT_HANDOFF.md §9 — re-lock with `scripts/sg-demo.ts close` after the hackathon.
+- The seed scripts still carry their own local `const NOW = …` — could read `DEMO_NOW` from `lib/data/pets.ts` to keep the anchor in one place.
