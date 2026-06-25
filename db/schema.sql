@@ -170,11 +170,14 @@ CREATE TABLE mobility_score_events (
 CREATE INDEX ON mobility_score_events (pet_id, recorded_at DESC);
 CREATE INDEX ON mobility_score_events USING hnsw (embedding vector_cosine_ops);
 
--- exercise sessions (planned vs completed + tolerance) — PARTITIONED by month
+-- exercise sessions (planned vs completed + tolerance) — PARTITIONED by month.
+-- FKs to pets (CASCADE) + exercises (RESTRICT): partitioned tables can reference
+-- regular tables since PG12; deleting a pet sweeps its sessions, deleting an
+-- exercise from the catalog while sessions reference it is refused.
 CREATE TABLE exercise_session_events (
   id          uuid NOT NULL DEFAULT gen_random_uuid(),
-  pet_id      uuid NOT NULL,
-  exercise_id text NOT NULL,
+  pet_id      uuid NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  exercise_id text NOT NULL REFERENCES exercises(id) ON DELETE RESTRICT,
   recorded_at timestamptz NOT NULL DEFAULT now(),
   planned_reps int, completed_reps int,
   tolerance   tolerance_rating,
