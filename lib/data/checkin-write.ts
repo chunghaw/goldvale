@@ -10,6 +10,7 @@ import {
   exercisePlans, planItems,
 } from "@/lib/db/schema";
 import { embedText } from "@/lib/ai/bedrock";
+import { refreshCheckinViews } from "./refresh-mv";
 import type { Tolerance } from "@/lib/domain/progression";
 
 export interface SaveCheckinInput {
@@ -72,6 +73,10 @@ export async function persistCheckin(input: SaveCheckinInput): Promise<string> {
     const embedding = await embedText(input.note.trim());
     await db.insert(journalEntries).values({ petId, text: input.note.trim(), embedding });
   }
+
+  // 5) keep the analytics layer fresh — non-fatal so a refresh hiccup never
+  //    loses the check-in we just persisted (see refresh-mv.ts).
+  await refreshCheckinViews(db);
 
   return checkin.id;
 }
