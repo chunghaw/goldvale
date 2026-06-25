@@ -188,7 +188,10 @@ export async function runCompanion(opts: {
       inputSchema: z.object({
         reason: z.string().min(1).max(COMPANION_TOOL_LIMITS.journal),
       }),
-      execute: async () => {
+      execute: async ({ reason }: { reason: string }) => {
+        // log the reason so a post-mortem can trace what triggered the
+        // escalation; we still never echo it back to the owner.
+        console.warn(`[companion] escalateToVet triggered for pet ${petId}: ${reason}`);
         cards.push({ type: "redflag" });
         return { guidance: "Contact your vet now." };
       },

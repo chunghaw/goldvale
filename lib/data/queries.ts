@@ -400,7 +400,7 @@ function patternFromCheckins(checkins: { recordedAt: Date; mobilityItems: unknow
   return {
     eyebrow: "Pattern memory",
     lead: safe("Slower rising has shown up"),
-    emphasis: n ? `${n} times in ${weeks} week${weeks === 1 ? "" : "s"}` : "in recent check-ins",
+    emphasis: n ? `${n} ${n === 1 ? "time" : "times"} in ${weeks} week${weeks === 1 ? "" : "s"}` : "in recent check-ins",
     occurrences: flares.map((c, i) => ({ date: fmtShort.format(c.recordedAt), weight: 16 + i * 5 })),
     vetFraming: safe("A pattern worth mentioning at your next vet visit."),
   };
@@ -474,7 +474,7 @@ function buildMentions(d: {
       id: "rising",
       iconKey: "repeat",
       accentKey: "mention",
-      title: `Slower rising, ${d.pattern.occurrences.length} times in 2 weeks`,
+      title: `Slower rising, ${d.pattern.occurrences.length} ${d.pattern.occurrences.length === 1 ? "time" : "times"} in 2 weeks`,
       body: safe(
         `Harder getting up from lying down on ${d.pattern.occurrences.map((o) => o.date).join(", ")} — clustered in the mornings.`,
       ),

@@ -184,6 +184,15 @@ CREATE TABLE exercise_session_events (
   fatigue_flags jsonb,                      -- {panting,lagging,limping,tremors}
   PRIMARY KEY (id, recorded_at)
 ) PARTITION BY RANGE (recorded_at);
+-- PARTITION MANAGEMENT: the two month partitions below are hardcoded for
+-- the hackathon window. Inserts past 2026-08-01 will land in the `_default`
+-- partition, which still works but defeats the pruning benefit and makes
+-- per-month maintenance impossible. Before going beyond demo scale:
+--   • install pg_partman + a daily maintenance job that creates the next
+--     month's partition automatically, OR
+--   • add monthly CREATE TABLE ... PARTITION OF ... statements on a cron
+--     and migrate accumulated `_default` rows.
+-- The seed/migrate flow does NOT roll partitions; do not rely on it for that.
 CREATE TABLE exercise_session_events_2026_06 PARTITION OF exercise_session_events
   FOR VALUES FROM ('2026-06-01') TO ('2026-07-01');
 CREATE TABLE exercise_session_events_2026_07 PARTITION OF exercise_session_events
