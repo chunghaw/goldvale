@@ -8,7 +8,6 @@ import { getDb } from "@/lib/db/client";
 import { mediaAssets } from "@/lib/db/schema";
 import { presignGet } from "@/lib/storage/s3";
 
-const NOW = new Date("2026-06-09T09:00:00Z"); // demo "today"; swap to new Date()
 const DAY = 24 * 60 * 60 * 1000;
 const fmtShort = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 const fmtMonth = new Intl.DateTimeFormat("en-US", { month: "long", timeZone: "UTC" });
@@ -41,15 +40,21 @@ export interface MediaAnalogue {
   similarity: number;
 }
 
-function groupFor(recordedAt: Date): string {
-  const days = Math.floor((NOW.getTime() - recordedAt.getTime()) / DAY);
+function groupFor(recordedAt: Date, now: Date): string {
+  const days = Math.floor((now.getTime() - recordedAt.getTime()) / DAY);
   if (days <= 0) return "Today";
   if (days < 7) return "This week";
   if (days < 14) return "Last week";
   return fmtMonth.format(recordedAt);
 }
 
-export async function getMediaTimeline(petId: string): Promise<MediaTimelineView> {
+/**
+ * `now` is the wall-clock used for grouping ("Today" / "This week" / …). The
+ * demo pet keeps a frozen clock so its seeded library lines up with the rest
+ * of the demo; real-user pets get `new Date()` so their timeline groups by
+ * actual time.
+ */
+export async function getMediaTimeline(petId: string, now: Date): Promise<MediaTimelineView> {
   const db = getDb();
   const rows = await db.select().from(mediaAssets)
     .where(eq(mediaAssets.petId, petId)).orderBy(desc(mediaAssets.recordedAt));
@@ -62,7 +67,7 @@ export async function getMediaTimeline(petId: string): Promise<MediaTimelineView
     durationSec: r.durationSec,
     mentionAtVet: r.mentionAtVet,
     dateLabel: fmtShort.format(r.recordedAt),
-    group: groupFor(r.recordedAt),
+    group: groupFor(r.recordedAt, now),
     recallable: r.kind === "photo" && r.embedding != null,
   })));
 
@@ -74,15 +79,20 @@ export async function getMediaTimeline(petId: string): Promise<MediaTimelineView
   };
 }
 
-/** "Similar days" — kNN over the pet's photo embeddings, ordered for display by date. */
+/**
+ * "Similar days" — kNN over the pet's photo embeddings, ordered for display
+ * by date. The reference-embedding subqueries are scoped to the same petId
+ * (not just the outer kNN) so a cross-pet mediaId can never seed the query —
+ * defense-in-depth on top of the action-layer requirePetAccess guard.
+ */
 export async function getSimilarMedia(petId: string, mediaId: string, limit = 6): Promise<MediaAnalogue[]> {
   const db = getDb();
   const rows = await db.execute<{ id: string; url: string; caption: string | null; recorded_at: Date; sim: number }>(
     sql`select id, url, caption, recorded_at,
-               1 - (embedding <=> (select embedding from media_assets where id = ${mediaId})) as sim
+               1 - (embedding <=> (select embedding from media_assets where id = ${mediaId} and pet_id = ${petId})) as sim
         from media_assets
         where pet_id = ${petId} and kind = 'photo' and embedding is not null
-        order by embedding <=> (select embedding from media_assets where id = ${mediaId})
+        order by embedding <=> (select embedding from media_assets where id = ${mediaId} and pet_id = ${petId})
         limit ${limit}`,
   );
   // kNN gives most-similar first; re-order oldest → newest for the "over time" series

@@ -1,9 +1,10 @@
 /** Verify the media timeline + pgvector "similar days" visual recall. Throwaway. */
 import { getMediaTimeline, getSimilarMedia } from "../lib/data/media";
+import { clockFor } from "../lib/data/pets";
 import { OSCAR_PET_ID } from "../lib/data/ids";
 
 async function main() {
-  const t = await getMediaTimeline(OSCAR_PET_ID);
+  const t = await getMediaTimeline(OSCAR_PET_ID, clockFor(OSCAR_PET_ID));
   console.log(`TIMELINE: ${t.photoCount} photos · ${t.videoCount} clips · ${t.flaggedCount} flagged`);
   console.log("ITEMS   :", t.items.map((i) => `${i.group}/${i.dateLabel} ${i.kind} "${i.caption}"`).join("\n          "));
 

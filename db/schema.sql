@@ -170,17 +170,29 @@ CREATE TABLE mobility_score_events (
 CREATE INDEX ON mobility_score_events (pet_id, recorded_at DESC);
 CREATE INDEX ON mobility_score_events USING hnsw (embedding vector_cosine_ops);
 
--- exercise sessions (planned vs completed + tolerance) — PARTITIONED by month
+-- exercise sessions (planned vs completed + tolerance) — PARTITIONED by month.
+-- FKs to pets (CASCADE) + exercises (RESTRICT): partitioned tables can reference
+-- regular tables since PG12; deleting a pet sweeps its sessions, deleting an
+-- exercise from the catalog while sessions reference it is refused.
 CREATE TABLE exercise_session_events (
   id          uuid NOT NULL DEFAULT gen_random_uuid(),
-  pet_id      uuid NOT NULL,
-  exercise_id text NOT NULL,
+  pet_id      uuid NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  exercise_id text NOT NULL REFERENCES exercises(id) ON DELETE RESTRICT,
   recorded_at timestamptz NOT NULL DEFAULT now(),
   planned_reps int, completed_reps int,
   tolerance   tolerance_rating,
   fatigue_flags jsonb,                      -- {panting,lagging,limping,tremors}
   PRIMARY KEY (id, recorded_at)
 ) PARTITION BY RANGE (recorded_at);
+-- PARTITION MANAGEMENT: the two month partitions below are hardcoded for
+-- the hackathon window. Inserts past 2026-08-01 will land in the `_default`
+-- partition, which still works but defeats the pruning benefit and makes
+-- per-month maintenance impossible. Before going beyond demo scale:
+--   • install pg_partman + a daily maintenance job that creates the next
+--     month's partition automatically, OR
+--   • add monthly CREATE TABLE ... PARTITION OF ... statements on a cron
+--     and migrate accumulated `_default` rows.
+-- The seed/migrate flow does NOT roll partitions; do not rely on it for that.
 CREATE TABLE exercise_session_events_2026_06 PARTITION OF exercise_session_events
   FOR VALUES FROM ('2026-06-01') TO ('2026-07-01');
 CREATE TABLE exercise_session_events_2026_07 PARTITION OF exercise_session_events

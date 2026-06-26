@@ -133,7 +133,7 @@ function OwnerBubble({ m }: { m: ChatMessageView }) {
   const photo = m.media.find((x) => x.kind === "photo");
   return (
     <div style={{ display: "flex", justifyContent: "flex-end", paddingLeft: 44 }}>
-      <div style={{ maxWidth: "100%", background: "linear-gradient(165deg, #54948a, #437a6d)", color: "#fff", borderRadius: 20, borderBottomRightRadius: 7, padding: photo ? 6 : "11px 14px", boxShadow: "0 4px 12px rgba(63,123,109,0.22)" }}>
+      <div style={{ maxWidth: "clamp(220px, 78%, 360px)", wordBreak: "break-word", background: "linear-gradient(165deg, #54948a, #437a6d)", color: "#fff", borderRadius: 20, borderBottomRightRadius: 7, padding: photo ? 6 : "11px 14px", boxShadow: "0 4px 12px rgba(63,123,109,0.22)" }}>
         {photo && (
           <div style={{ borderRadius: 15, overflow: "hidden", marginBottom: m.text ? 8 : 0, lineHeight: 0 }}>
             <Image src={photo.url} alt={photo.caption ?? "sent"} width={210} height={150} style={{ width: "100%", maxWidth: 210, height: "auto", display: "block", objectFit: "cover" }} />
@@ -149,8 +149,8 @@ function AgentBubble({ m, name, petId }: { m: ChatMessageView; name: string; pet
   return (
     <div style={{ display: "flex", gap: 9, paddingRight: 24 }}>
       <AgentMark s={28} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "12px 14px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)" }}>
+      <div style={{ flex: 1, minWidth: 0, maxWidth: "clamp(220px, 84%, 360px)" }}>
+        <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "12px 14px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)", wordBreak: "break-word" }}>
           {m.text && <div style={{ fontSize: 14.5, lineHeight: 1.5, color: C.charcoal }}>{m.text}</div>}
           <Cards cards={m.cards} name={name} petId={petId} />
         </div>
@@ -160,10 +160,12 @@ function AgentBubble({ m, name, petId }: { m: ChatMessageView; name: string; pet
 }
 
 function Typing() {
+  // role="status" + aria-live="polite" so a screen reader announces "typing"
+  // without grabbing focus — the typing dots are otherwise invisible to AT.
   return (
-    <div style={{ display: "flex", gap: 9 }}>
+    <div style={{ display: "flex", gap: 9 }} role="status" aria-live="polite" aria-label="Companion is typing">
       <AgentMark s={28} />
-      <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "14px 16px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)", display: "flex", gap: 5, alignItems: "center" }}>
+      <div style={{ background: "#fff", border: `1px solid ${C.hair}`, borderRadius: 20, borderBottomLeftRadius: 7, padding: "14px 16px", boxShadow: "0 4px 14px rgba(32,38,42,0.05)", display: "flex", gap: 5, alignItems: "center" }} aria-hidden="true">
         {[0, 1, 2].map((i) => (
           <span key={i} style={{ width: 7, height: 7, borderRadius: 999, background: C.sage, display: "block", animation: `gv-dot 1.2s ${i * 0.18}s infinite ease-in-out` }} />
         ))}
@@ -181,6 +183,8 @@ export function CompanionScreen({
   const [text, setText] = useState("");
   const [attached, setAttached] = useState<string | null>(null); // local data URL preview
   const [sending, setSending] = useState(false);
+  // last send that failed — drives the inline Retry affordance
+  const [lastFailed, setLastFailed] = useState<{ text: string; image: string | null } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -198,26 +202,46 @@ export function CompanionScreen({
     reader.readAsDataURL(file);
   }
 
+  async function send(payload: { text: string; image: string | null }) {
+    const optimistic: ChatMessageView = {
+      id: `tmp-${Date.now()}`, role: "owner", text: payload.text, cards: [],
+      media: payload.image ? [{ url: payload.image, kind: "photo" }] : [],
+    };
+    setMessages((m) => [...m, optimistic]);
+    setSending(true);
+    try {
+      const { assistant } = await sendCompanionMessage({
+        petId, text: payload.text, imageDataUrl: payload.image ?? undefined,
+      });
+      setMessages((m) => [...m, assistant]);
+      setLastFailed(null);
+    } catch {
+      setMessages((m) => [...m, {
+        id: `err-${Date.now()}`, role: "assistant", cards: [], media: [],
+        text: "Sorry — I couldn't reach my notes just now. Tap Retry to try again.",
+      }]);
+      setLastFailed(payload);
+    } finally {
+      setSending(false);
+    }
+  }
+
   async function handleSend() {
     const t = text.trim();
     const img = attached;
     if ((!t && !img) || sending) return;
     setText("");
     setAttached(null);
-    setSending(true);
-    const optimistic: ChatMessageView = {
-      id: `tmp-${messages.length}`, role: "owner", text: t, cards: [],
-      media: img ? [{ url: img, kind: "photo" }] : [],
-    };
-    setMessages((m) => [...m, optimistic]);
-    try {
-      const { assistant } = await sendCompanionMessage({ petId, text: t, imageDataUrl: img ?? undefined });
-      setMessages((m) => [...m, assistant]);
-    } catch {
-      setMessages((m) => [...m, { id: `err-${m.length}`, role: "assistant", text: "Sorry — I couldn't reach my notes just now. Please try again.", cards: [], media: [] }]);
-    } finally {
-      setSending(false);
-    }
+    await send({ text: t, image: img });
+  }
+
+  async function handleRetry() {
+    if (!lastFailed || sending) return;
+    // pop the prior error bubble so we don't end up with two of them stacked
+    setMessages((m) => (m.length && String(m[m.length - 1].id).startsWith("err-") ? m.slice(0, -1) : m));
+    const payload = lastFailed;
+    setLastFailed(null);
+    await send(payload);
   }
 
   const canSend = (text.trim().length > 0 || attached !== null) && !sending;
@@ -263,6 +287,19 @@ export function CompanionScreen({
           <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "6px 2px" }}>
             {messages.map((m) => m.role === "owner" ? <OwnerBubble key={m.id} m={m} /> : <AgentBubble key={m.id} m={m} name={petName} petId={petId} />)}
             {sending && <Typing />}
+            {lastFailed && !sending && (
+              <div role="alert" style={{ display: "flex", justifyContent: "center", paddingLeft: 37, marginTop: -8 }}>
+                <button
+                  className="gv-press"
+                  onClick={handleRetry}
+                  aria-label="Retry the last message"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "7px 14px", borderRadius: 999, cursor: "pointer", border: `1px solid ${C.sage}`, background: "var(--sage-soft)", color: "var(--sage-ink)", fontSize: 12.5, fontWeight: 700 }}
+                >
+                  {Ico.rotate({ s: 13, c: "var(--sage-ink)" })}
+                  <span>Retry</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

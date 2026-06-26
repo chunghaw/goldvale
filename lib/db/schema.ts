@@ -168,8 +168,10 @@ export const mobilityScoreEvents = pgTable("mobility_score_events", {
 
 export const exerciseSessionEvents = pgTable("exercise_session_events", {
   id: uuid("id").notNull().defaultRandom(),
-  petId: uuid("pet_id").notNull(),
-  exerciseId: text("exercise_id").notNull(),
+  // cascade pet deletes through to session history; restrict on exercises so
+  // the catalog entry can't be removed while sessions still reference it.
+  petId: uuid("pet_id").notNull().references(() => pets.id, { onDelete: "cascade" }),
+  exerciseId: text("exercise_id").notNull().references(() => exercises.id, { onDelete: "restrict" }),
   recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull().defaultNow(),
   plannedReps: integer("planned_reps"),
   completedReps: integer("completed_reps"),
