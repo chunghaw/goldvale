@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { AuthHero, NonClinicalLine } from "./authShared";
 import { Ico } from "@/components/ui/icons";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { A, C } from "@/components/ui/tokens";
 
 const ACC = { pet: A.sage, cond: A.slate, plan: A.teal };
@@ -61,13 +62,13 @@ export function LandingScreen({ demoPetId }: { demoPetId: string }) {
           textAlign: "center", textDecoration: "none", color: C.sage, fontSize: 13.5, fontWeight: 650,
           padding: "8px 0 2px", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
         }}>
-          {Ico.paw({ s: 15, c: C.sage })} Explore the live demo
+          <BrandMark size={16} toe={C.sage} heart={C.sage} /> Explore the live demo
         </Link>
       </div>
       </div>
 
       <div style={{ textAlign: "center", fontSize: 11.5, color: C.muted, paddingTop: 16, letterSpacing: 0.2 }}>
-        In loving memory of Oscar {Ico.paw({ s: 11, c: C.muted })}
+        In loving memory of Oscar <BrandMark size={13} toe={C.muted} heart={C.muted} />
       </div>
     </main>
   );

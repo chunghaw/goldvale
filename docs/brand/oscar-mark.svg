@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 92" role="img" aria-label="Oscar">
+  <title>Oscar</title>
+  <!-- four toe beans, brand sage -->
+  <ellipse cx="20" cy="36" rx="6.4" ry="8.4" fill="#4f8a7d" transform="rotate(-24 20 36)"/>
+  <ellipse cx="35" cy="24" rx="7" ry="9" fill="#4f8a7d" transform="rotate(-8 35 24)"/>
+  <ellipse cx="57" cy="24" rx="7" ry="9" fill="#4f8a7d" transform="rotate(8 57 24)"/>
+  <ellipse cx="72" cy="36" rx="6.4" ry="8.4" fill="#4f8a7d" transform="rotate(24 72 36)"/>
+  <!-- heart pad, brand gold -->
+  <path d="M46 80 C 30 66 22 57 22 49 C 22 43 27 40 32 41 C 37 42 44 47 46 52 C 48 47 55 42 60 41 C 65 40 70 43 70 49 C 70 57 62 66 46 80 Z" fill="#d6981e"/>
+</svg>

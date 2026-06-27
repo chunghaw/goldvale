@@ -5,6 +5,7 @@
  */
 import type { CSSProperties, ReactNode } from "react";
 import { Ico } from "@/components/ui/icons";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { C } from "@/components/ui/tokens";
 
 export const authInputStyle: CSSProperties = {
@@ -26,8 +27,8 @@ export function AuthHero({ title, subtitle }: { title: string; subtitle: string 
         <circle cx="110" cy="110" r="40" fill="none" stroke="#fff" strokeWidth="1.5" />
       </svg>
       <div style={{ position: "relative" }}>
-        <div style={{ width: 64, height: 64, borderRadius: 999, margin: "0 auto 16px", background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.28)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {Ico.paw({ s: 30, c: "#fff" })}
+        <div style={{ width: 64, height: 64, borderRadius: 999, margin: "0 auto 16px", background: "rgba(255,255,255,0.9)", border: "1px solid rgba(255,255,255,0.5)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(32,38,42,0.12)" }}>
+          <BrandMark size={36} title="Oscar" />
         </div>
         <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.8)", fontWeight: 650, letterSpacing: 1.4, textTransform: "uppercase" }}>Oscar</div>
         <div style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 500, letterSpacing: -0.6, lineHeight: 1.12, color: "#fff", marginTop: 8 }}>{title}</div>

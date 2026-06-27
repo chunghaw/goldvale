@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Oscar — opening slide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#eef1ef; --charcoal:#20262a; --sage:#4f8a7d; --sage-ink:#3a6b60;
+    --gold:#d6981e; --muted:#5a6359; --muted-soft:#8a938e; --hair:#dde3df;
+    --serif:"Newsreader",Georgia,serif;
+    --sans:"Geist",-apple-system,"Segoe UI",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#0c100f;display:grid;place-items:center;min-height:100vh}
+  /* The exact 16:9 asset. Capture this node at 1920x1080 (see note in chat). */
+  .stage{
+    position:relative;width:1920px;height:1080px;overflow:hidden;
+    background:
+      radial-gradient(1300px 760px at 50% 16%, rgba(79,138,125,.12), transparent 62%),
+      radial-gradient(900px 600px at 84% 96%, rgba(214,152,30,.08), transparent 60%),
+      var(--cream);
+    font-family:var(--sans);color:var(--charcoal);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .mark{width:188px;height:188px;margin-bottom:26px;
+    filter:drop-shadow(0 10px 24px rgba(32,38,42,.10));}
+  .word{font-family:var(--serif);font-weight:500;font-size:132px;line-height:.95;
+    letter-spacing:-3px;color:var(--charcoal);}
+  .tagline{font-family:var(--serif);font-style:italic;font-weight:500;font-size:42px;
+    color:var(--sage-ink);margin-top:20px;letter-spacing:-.3px;}
+  .sub{font-size:27px;color:var(--muted);margin-top:24px;max-width:980px;text-align:center;
+    line-height:1.5;font-weight:400;}
+  .rule{width:64px;height:3px;border-radius:3px;background:var(--gold);opacity:.85;margin-top:40px;}
+  .foot{position:absolute;left:0;right:0;bottom:54px;text-align:center;
+    font-size:18px;color:var(--muted-soft);letter-spacing:.4px;}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="mark">
+      <svg viewBox="0 0 92 92" width="188" height="188" xmlns="http://www.w3.org/2000/svg" aria-label="Oscar">
+        <ellipse cx="20" cy="36" rx="6.4" ry="8.4" fill="#4f8a7d" transform="rotate(-24 20 36)"/>
+        <ellipse cx="35" cy="24" rx="7" ry="9" fill="#4f8a7d" transform="rotate(-8 35 24)"/>
+        <ellipse cx="57" cy="24" rx="7" ry="9" fill="#4f8a7d" transform="rotate(8 57 24)"/>
+        <ellipse cx="72" cy="36" rx="6.4" ry="8.4" fill="#4f8a7d" transform="rotate(24 72 36)"/>
+        <path d="M46 80 C 30 66 22 57 22 49 C 22 43 27 40 32 41 C 37 42 44 47 46 52 C 48 47 55 42 60 41 C 65 40 70 43 70 49 C 70 57 62 66 46 80 Z" fill="#d6981e"/>
+      </svg>
+    </div>
+    <div class="word">Oscar</div>
+    <div class="tagline">A calmer way to care</div>
+    <div class="sub">A daily companion &amp; home-rehab tracker for senior and chronically-ill dogs and cats.</div>
+    <div class="rule"></div>
+    <div class="foot">In loving memory of Oscar &#128062;</div>
+  </div>
+</body>
+</html>
