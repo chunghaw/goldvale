@@ -34,16 +34,34 @@
 ---
 
 ## The exact click-path to screen-record
-1. `/` landing → **Explore the live demo**
-2. Dashboard → **Daily check-in** (tap a face + a movement item) → back
-3. Dashboard → tap a **mobility chart** point
-4. Dashboard → **Days like this** (pattern recall — hold on the % matches)
-5. Dashboard → **Photos & clips** → tap **Similar days** on an incision photo (the healing series)
-6. Dashboard → **Talk to Oscar** → tap a suggestion chip → send → reply card
-7. Dashboard → **Prepare a vet brief**
-8. Any **Contact your vet now** link → the escalation screen
+
+Demo pet id: `a0c5ca9e-0000-4000-8000-000000000001` · base: `https://oscarcare.vercel.app`
+Navigate by tapping through from the dashboard (looks natural on camera); the URLs below are your pre-flight check / fallback. All verified 200 on oscarcare.
+
+1. **Landing** → *Explore the live demo* — `https://oscarcare.vercel.app/`
+2. **Daily check-in** (tap a face + a movement item) → back — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/checkin`
+3. **Dashboard** → tap a mobility-chart point — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001`
+4. **Days like this** (pattern recall — hold on the % matches) — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/recall`
+5. **Photos & clips** → *Similar days* on an incision photo (the healing series) — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/media`
+6. **Talk to Oscar** → suggestion chip → send → reply card — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/companion`
+7. **Prepare a vet brief** — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/brief`
+8. **Contact your vet now** → escalation screen — `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/vet-contact`
+
+Bonus screen if time allows — the vet-gated exercise track: `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/exercises`
+
+## Links — everything to put on screen / in the submission
+
+**Submission + end-screen**
+- Live demo: **https://oscarcare.vercel.app**
+- Repo (public, MIT): **https://github.com/chunghaw/oscar**
+- Hashtag: **#H0Hackathon**
+- Vercel Team ID: `team_1NrzZKgn3I3Rh1M8ZHukgoOw`
+- Architecture diagram (Beat 4 flash + Beat 6 hold): `docs/architecture.svg` / `.png` — local asset, not a URL
+- Slides to bookend the video: `docs/slides/opening.html` · `docs/slides/ending.html` (capture at 1920×1080)
+
+**In-app routes** — all listed inline in the click-path above (base `https://oscarcare.vercel.app`, demo pet `a0c5ca9e-0000-4000-8000-000000000001`).
 
 ## Notes
 - **One DB sentence on screen** (optional lower-third over Beat 4): *"Relational + time-series + text-vector + image-vector — one Aurora instance."*
 - Keep cuts quick; let the **% match numbers** and the **incision side-by-side** breathe — those are the "look what one query does" shots.
-- End screen: live URL `oscarcare.vercel.app` + repo + "#H0Hackathon".
+- **End screen** (use `docs/slides/ending.html`): live URL **oscarcare.vercel.app** · repo **github.com/chunghaw/oscar** · **#H0Hackathon**.
