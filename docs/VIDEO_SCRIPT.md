@@ -11,32 +11,32 @@ Demo pet id `a0c5ca9e-0000-4000-8000-000000000001` · base `https://oscarcare.ve
 ### Beat 1 — Hook / the problem  (0:00–0:22)
 **Screen:** Open on the title slide (`docs/slides/opening.html`), then the landing page, slow zoom; then the "Explore the live demo" tap.
 **URL:** https://oscarcare.vercel.app/
-**VO:** "If you've cared for an aging dog, or a cat with a chronic condition, you know the hardest part isn't the vet visit — it's the months in between. The slow decline you're tracking at home, hoping you'll catch the pattern in time."
+**VO:** "If you've ever looked after an old dog, or a cat who isn't quite who she used to be, you know the hardest part isn't the vet visit. It's the long stretch in between — watching them slow down at home, hoping you'll notice the thing that matters before it slips by."
 
 ### Beat 2 — What it is + the daily check-in  (0:22–0:45)
 **Screen:** Oscar's dashboard, then tap into the **daily check-in** — show the mood faces and the rotating mobility items.
 **URL:** dashboard `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001` → check-in `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/checkin`
-**VO:** "Oscar is a calm daily companion and home-rehab tracker for those pets. It starts with a twenty-second check-in — how they're moving, how they're doing."
+**VO:** "So I built Oscar. It's a gentle, twenty-second check-in you do each day — just how they're moving, how they seem in themselves. I named it after a real dog who needed exactly this."
 
 ### Beat 3 — The trend + the non-clinical decision  (0:45–1:08)
 **Screen:** Back to dashboard; the **mobility trend** chart (tap a point to show the score; the line rises).
 **URL:** https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001
-**VO:** "That trends a validated mobility score over time. And here's a deliberate choice: every clinical number is computed by plain, deterministic code — never the language model. The AI only narrates what the data already says."
+**VO:** "Those small daily notes add up to a real picture of how they're doing, week by week. And one thing I was careful about: the actual scoring is done by plain, ordinary code — never the AI. The AI doesn't decide anything medical. It just helps you see what's already there."
 
 ### Beat 4 — THE DATABASE MOMENT  (1:08–1:50)  ← the peak
 **Screen:** Flash the **architecture diagram** (2 sec), then the **pattern-memory recall** screen — let the **% match** numbers sit on screen — then the **media "Similar days"** overlay — Oscar's matching days side by side.
 **URL:** diagram `docs/architecture.svg` → recall `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/recall` → media `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/media`
-**VO:** "Now, the engineering. A senior pet's health record is relational, time-series, *and* semantic — all at once. So Oscar keeps every bit of it in one Aurora Postgres instance with pgvector. When a stiff morning shows up, it searches the pet's own journal by meaning — *this flare resembles one from five weeks ago.* And it does the same with photos — *lining up the days he was moving like this, weeks apart.* Two kinds of similarity search — text and image — as plain SQL on the same rows. No second database, no sync."
+**VO:** "Here's the part I'm proud of. A pet's history is a few things at once — facts, changes over time, and the kind of memory you can't put in a number. Most apps would reach for three different databases. Oscar keeps all of it in one — Aurora Postgres, with pgvector. So when a rough morning comes, it can search his own history by meaning: this feels like that hard week back in spring. It does the same with photos — pulling up the days he was moving like this one. Words and pictures, both searchable, all in one place."
 
 ### Beat 5 — Companion + vet brief + safety  (1:50–2:15)
 **Screen:** The **companion chat** (send a message, a reply with a card appears), then the **vet brief**, then the **"Contact your vet now"** screen.
 **URL:** companion `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/companion` → brief `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/brief` → vet-contact `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/vet-contact`
-**VO:** "An AI companion on Amazon Bedrock ties it together — it logs what you tell it, recalls the history, and packages a cited, vet-ready brief. But it never diagnoses. Every line is checked, and anything worrying routes straight to your vet."
+**VO:** "There's a companion you can just talk to — built on Amazon Bedrock — that remembers what you tell it, brings back the history, and quietly puts together everything your vet should see. It will never tell you what's wrong; that was never its job. If something looks worrying, it points you straight to your vet."
 
 ### Beat 6 — Close  (2:15–2:25)
 **Screen:** End on the closing slide (`docs/slides/ending.html`), or hold the architecture diagram.
 **On screen:** live **oscarcare.vercel.app** · repo **github.com/chunghaw/oscar** · **#H0Hackathon**
-**VO:** "One Aurora backend, four load-bearing layers, doing real work on every request. Oscar supports the vet's plan — it never replaces it."
+**VO:** "One database, quietly doing the work of four. Oscar doesn't replace your vet — it just helps you walk in knowing more. For Oscar — and every old friend like him."
 
 ---
 
