@@ -139,7 +139,7 @@ function VideoLightbox({ item, onClose }: { item: MediaItemView; onClose: () => 
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,18,20,0.86)" }} />
       <button className="gv-press" onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 16, right: 16, zIndex: 1, width: 34, height: 34, borderRadius: 999, border: "1px solid rgba(255,255,255,0.28)", background: "rgba(0,0,0,0.4)", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>{Ico.close({ s: 17, c: "#fff" })}</button>
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "100%" }}>
-        <video src={item.url} controls autoPlay playsInline style={{ maxWidth: "100%", maxHeight: "72vh", borderRadius: 14, background: "#000", display: "block" }} />
+        <video src={item.url} controls autoPlay muted playsInline preload="auto" style={{ maxWidth: "100%", maxHeight: "72vh", borderRadius: 14, background: "#000", display: "block" }} />
         <div style={{ marginTop: 14, textAlign: "center", maxWidth: 320 }}>
           {item.caption && <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.25 }}>{item.caption}</div>}
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.66)", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{item.dateLabel}</div>
