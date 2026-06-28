@@ -63,12 +63,12 @@ tool-use over Aurora — it logs the owner's notes, recalls their own history (p
 narrates the mobility trend, flags items for the vet, and escalates red flags — with the
 guardrail on every reply. The rich cards in the thread are real tool outputs.
 
-The **media library** stores photos/clips in **S3** and embeds photos with **Titan
-multimodal**; "Similar days" is a **pgvector kNN** over those image vectors — the incision
-close-ups cluster in the high-0.80s cosine, clearly above the walk/rest/garden shots
-(~0.61–0.76), so the owner sees the same spot heal over six weeks (the in-app overlay
-shows ~77–82% match against an incision anchor). Two more layers exercised: object storage
-+ multimodal vectors.
+The **media library** stores photos and clips in **S3** and embeds each photo with **Titan
+multimodal**; "Similar days" is a **pgvector kNN** over those image vectors — tap one of
+Oscar's photos and the app ranks his other days by visual likeness, showing the live cosine
+% match (his slow-walk days line up together, apart from the resting ones). The clips are
+real owner footage, audio-stripped for privacy. Two more layers exercised: object storage +
+multimodal vectors.
 
 The **recall** screen is the pgvector payoff: it embeds the surfaced pattern with Titan
 and kNN-ranks Oscar's own journal days by meaning — Jun 4 (55%), May 30 (55%),

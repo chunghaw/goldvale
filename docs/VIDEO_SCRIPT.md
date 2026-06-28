@@ -24,9 +24,9 @@ Demo pet id `a0c5ca9e-0000-4000-8000-000000000001` · base `https://oscarcare.ve
 **VO:** "That trends a validated mobility score over time. And here's a deliberate choice: every clinical number is computed by plain, deterministic code — never the language model. The AI only narrates what the data already says."
 
 ### Beat 4 — THE DATABASE MOMENT  (1:08–1:50)  ← the peak
-**Screen:** Flash the **architecture diagram** (2 sec), then the **pattern-memory recall** screen — let the **% match** numbers sit on screen — then the **media "Similar days"** overlay with the incision series side by side.
+**Screen:** Flash the **architecture diagram** (2 sec), then the **pattern-memory recall** screen — let the **% match** numbers sit on screen — then the **media "Similar days"** overlay — Oscar's matching days side by side.
 **URL:** diagram `docs/architecture.svg` → recall `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/recall` → media `https://oscarcare.vercel.app/pets/a0c5ca9e-0000-4000-8000-000000000001/media`
-**VO:** "Now, the engineering. A senior pet's health record is relational, time-series, *and* semantic — all at once. So Oscar keeps every bit of it in one Aurora Postgres instance with pgvector. When a stiff morning shows up, it searches the pet's own journal by meaning — *this flare resembles one from five weeks ago.* And it does the same with photos: *compare today's incision to last month.* Two kinds of similarity search — text and image — as plain SQL on the same rows. No second database, no sync."
+**VO:** "Now, the engineering. A senior pet's health record is relational, time-series, *and* semantic — all at once. So Oscar keeps every bit of it in one Aurora Postgres instance with pgvector. When a stiff morning shows up, it searches the pet's own journal by meaning — *this flare resembles one from five weeks ago.* And it does the same with photos — *lining up the days he was moving like this, weeks apart.* Two kinds of similarity search — text and image — as plain SQL on the same rows. No second database, no sync."
 
 ### Beat 5 — Companion + vet brief + safety  (1:50–2:15)
 **Screen:** The **companion chat** (send a message, a reply with a card appears), then the **vet brief**, then the **"Contact your vet now"** screen.

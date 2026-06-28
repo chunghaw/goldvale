@@ -1,22 +1,24 @@
 /**
- * Seed Oscar's media timeline from the REAL designer-shipped photos so the photo
- * library AND the pgvector VISUAL recall (kNN over Titan image embeddings) are
- * demo-real — no mock data, these are actual JPEGs in handoff/media/assets/.
+ * Seed Oscar's media timeline from REAL photos and video of Oscar — the senior dog
+ * this app is named after, filmed as his mobility began to decline. Feeds the photo
+ * library AND the pgvector VISUAL recall (kNN over Titan image embeddings) with
+ * genuine, owner-supplied media — no stand-ins.
  *
  * Seeds THROUGH saveMedia() (the exact live path: S3 upload → Titan embed →
  * media_assets insert), so what the demo shows is what the app would have written.
  *
- * Idempotent: wipes Oscar's media_assets first. 10 real photos + 2 real video
- * clips (free-for-commercial Mixkit footage shipped in handoff/media/assets/),
- * so the library honestly reads "10 photos · 2 clips".
+ * Idempotent: wipes Oscar's media_assets first. 6 photos (2 of Oscar + 4 frames
+ * lifted from the clips, so visual recall has enough to cluster) and 4 short clips.
+ * The clips are AUDIO-STRIPPED for privacy (muted with ffmpeg at prep time). Captions
+ * are owner observations — non-clinical: no diagnosis, grading, or staging.
  *
  * Standalone:  npx tsx --env-file=.env scripts/seed-demo-media.ts
  * Also called best-effort by scripts/seed-demo-pet.ts so one command rebuilds all.
  *
- * Story (TPLO Week-5 post-op): a 6-photo incision HEALING series oldest→newest,
- * plus a first-walk, a rest, a garden potter, and a back-step, and two short
- * movement clips. Captions are owner observations — non-clinical: no diagnosis,
- * grading, or staging.
+ * Story (how he's moving, over the weeks): walking practice, a slow walk, still
+ * perking up at dinner, resting on a lap, an afternoon nap, and the harder mornings
+ * when his back legs are tired — oldest → newest, the two "mention at the vet" days
+ * flagged.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -40,18 +42,14 @@ interface SeedPhoto {
   mentionAtVet?: boolean;
 }
 
-// Owner observations only — no diagnosis/grading. Oldest → newest healing series.
+// Real Oscar — owner observations only, no diagnosis/grading. Oldest → newest.
 const PHOTOS: SeedPhoto[] = [
-  { file: "media-incision-1.jpg", caption: "Incision — 1 week post-op", daysAgo: 33, mentionAtVet: true },
-  { file: "media-incision-2.jpg", caption: "2 weeks — staples out", daysAgo: 26 },
-  { file: "media-incision-3.jpg", caption: "3 weeks — closing well", daysAgo: 19 },
-  { file: "media-incision-4.jpg", caption: "4 weeks", daysAgo: 12 },
-  { file: "media-incision-5.jpg", caption: "5 weeks — fully healed", daysAgo: 6 },
-  { file: "media-incision-6.jpg", caption: "Latest — clean and dry", daysAgo: 2, mentionAtVet: true },
-  { file: "media-clip-garden.jpg", caption: "Pottering in the garden", daysAgo: 8 },
-  { file: "media-walk.jpg", caption: "First proper walk to the end of the street", daysAgo: 5 },
-  { file: "media-rest.jpg", caption: "Resting easy after rehab", daysAgo: 3 },
-  { file: "media-clip-stairs.jpg", caption: "Taking the back step slowly", daysAgo: 1 },
+  { file: "oscar-walk-practice.jpg", caption: "Walking practice down the hallway", daysAgo: 28 },
+  { file: "oscar-walk-still.jpg", caption: "Out for a slow walk", daysAgo: 22 },
+  { file: "oscar-food-still.jpg", caption: "Still perks right up at dinner", daysAgo: 16 },
+  { file: "oscar-rest-lap.jpg", caption: "Resting on my lap", daysAgo: 11 },
+  { file: "oscar-sleep-still.jpg", caption: "Napping in the afternoon", daysAgo: 6 },
+  { file: "oscar-bed-still.jpg", caption: "A harder morning — back legs tired", daysAgo: 2, mentionAtVet: true },
 ];
 
 interface SeedVideo {
@@ -62,11 +60,12 @@ interface SeedVideo {
   mentionAtVet?: boolean;
 }
 
-// Real free-for-commercial Mixkit clips (Mixkit License: commercial OK, no
-// attribution). Captions are owner observations — non-clinical.
+// Real Oscar clips, AUDIO-STRIPPED for privacy. Captions are owner observations.
 const VIDEOS: SeedVideo[] = [
-  { file: "media-clip-forest-walk.mp4", caption: "Out for a woodland walk — moving freely", daysAgo: 7, durationSec: 11 },
-  { file: "media-clip-park-run.mp4", caption: "Trotting over to me at the park", daysAgo: 4, durationSec: 11 },
+  { file: "oscar-walk.mp4", caption: "A slow walk outside", daysAgo: 23, durationSec: 34 },
+  { file: "oscar-food.mp4", caption: "Excited for dinner", daysAgo: 15, durationSec: 45 },
+  { file: "oscar-sleep.mp4", caption: "Sleeping easy", daysAgo: 8, durationSec: 3 },
+  { file: "oscar-bed.mp4", caption: "Lying down — back legs weak today", daysAgo: 3, durationSec: 11, mentionAtVet: true },
 ];
 
 /** Read a JPEG from the asset dir and build a base64 data URL. */

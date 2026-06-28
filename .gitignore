@@ -37,6 +37,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Oscar source media — originals WITH audio. Never commit; only the muted/processed
+# files in handoff/media/assets/ ship.
+handoff/media/incoming/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
