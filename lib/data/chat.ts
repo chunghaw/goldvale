@@ -3,7 +3,7 @@
  * messages. Rich-card payloads (agent tool outputs) and media refs ride along as
  * jsonb so the thread re-renders exactly on reload (the "remembers" story).
  */
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { chatThreads, chatMessages } from "@/lib/db/schema";
 import { presignGet } from "@/lib/storage/s3";
@@ -33,9 +33,16 @@ export interface ChatMessageView {
 
 export async function getOrCreateThread(petId: string): Promise<string> {
   const db = getDb();
+  // newest thread = the pet's current session (a "New chat" inserts a fresh one)
   const [existing] = await db.select({ id: chatThreads.id }).from(chatThreads)
-    .where(eq(chatThreads.petId, petId)).orderBy(asc(chatThreads.createdAt)).limit(1);
+    .where(eq(chatThreads.petId, petId)).orderBy(desc(chatThreads.createdAt)).limit(1);
   if (existing) return existing.id;
+  return createThread(petId);
+}
+
+/** Always start a fresh thread (a separate chat session) for the pet. */
+export async function createThread(petId: string): Promise<string> {
+  const db = getDb();
   const [created] = await db.insert(chatThreads).values({ petId }).returning({ id: chatThreads.id });
   return created.id;
 }

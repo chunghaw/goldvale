@@ -13,7 +13,7 @@ import { Ico } from "@/components/ui/icons";
 import { C } from "@/components/ui/tokens";
 import { Avatar } from "@/components/ui/Avatar";
 import { BackButton } from "@/components/ui/BackButton";
-import { sendCompanionMessage } from "@/lib/actions/companion";
+import { sendCompanionMessage, startNewCompanionChat } from "@/lib/actions/companion";
 import type { CompanionCard } from "@/lib/ai/companion";
 import type { ChatMessageView } from "@/lib/data/chat";
 
@@ -244,6 +244,15 @@ export function CompanionScreen({
     await send(payload);
   }
 
+  async function onNewChat() {
+    if (sending) return;
+    setMessages([]);
+    setText("");
+    setAttached(null);
+    setLastFailed(null);
+    await startNewCompanionChat(petId);
+  }
+
   const canSend = (text.trim().length > 0 || attached !== null) && !sending;
 
   const empty = messages.length === 0;
@@ -261,6 +270,9 @@ export function CompanionScreen({
             <div style={{ fontFamily: "var(--serif)", fontSize: 17.5, fontWeight: 500, color: "#fff", letterSpacing: -0.2, lineHeight: 1.1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Your companion</div>
             <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.82)", fontWeight: 500, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Here for {petName} · always remembers</div>
           </div>
+          <button onClick={onNewChat} disabled={sending} className="gv-press" aria-label="Start a new chat" style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#fff", fontWeight: 650, background: "rgba(255,255,255,0.18)", padding: "4px 9px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.24)", flexShrink: 0, cursor: sending ? "default" : "pointer" }}>
+            {Ico.plus({ s: 11, c: "#fff", w: 2.4 })} <span>New</span>
+          </button>
           <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#fff", fontWeight: 650, background: "rgba(255,255,255,0.18)", padding: "4px 8px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.24)", flexShrink: 0 }}>
             {Ico.shield({ s: 11, c: "#fff" })} <span>Non-clinical</span>
           </div>

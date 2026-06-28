@@ -10,7 +10,7 @@ import { getDb } from "@/lib/db/client";
 import { pets, mediaAssets } from "@/lib/db/schema";
 import { runCompanion, withCompanionFallback, type ChatTurn } from "@/lib/ai/companion";
 import {
-  appendAssistant, appendOwner, getOrCreateThread, loadMessages,
+  appendAssistant, appendOwner, createThread, getOrCreateThread, loadMessages,
   type ChatMessageView, type MediaRef, type StoredMediaRef,
 } from "@/lib/data/chat";
 import { saveMedia } from "@/lib/data/media-write";
@@ -52,4 +52,10 @@ export async function sendCompanionMessage(
     owner: { id: ownerId, role: "owner", text, cards: [], media: ownerMedia },
     assistant: { id: assistantId, role: "assistant", text: reply.text, cards: reply.cards, media: [] },
   };
+}
+
+/** Start a fresh chat session — subsequent messages land in this new thread. */
+export async function startNewCompanionChat(petId: string): Promise<void> {
+  await requirePetAccess(petId);
+  await createThread(petId);
 }
