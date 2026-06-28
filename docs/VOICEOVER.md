@@ -23,13 +23,13 @@ If you've ever looked after an old dog, or a cat who isn't quite who she used to
 So I built Oscar. It's a gentle, twenty-second check-in you do each day — just how they're moving, how they seem in themselves. I named it after a real dog who needed exactly this.
 
 [Beat 3 · 0:45–1:08 · ≈23s]
-Those small daily notes add up to a real picture of how they're doing, week by week. And one thing I was careful about: the actual scoring is done by plain, ordinary code — never the AI. The AI doesn't decide anything medical. It just helps you see what's already there.
+Do that for a couple of weeks, and those little notes become something you can see — a simple line that shows whether they're holding steady, or slipping. Same check, same maths, every day — so the trend you're looking at is real, not a guess.
 
 [Beat 4 · 1:08–1:50 · ≈42s — the database moment]
-Here's the part I'm proud of. A pet's history is a few things at once — facts, changes over time, and the kind of memory you can't put in a number. Most apps would reach for three different databases. Oscar keeps all of it in one — Aurora Postgres, with pgvector. So when a rough morning comes, it can search his own history by meaning: this feels like that hard week back in spring. It does the same with photos — pulling up the days he was moving like this one. Words and pictures, both searchable, all in one place.
+Here's the part I'm proud of. Everything about a pet comes in different shapes — his meds and his rehab plan, how he's moved day by day, and the fuzzy stuff: a rough morning that reminds you of one weeks ago. Normally you'd need three different databases for that. Oscar keeps it all in one — Aurora Postgres, with pgvector. So I can ask it, in plain words, when something happened before — and it finds the match. Same with photos: it pulls up the days he was moving like this one. Words and pictures, both searchable, in one place.
 
 [Beat 5 · 1:50–2:15 · ≈25s]
-There's a companion you can just talk to — built on Amazon Bedrock — that remembers what you tell it, brings back the history, and quietly puts together everything your vet should see. It will never tell you what's wrong; that was never its job. If something looks worrying, it points you straight to your vet.
+And there's a companion you can just talk to — it runs on Amazon Bedrock. Tell it what you saw, and it remembers — it pulls up the history and builds the summary your vet actually needs. It won't guess what's wrong with him; that's the vet's job, not a chatbot's. If something sounds serious, it says so, and sends you straight to your vet.
 
 [Beat 6 · 2:15–2:25 · ≈10s]
 One database, quietly doing the work of four. Oscar doesn't replace your vet — it just helps you walk in knowing more. For Oscar — and every old friend like him.
