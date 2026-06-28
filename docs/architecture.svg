@@ -58,7 +58,7 @@
   <g>
     <rect x="612" y="408" width="428" height="52" rx="14" fill="#fff" stroke="#dde3df"/>
     <text x="634" y="431" font-size="13.5" class="h">🗄  Amazon S3 — private media bucket</text>
-    <text x="634" y="450" class="note">photos + video clips · presigned GET · the searchable vectors live in Aurora</text>
+    <text x="634" y="450" class="note">photos + video clips · presigned GET · vectors live in Aurora</text>
   </g>
   <line x1="560" y1="404" x2="612" y2="430" stroke="#8a938e" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
   <text x="556" y="398" font-size="10.5" class="s" text-anchor="end">store / serve</text>
@@ -96,13 +96,13 @@
     <!-- 3 PGVECTOR -->
     <g>
       <rect x="544" y="562" width="232" height="222" rx="14" fill="#fff"/>
-      <text x="562" y="590" class="tag" fill="#7d6b96">3 · PGVECTOR — TWO MODALITIES</text>
+      <text x="562" y="590" class="tag" fill="#7d6b96">3 · PGVECTOR — TEXT + IMAGE</text>
       <text x="562" y="616" class="row">journal_entries — text</text>
       <text x="562" y="637" class="row">media_assets — image</text>
       <text x="562" y="658" class="row">literature_chunks</text>
       <text x="562" y="690" class="note" font-weight="700" fill="#5b6b66">HNSW cosine kNN:</text>
-      <text x="562" y="710" class="note">text → “resembles a flare 5 wks ago”</text>
-      <text x="562" y="726" class="note">image → “incision today vs last month”</text>
+      <text x="562" y="710" class="note">text → “resembles 5 weeks ago”</text>
+      <text x="562" y="726" class="note">image → “days he moved like this”</text>
       <text x="562" y="760" class="note">one query, no second datastore</text>
     </g>
     <!-- 4 ANALYTICS -->

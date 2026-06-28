@@ -364,6 +364,33 @@ function VetBriefCard({ header, briefCount, href }: { header: PetHeader; briefCo
   );
 }
 
+function CheckinCard({ name, streakDays, href }: { name: string; streakDays: number; href: string }) {
+  return (
+    <Link
+      href={href}
+      className="gv-press"
+      style={{
+        width: "100%", textAlign: "left", cursor: "pointer",
+        background: "linear-gradient(135deg, #59978a, #437a6d)", border: "none",
+        borderRadius: "var(--radius)", padding: 16, color: "#fff",
+        boxShadow: "0 10px 24px rgba(63,123,109,0.28)",
+        display: "flex", alignItems: "center", gap: 13, textDecoration: "none",
+      }}
+    >
+      <div style={{ width: 40, height: 40, borderRadius: 12, flexShrink: 0, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {Ico.heart({ s: 20, c: "#fff" })}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: "var(--serif)", fontSize: 17, fontWeight: 500 }}>Today&rsquo;s check-in</div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", marginTop: 1 }}>
+          {streakDays > 0 ? `Twenty seconds · keep the ${streakDays}-day streak going` : `Twenty seconds · how ${name}’s moving today`}
+        </div>
+      </div>
+      {Ico.chevR({ s: 18, c: "#fff" })}
+    </Link>
+  );
+}
+
 export function DashboardScreen({ header, view, isDemo = false }: { header: PetHeader; view: DashboardView; isDemo?: boolean }) {
   const briefHref = `/pets/${header.id}/brief`;
   const recallHref = `/pets/${header.id}/recall`;
@@ -387,6 +414,7 @@ export function DashboardScreen({ header, view, isDemo = false }: { header: PetH
         />
       </Hero>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <CheckinCard name={header.name} streakDays={header.streakDays} href={`/pets/${header.id}/checkin`} />
         <MobilityChart trend={view.mobility} bandLabel={bandLabel(view.mobility.band)} />
         <QolWeekCard qol={view.qol} />
         {view.progression.fires && <ProgressionCard nudge={view.progression} briefHref={briefHref} />}
